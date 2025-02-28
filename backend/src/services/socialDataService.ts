@@ -19,8 +19,87 @@ const socialDataApi = axios.create({
   }
 });
 
-// Mock data for testing
-const mockTwitterData = {
+// Function to generate mock data based on handle
+const generateMockData = (handle: string) => {
+  // Default mock data structure
+  return {
+    profile: {
+      data: {
+        id: `${Math.floor(Math.random() * 100000000)}`,
+        name: handle.charAt(0).toUpperCase() + handle.slice(1),
+        username: handle.toLowerCase(),
+        description: `This is a mock profile for ${handle}`,
+        profile_image_url: `https://ui-avatars.com/api/?name=${handle}&background=random`,
+        verified: Math.random() > 0.5,
+        public_metrics: {
+          followers_count: Math.floor(Math.random() * 1000000),
+          following_count: Math.floor(Math.random() * 1000),
+          tweet_count: Math.floor(Math.random() * 10000),
+          listed_count: Math.floor(Math.random() * 10000)
+        }
+      }
+    },
+    tweets: {
+      data: [
+        {
+          id: `${Math.floor(Math.random() * 1000000000)}`,
+          text: `Just posted my first tweet as ${handle}! #HelloWorld`,
+          created_at: new Date(Date.now() - 86400000).toISOString(),
+          public_metrics: {
+            retweet_count: Math.floor(Math.random() * 1000),
+            reply_count: Math.floor(Math.random() * 500),
+            like_count: Math.floor(Math.random() * 5000),
+            quote_count: Math.floor(Math.random() * 200)
+          }
+        },
+        {
+          id: `${Math.floor(Math.random() * 1000000000)}`,
+          text: `Excited to share my latest project with everyone! #Innovation #Tech`,
+          created_at: new Date(Date.now() - 172800000).toISOString(),
+          public_metrics: {
+            retweet_count: Math.floor(Math.random() * 1000),
+            reply_count: Math.floor(Math.random() * 500),
+            like_count: Math.floor(Math.random() * 5000),
+            quote_count: Math.floor(Math.random() * 200)
+          }
+        },
+        {
+          id: `${Math.floor(Math.random() * 1000000000)}`,
+          text: `Thanks for all the support from my amazing followers! You're the best!`,
+          created_at: new Date(Date.now() - 259200000).toISOString(),
+          public_metrics: {
+            retweet_count: Math.floor(Math.random() * 1000),
+            reply_count: Math.floor(Math.random() * 500),
+            like_count: Math.floor(Math.random() * 5000),
+            quote_count: Math.floor(Math.random() * 200)
+          }
+        }
+      ]
+    },
+    following: {
+      data: [
+        {
+          id: '123456',
+          name: 'Tech News',
+          username: 'technews'
+        },
+        {
+          id: '123457',
+          name: 'Coding Tips',
+          username: 'codingtips'
+        },
+        {
+          id: '123458',
+          name: 'AI Updates',
+          username: 'aiupdates'
+        }
+      ]
+    }
+  };
+};
+
+// Special case for Elon Musk to maintain the original example
+const elonMuskData = {
   profile: {
     data: {
       id: '44196397',
@@ -107,7 +186,13 @@ export const fetchTwitterData = async (handle: string) => {
     
     if (useMockData) {
       console.log('Using mock data for Twitter API');
-      return mockTwitterData;
+      
+      // Return Elon Musk's data if the handle is elonmusk, otherwise generate dynamic mock data
+      if (handle.toLowerCase() === 'elonmusk') {
+        return elonMuskData;
+      } else {
+        return generateMockData(handle);
+      }
     }
     
     // Real API implementation (currently not working)
