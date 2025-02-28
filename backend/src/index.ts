@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { socialDataRoutes } from './routes/socialDataRoutes';
 import { emailRoutes } from './routes/emailRoutes';
+import { insightsRoutes } from './routes/insightsRoutes';
 
 // Load environment variables
 dotenv.config();
@@ -17,6 +18,7 @@ app.use(express.json());
 // Routes
 app.use('/api/social', socialDataRoutes);
 app.use('/api/email', emailRoutes);
+app.use('/api/insights', insightsRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
