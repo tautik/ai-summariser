@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { 
   ChakraProvider, 
   Box, 
@@ -10,11 +10,29 @@ import {
   VStack, 
   HStack, 
   Spinner,
-  useToast
+  useToast,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+  Badge,
+  Stat,
+  StatLabel,
+  StatNumber,
+  StatGroup,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  Code
 } from '@chakra-ui/react'
 import axios from 'axios'
 import './App.css'
 import theme from './theme'
+import Auth from './components/Auth'
+import Dashboard from './components/Dashboard'
 
 // Define types for our data
 interface Profile {
@@ -23,6 +41,43 @@ interface Profile {
   username: string;
   description: string;
   profile_image_url: string;
+  verified?: boolean;
+  public_metrics?: {
+    followers_count: number;
+    following_count: number;
+    tweet_count: number;
+    listed_count: number;
+  };
+}
+
+interface Tweet {
+  id: string;
+  text: string;
+  created_at: string;
+  public_metrics: {
+    retweet_count: number;
+    reply_count: number;
+    like_count: number;
+    quote_count: number;
+  };
+}
+
+interface Following {
+  id: string;
+  name: string;
+  username: string;
+}
+
+interface RawData {
+  profile: {
+    data: Profile;
+  };
+  tweets: {
+    data: Tweet[];
+  };
+  following: {
+    data: Following[];
+  };
 }
 
 interface Summary {
@@ -30,13 +85,23 @@ interface Summary {
   tweetSummary: string;
   tweetContent: string;
   followingSummary: string;
+  rawData?: RawData;
 }
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [handle, setHandle] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
   const [summary, setSummary] = useState<Summary | null>(null)
   const toast = useToast()
+
+  // Check if user is already authenticated on mount
+  useEffect(() => {
+    const authStatus = localStorage.getItem('isAuthenticated')
+    if (authStatus === 'true') {
+      setIsAuthenticated(true)
+    }
+  }, [])
 
   const handleSubmit = async () => {
     if (!handle) {
@@ -70,97 +135,27 @@ function App() {
     }
   }
 
+  const handleLogin = () => {
+    setIsAuthenticated(true)
+    localStorage.setItem('isAuthenticated', 'true')
+  }
+
+  const handleLogout = () => {
+    setIsAuthenticated(false)
+    localStorage.removeItem('isAuthenticated')
+    // Clear connected services on logout
+    localStorage.removeItem('connectedServices')
+  }
+
   return (
     <ChakraProvider theme={theme}>
-      <Container maxW="container.lg" py={8}>
-        <VStack spacing={8} align="stretch">
-          <Box textAlign="center">
-            <Heading as="h1" size="2xl" mb={2}>AI Content Summarizer</Heading>
-            <Text fontSize="lg" color="gray.600">
-              Enter a Twitter handle to get a summary of their content
-            </Text>
-          </Box>
-
-          <Box bg="white" p={6} borderRadius="md" boxShadow="md">
-            <VStack spacing={4}>
-              <HStack width="100%">
-                <Input 
-                  placeholder="Enter Twitter handle (without @)" 
-                  value={handle} 
-                  onChange={(e) => setHandle(e.target.value)}
-                  size="lg"
-                />
-                <Button 
-                  colorScheme="blue" 
-                  size="lg" 
-                  onClick={handleSubmit}
-                  isLoading={loading}
-                  loadingText="Summarizing"
-                >
-                  Summarize
-                </Button>
-              </HStack>
-            </VStack>
-          </Box>
-
-          {loading && (
-            <Box textAlign="center" py={10}>
-              <Spinner size="xl" />
-              <Text mt={4}>Analyzing Twitter data...</Text>
-            </Box>
-          )}
-
-          {summary && (
-            <Box bg="white" p={6} borderRadius="md" boxShadow="md">
-              <VStack spacing={6} align="stretch">
-                <Box>
-                  <Heading as="h2" size="lg" mb={2}>Profile</Heading>
-                  <HStack>
-                    {summary.profile.profile_image_url && (
-                      <Box boxSize="100px">
-                        <img 
-                          src={summary.profile.profile_image_url} 
-                          alt={summary.profile.name} 
-                          style={{ borderRadius: '50%' }}
-                        />
-                      </Box>
-                    )}
-                    <Box>
-                      <Heading as="h3" size="md">{summary.profile.name}</Heading>
-                      <Text color="gray.500">@{summary.profile.username}</Text>
-                      <Text mt={2}>{summary.profile.description}</Text>
-                    </Box>
-                  </HStack>
-                </Box>
-
-                <Box>
-                  <Heading as="h2" size="lg" mb={2}>Tweet Summary</Heading>
-                  <Text>{summary.tweetSummary}</Text>
-                </Box>
-
-                <Box>
-                  <Heading as="h2" size="lg" mb={2}>Recent Tweets</Heading>
-                  <Box 
-                    p={4} 
-                    bg="gray.50" 
-                    borderRadius="md" 
-                    maxHeight="300px" 
-                    overflowY="auto"
-                    whiteSpace="pre-line"
-                  >
-                    {summary.tweetContent}
-                  </Box>
-                </Box>
-
-                <Box>
-                  <Heading as="h2" size="lg" mb={2}>Following</Heading>
-                  <Text>{summary.followingSummary}</Text>
-                </Box>
-              </VStack>
-            </Box>
-          )}
-        </VStack>
-      </Container>
+      <Box minH="100vh">
+        {isAuthenticated ? (
+          <Dashboard onLogout={handleLogout} />
+        ) : (
+          <Auth onLogin={handleLogin} />
+        )}
+      </Box>
     </ChakraProvider>
   )
 }

@@ -7,7 +7,10 @@
     "dev": "nodemon --exec ts-node src/index.ts",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "test-api": "ts-node src/test-api.ts"
+    "test-api": "ts-node src/test-api.ts",
+    "dev:mock": "ts-node src/utils/runApp.ts mock",
+    "dev:real": "ts-node src/utils/runApp.ts real",
+    "run": "ts-node src/utils/runApp.ts"
   },
   "keywords": [],
   "author": "",
