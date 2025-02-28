@@ -1,6 +1,13 @@
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
+import {
+  Box,
+  Flex,
+  Text,
+  Icon,
+  VStack,
+  Avatar,
+  Button,
+  useColorModeValue
+} from '@chakra-ui/react';
 import { 
   FaHome, 
   FaTwitter, 
@@ -24,37 +31,77 @@ interface NavItemProps {
   onClick: () => void;
 }
 
-const NavItem = ({ icon: Icon, children, isActive, onClick }: NavItemProps) => {
+const NavItem = ({ icon, children, isActive, onClick }: NavItemProps) => {
+  const activeBg = useColorModeValue('blue.50', 'blue.900');
+  const activeColor = useColorModeValue('blue.700', 'blue.200');
+  const inactiveColor = useColorModeValue('gray.600', 'gray.400');
+  const hoverBg = useColorModeValue('gray.100', 'gray.700');
+
   return (
-    <Button
-      variant={isActive ? "default" : "ghost"}
-      className="w-full justify-start"
+    <Flex
+      align="center"
+      px="4"
+      py="3"
+      cursor="pointer"
+      role="group"
+      fontWeight={isActive ? "semibold" : "normal"}
+      color={isActive ? activeColor : inactiveColor}
+      bg={isActive ? activeBg : "transparent"}
+      borderRadius="md"
+      _hover={{
+        bg: isActive ? activeBg : hoverBg,
+        color: isActive ? activeColor : inactiveColor,
+      }}
       onClick={onClick}
     >
-      <Icon className="mr-2 h-4 w-4" />
-      {children}
-    </Button>
+      <Icon
+        mr="4"
+        fontSize="16"
+        as={icon}
+      />
+      <Text fontSize="md">{children}</Text>
+    </Flex>
   );
 };
 
 const Sidebar = ({ onNavigate, activePage, onLogout }: SidebarProps) => {
+  const bgColor = useColorModeValue('white', 'gray.800');
+  const borderColor = useColorModeValue('gray.200', 'gray.700');
+
   return (
-    <div className="flex h-screen w-64 flex-col border-r bg-background">
-      <div className="flex items-center p-6">
-        <div className="h-8 w-8 rounded-full bg-primary" />
-        <span className="ml-3 text-xl font-bold">AI Summarizer</span>
-      </div>
-      
-      <Separator />
-      
-      <ScrollArea className="flex-1 px-3">
-        <div className="space-y-1 py-4">
+    <Box
+      position="fixed"
+      left="0"
+      w="64"
+      h="100vh"
+      bg={bgColor}
+      borderRight="1px"
+      borderRightColor={borderColor}
+      py="5"
+    >
+      <Flex
+        direction="column"
+        h="full"
+        px="4"
+      >
+        <Flex align="center" mb="8" px="2">
+          <Avatar size="md" name="AI Summarizer" src="/logo.png" />
+          <Text
+            fontSize="2xl"
+            fontWeight="bold"
+            ml="3"
+          >
+            AI Summarizer
+          </Text>
+        </Flex>
+
+        <VStack spacing="1" align="stretch" flex="1">
           <NavItem 
             icon={FaHome} 
             isActive={activePage === 'home'}
             onClick={() => onNavigate('home')}
           >
-            Home
+            Dashboard
           </NavItem>
           <NavItem 
             icon={FaTwitter} 
@@ -91,20 +138,21 @@ const Sidebar = ({ onNavigate, activePage, onLogout }: SidebarProps) => {
           >
             Settings
           </NavItem>
-        </div>
-      </ScrollArea>
+        </VStack>
 
-      <div className="p-4">
-        <Button
-          variant="destructive"
-          className="w-full justify-start"
-          onClick={onLogout}
-        >
-          <FaSignOutAlt className="mr-2 h-4 w-4" />
-          Sign Out
-        </Button>
-      </div>
-    </div>
+        <Box mt="6">
+          <Button
+            leftIcon={<FaSignOutAlt />}
+            colorScheme="red"
+            variant="outline"
+            width="full"
+            onClick={onLogout}
+          >
+            Logout
+          </Button>
+        </Box>
+      </Flex>
+    </Box>
   );
 };
 

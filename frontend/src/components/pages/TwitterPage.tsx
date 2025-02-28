@@ -1,11 +1,40 @@
 import { useState } from 'react';
+import {
+  Box,
+  Heading,
+  Text,
+  Input,
+  Button,
+  VStack,
+  HStack,
+  useToast,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+  Badge,
+  Stat,
+  StatLabel,
+  StatNumber,
+  StatGroup,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  Code,
+  Flex,
+  Divider,
+  Avatar,
+  Link,
+  Spinner
+} from '@chakra-ui/react';
 import { FaTwitter, FaLink, FaUnlink } from 'react-icons/fa';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
 
 interface TwitterPageProps {
   isConnected: boolean;
@@ -82,39 +111,71 @@ const TwitterPage = ({ isConnected, onConnect, onDisconnect }: TwitterPageProps)
   const [handle, setHandle] = useState('');
   const [loading, setLoading] = useState(false);
   const [summary, setSummary] = useState<Summary | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const toast = useToast();
 
   const handleSubmit = async () => {
-    if (!handle) {
-      setError('Please enter a Twitter handle');
+    if (!handle.trim()) {
+      toast({
+        title: 'Error',
+        description: 'Please enter a Twitter handle',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
       return;
     }
 
     setLoading(true);
-    setError(null);
-
     try {
-      const response = await fetch(`http://localhost:5001/api/social/twitter/${handle}`);
-      const data = await response.json();
+      const response = await fetch('http://localhost:5001/api/social/summarize', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ handle }),
+      });
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to fetch Twitter data');
+        throw new Error('Failed to fetch data');
       }
 
+      const data = await response.json();
+      console.log('API Response:', data); // Debug log
+      
+      // Ensure the data structure matches what we expect
+      if (!data.profile) {
+        throw new Error('Invalid data structure received from API');
+      }
+      
+      // If public_metrics is missing, add default values
+      if (!data.profile.public_metrics) {
+        data.profile.public_metrics = {
+          followers_count: 0,
+          following_count: 0,
+          tweet_count: 0,
+          listed_count: 0
+        };
+      }
+      
       setSummary(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      toast({
+        title: 'Error',
+        description: error instanceof Error ? error.message : 'Failed to fetch data',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
     } finally {
       setLoading(false);
     }
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleString();
   };
 
   const adaptTweetsForDisplay = () => {
@@ -138,203 +199,276 @@ const TwitterPage = ({ isConnected, onConnect, onDisconnect }: TwitterPageProps)
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
-            <FaTwitter className="text-[#1DA1F2]" />
+    <Box>
+      <Flex justify="space-between" align="center" mb={6}>
+        <Box>
+          <Heading display="flex" alignItems="center">
+            <FaTwitter color="#1DA1F2" style={{ marginRight: '10px' }} />
             Twitter Analysis
-          </h1>
-          <p className="text-muted-foreground mt-1">
+          </Heading>
+          <Text color="gray.500" mt={1}>
             Analyze Twitter profiles and get insights
-          </p>
-        </div>
+          </Text>
+        </Box>
         <Button
-          variant={isConnected ? "destructive" : "default"}
+          leftIcon={isConnected ? <FaUnlink /> : <FaLink />}
+          colorScheme={isConnected ? "red" : "twitter"}
           onClick={isConnected ? onDisconnect : onConnect}
         >
-          {isConnected ? (
-            <>
-              <FaUnlink className="mr-2" />
-              Disconnect
-            </>
-          ) : (
-            <>
-              <FaLink className="mr-2" />
-              Connect to Twitter
-            </>
-          )}
+          {isConnected ? "Disconnect" : "Connect to Twitter"}
         </Button>
-      </div>
+      </Flex>
 
       {!isConnected ? (
-        <Card>
-          <CardHeader>
-            <CardTitle>Not connected!</CardTitle>
-            <CardDescription>
-              Connect to Twitter to analyze profiles and tweets.
-            </CardDescription>
-          </CardHeader>
-        </Card>
+        <Alert status="info" borderRadius="md">
+          <AlertIcon />
+          <AlertTitle>Not connected!</AlertTitle>
+          <AlertDescription>
+            Connect to Twitter to analyze profiles and tweets.
+          </AlertDescription>
+        </Alert>
       ) : (
-        <div className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Analyze Twitter Profile</CardTitle>
-              <CardDescription>
-                Enter a Twitter handle to analyze their profile and tweets
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex gap-4">
-                <Input
-                  placeholder="e.g. elonmusk"
-                  value={handle}
-                  onChange={(e) => setHandle(e.target.value)}
-                  disabled={loading}
-                />
-                <Button onClick={handleSubmit} disabled={loading}>
-                  {loading ? 'Analyzing...' : 'Analyze'}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+        <VStack spacing={6} align="stretch">
+          <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+            <Heading size="md" mb={4}>Enter Twitter Handle</Heading>
+            <HStack>
+              <Input
+                placeholder="e.g. elonmusk"
+                value={handle}
+                onChange={(e) => setHandle(e.target.value)}
+                disabled={loading}
+              />
+              <Button
+                colorScheme="twitter"
+                onClick={handleSubmit}
+                isLoading={loading}
+                loadingText="Analyzing"
+              >
+                Analyze
+              </Button>
+            </HStack>
+          </Box>
 
-          {error && (
-            <Card className="bg-destructive/15">
-              <CardHeader>
-                <CardTitle className="text-destructive">Error</CardTitle>
-                <CardDescription>{error}</CardDescription>
-              </CardHeader>
-            </Card>
+          {loading && (
+            <Box textAlign="center" py={10}>
+              <Spinner size="xl" color="twitter.500" />
+              <Text mt={4}>Analyzing Twitter profile...</Text>
+            </Box>
           )}
 
-          {summary && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Analysis Results</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Tabs defaultValue="profile" className="space-y-4">
-                  <TabsList>
-                    <TabsTrigger value="profile">Profile</TabsTrigger>
-                    <TabsTrigger value="tweets">Tweets</TabsTrigger>
-                    <TabsTrigger value="following">Following</TabsTrigger>
-                    <TabsTrigger value="raw">Raw Data</TabsTrigger>
-                  </TabsList>
+          {summary && !loading && (
+            <Box mt={4}>
+              <Tabs colorScheme="twitter" variant="enclosed">
+                <TabList>
+                  <Tab>Summary</Tab>
+                  <Tab>Detailed View</Tab>
+                  <Tab>Raw Data</Tab>
+                </TabList>
 
-                  <TabsContent value="profile">
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-4">
-                        {summary.profile.profile_image_url && (
-                          <img
-                            src={summary.profile.profile_image_url}
-                            alt={summary.profile.name}
-                            className="w-16 h-16 rounded-full"
-                          />
-                        )}
-                        <div>
-                          <h3 className="text-lg font-semibold">{summary.profile.name}</h3>
-                          <p className="text-muted-foreground">@{summary.profile.username}</p>
-                        </div>
-                      </div>
-                      <p>{summary.profile.description}</p>
-                      {summary.profile.public_metrics && (
-                        <div className="grid grid-cols-4 gap-4">
-                          <div>
-                            <p className="font-semibold">{summary.profile.public_metrics.followers_count}</p>
-                            <p className="text-sm text-muted-foreground">Followers</p>
-                          </div>
-                          <div>
-                            <p className="font-semibold">{summary.profile.public_metrics.following_count}</p>
-                            <p className="text-sm text-muted-foreground">Following</p>
-                          </div>
-                          <div>
-                            <p className="font-semibold">{summary.profile.public_metrics.tweet_count}</p>
-                            <p className="text-sm text-muted-foreground">Tweets</p>
-                          </div>
-                          <div>
-                            <p className="font-semibold">{summary.profile.public_metrics.listed_count}</p>
-                            <p className="text-sm text-muted-foreground">Listed</p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </TabsContent>
+                <TabPanels>
+                  {/* Summary Tab */}
+                  <TabPanel>
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                      <Flex>
+                        <Avatar 
+                          size="xl" 
+                          src={summary.profile.profile_image_url} 
+                          name={summary.profile.name} 
+                          mr={6}
+                        />
+                        <Box>
+                          <Heading size="lg">
+                            {summary.profile.name}
+                            {summary.profile.verified && (
+                              <Badge ml={2} colorScheme="twitter">Verified</Badge>
+                            )}
+                          </Heading>
+                          <Text color="gray.500">@{summary.profile.username}</Text>
+                          <Text mt={2}>{summary.profile.description}</Text>
+                        </Box>
+                      </Flex>
 
-                  <TabsContent value="tweets">
-                    <div className="space-y-4">
-                      <ScrollArea className="h-[400px]">
-                        {summary.rawData.tweets.data.map((tweet) => (
-                          <Card key={tweet.id} className="mb-4">
-                            <CardContent className="pt-6">
-                              <p>{tweet.text}</p>
-                              <div className="flex justify-between mt-4 text-sm text-muted-foreground">
-                                <span>{formatDate(tweet.created_at)}</span>
-                                <div className="flex gap-4">
-                                  <span>🔄 {tweet.public_metrics.retweet_count}</span>
-                                  <span>💬 {tweet.public_metrics.reply_count}</span>
-                                  <span>❤️ {tweet.public_metrics.like_count}</span>
-                                </div>
-                              </div>
-                            </CardContent>
-                          </Card>
-                        ))}
-                      </ScrollArea>
-                    </div>
-                  </TabsContent>
+                      <Divider my={6} />
 
-                  <TabsContent value="following">
-                    <div className="space-y-4">
-                      <ScrollArea className="h-[400px]">
-                        <div className="grid grid-cols-2 gap-4">
-                          {summary.rawData.following.data.map((user) => (
-                            <Card key={user.id}>
-                              <CardHeader>
-                                <div className="flex items-center gap-2">
-                                  {user.profile_image_url && (
-                                    <img
-                                      src={user.profile_image_url}
-                                      alt={user.name}
-                                      className="w-10 h-10 rounded-full"
-                                    />
-                                  )}
-                                  <div>
-                                    <CardTitle className="text-base">{user.name}</CardTitle>
-                                    <CardDescription>@{user.username}</CardDescription>
-                                  </div>
-                                </div>
-                              </CardHeader>
-                              {user.description && (
-                                <CardContent>
-                                  <p className="text-sm">{user.description}</p>
-                                </CardContent>
+                      <Heading size="md" mb={4}>Tweet Summary</Heading>
+                      <Text>{summary.tweetSummary}</Text>
+
+                      <Divider my={6} />
+
+                      <Heading size="md" mb={4}>Following Summary</Heading>
+                      <Text>{summary.followingSummary}</Text>
+                    </Box>
+                  </TabPanel>
+
+                  {/* Detailed View Tab */}
+                  <TabPanel>
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md" mb={6}>
+                      <Heading size="md" mb={4}>Profile Details</Heading>
+                      <Flex wrap="wrap">
+                        <Avatar 
+                          size="2xl" 
+                          src={summary.profile.profile_image_url} 
+                          name={summary.profile.name} 
+                          mr={6}
+                          mb={4}
+                        />
+                        <Box flex="1">
+                          <Heading size="lg">
+                            {summary.profile.name}
+                            {summary.profile.verified && (
+                              <Badge ml={2} colorScheme="twitter">Verified</Badge>
+                            )}
+                          </Heading>
+                          <Text color="gray.500" fontSize="lg">@{summary.profile.username}</Text>
+                          <Text mt={4} fontSize="md">{summary.profile.description}</Text>
+
+                          <StatGroup mt={6}>
+                            <Stat>
+                              <StatLabel>Followers</StatLabel>
+                              <StatNumber>
+                                {safeGet(summary, 'profile.public_metrics.followers_count', 0).toLocaleString()}
+                              </StatNumber>
+                            </Stat>
+                            <Stat>
+                              <StatLabel>Following</StatLabel>
+                              <StatNumber>
+                                {safeGet(summary, 'profile.public_metrics.following_count', 0).toLocaleString()}
+                              </StatNumber>
+                            </Stat>
+                            <Stat>
+                              <StatLabel>Tweets</StatLabel>
+                              <StatNumber>
+                                {safeGet(summary, 'profile.public_metrics.tweet_count', 0).toLocaleString()}
+                              </StatNumber>
+                            </Stat>
+                            <Stat>
+                              <StatLabel>Listed</StatLabel>
+                              <StatNumber>
+                                {safeGet(summary, 'profile.public_metrics.listed_count', 0).toLocaleString()}
+                              </StatNumber>
+                            </Stat>
+                          </StatGroup>
+                        </Box>
+                      </Flex>
+                    </Box>
+
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md" mb={6}>
+                      <Heading size="md" mb={4}>Recent Tweets</Heading>
+                      <Accordion allowMultiple>
+                        {adaptTweetsForDisplay().map((tweet) => (
+                          <AccordionItem key={tweet.id}>
+                            <h2>
+                              <AccordionButton>
+                                <Box flex="1" textAlign="left">
+                                  {tweet.text.length > 100 
+                                    ? `${tweet.text.substring(0, 100)}...` 
+                                    : tweet.text}
+                                </Box>
+                                <AccordionIcon />
+                              </AccordionButton>
+                            </h2>
+                            <AccordionPanel pb={4}>
+                              <Text mb={2}>{tweet.text}</Text>
+                              <Text color="gray.500" fontSize="sm">
+                                Posted on: {formatDate(tweet.created_at)}
+                              </Text>
+                              <HStack mt={3} spacing={4}>
+                                <Badge>Retweets: {safeGet(tweet, 'public_metrics.retweet_count', 0)}</Badge>
+                                <Badge>Replies: {safeGet(tweet, 'public_metrics.reply_count', 0)}</Badge>
+                                <Badge>Likes: {safeGet(tweet, 'public_metrics.like_count', 0)}</Badge>
+                                <Badge>Quotes: {safeGet(tweet, 'public_metrics.quote_count', 0)}</Badge>
+                              </HStack>
+                              {tweet.source && (
+                                <Text color="gray.500" fontSize="xs" mt={2}>
+                                  Source: {tweet.source}
+                                </Text>
                               )}
-                            </Card>
-                          ))}
-                        </div>
-                      </ScrollArea>
-                    </div>
-                  </TabsContent>
+                              <Link 
+                                href={`https://twitter.com/${summary.profile.username}/status/${tweet.id}`}
+                                color="twitter.500"
+                                isExternal
+                                mt={2}
+                                display="inline-block"
+                              >
+                                View on Twitter
+                              </Link>
+                            </AccordionPanel>
+                          </AccordionItem>
+                        ))}
+                      </Accordion>
+                    </Box>
 
-                  <TabsContent value="raw">
-                    <Card>
-                      <CardContent>
-                        <ScrollArea className="h-[400px]">
-                          <pre className="p-4 bg-muted rounded-lg text-sm">
-                            {JSON.stringify(summary.rawData, null, 2)}
-                          </pre>
-                        </ScrollArea>
-                      </CardContent>
-                    </Card>
-                  </TabsContent>
-                </Tabs>
-              </CardContent>
-            </Card>
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                      <Heading size="md" mb={4}>Following</Heading>
+                      <VStack align="stretch" spacing={3}>
+                        {adaptFollowingForDisplay().map((user) => (
+                          <Box 
+                            key={user.id} 
+                            p={3} 
+                            borderWidth="1px" 
+                            borderRadius="md"
+                          >
+                            <Flex align="center">
+                              {user.profile_image_url && (
+                                <Avatar 
+                                  size="sm" 
+                                  src={user.profile_image_url} 
+                                  name={user.name} 
+                                  mr={3}
+                                />
+                              )}
+                              <Box>
+                                <Text fontWeight="bold">
+                                  {user.name}
+                                  {user.verified && (
+                                    <Badge ml={2} colorScheme="twitter" size="sm">Verified</Badge>
+                                  )}
+                                </Text>
+                                <Text color="gray.500">@{user.username}</Text>
+                                {user.description && (
+                                  <Text fontSize="sm" mt={1}>{user.description}</Text>
+                                )}
+                              </Box>
+                            </Flex>
+                            <Link 
+                              href={`https://twitter.com/${user.username}`}
+                              color="twitter.500"
+                              isExternal
+                              fontSize="sm"
+                              mt={2}
+                              display="block"
+                            >
+                              View Profile
+                            </Link>
+                          </Box>
+                        ))}
+                      </VStack>
+                    </Box>
+                  </TabPanel>
+
+                  {/* Raw Data Tab */}
+                  <TabPanel>
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                      <Heading size="md" mb={4}>Raw JSON Response</Heading>
+                      <Box 
+                        p={4} 
+                        bg="gray.50" 
+                        borderRadius="md" 
+                        overflowX="auto"
+                      >
+                        <Code display="block" whiteSpace="pre" fontSize="sm">
+                          {JSON.stringify(summary, null, 2)}
+                        </Code>
+                      </Box>
+                    </Box>
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>
+            </Box>
           )}
-        </div>
+        </VStack>
       )}
-    </div>
+    </Box>
   );
 };
 
