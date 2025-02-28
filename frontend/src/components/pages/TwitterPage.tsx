@@ -401,9 +401,57 @@ const TRENDING_SUMMARY = {
 
 const TwitterPage = ({ isConnected, onConnect, onDisconnect }: TwitterPageProps) => {
   const [loading, setLoading] = useState(false);
+  const [handle, setHandle] = useState(DEFAULT_HANDLE);
   const [summary, setSummary] = useState<Summary | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const [summaryType, setSummaryType] = useState<SummaryType>('latest');
+  const [error, setError] = useState<string | null>(null);
+  
+  // Add this function to generate summary data for email
+  const getEmailSummaryData = () => {
+    if (!summary) {
+      return {
+        summary: 'No Twitter data available. Please connect your Twitter account and generate insights first.',
+        details: {}
+      };
+    }
+    
+    // Create a summary for email
+    const emailSummary = {
+      summary: `Twitter Analysis for @${summary.profile.username}: ${summary.tweetSummary}`,
+      details: {
+        profile: {
+          name: summary.profile.name,
+          username: summary.profile.username,
+          followers: summary.profile.public_metrics?.followers_count || 0,
+          following: summary.profile.public_metrics?.following_count || 0,
+          tweets: summary.profile.public_metrics?.tweet_count || 0
+        },
+        tweetInsights: {
+          summaryType,
+          tweetContent: summary.tweetContent,
+          followingSummary: summary.followingSummary
+        },
+        topTweets: summary.rawData.tweets?.data.slice(0, 3).map(tweet => ({
+          text: tweet.text,
+          engagement: tweet.public_metrics.like_count + tweet.public_metrics.retweet_count
+        })) || []
+      }
+    };
+    
+    return emailSummary;
+  };
+  
+  // Make this function available to the parent component via a ref or context
+  // For now, we'll attach it to the window object for demonstration purposes
+  useEffect(() => {
+    // @ts-ignore
+    window.getTwitterSummaryData = getEmailSummaryData;
+    
+    return () => {
+      // @ts-ignore
+      delete window.getTwitterSummaryData;
+    };
+  }, [summary, summaryType]);
 
   // Load default summary on component mount or when connection status changes
   useEffect(() => {

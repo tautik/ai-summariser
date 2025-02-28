@@ -73,8 +73,9 @@ const HomePage = ({ connectedServices, onConnect }: HomePageProps) => {
   // Check if any services are connected
   const hasConnectedServices = Object.values(connectedServices).some(connected => connected);
 
-  // Collective AI insights from all platforms
+  // AI insights data
   const aiInsights = {
+    contentSummary: "Your digital presence shows strong engagement with technology and AI topics across platforms. On Twitter, you're following key AI innovators and engaging with content about developer tools and startup funding. Your Reddit activity focuses on technology and science communities, with particular interest in AI research and open source projects. Gmail communications indicate active job recruitment in the tech sector, particularly for AI and software engineering roles.",
     topTrends: [
       { name: 'AI and Machine Learning', count: 245, source: 'twitter' },
       { name: 'Startup Funding', count: 187, source: 'reddit' },
@@ -86,16 +87,7 @@ const HomePage = ({ connectedServices, onConnect }: HomePageProps) => {
       { name: '@therealprady', description: 'Founder @ AI lip sync startup', source: 'twitter' },
       { name: '@eshamanideep', description: 'Working on AGI @ gigaml', source: 'twitter' },
       { name: 'ekta@headout.com', description: 'Recruiter at Headout', source: 'gmail' },
-      { name: 'u/science_enthusiast', description: 'Active in r/science community', source: 'reddit' },
-      { name: 'isaiah@delve.com', description: 'Recruiter at Delve', source: 'gmail' }
-    ],
-    contentSummary: "Your digital presence shows strong engagement with technology and AI topics across platforms. On Twitter, you're following key AI innovators and engaging with content about developer tools and startup funding. Your Reddit activity focuses on technology and science communities, with particular interest in AI research and open source projects. Gmail communications indicate active job recruitment in the tech sector, particularly for AI and software engineering roles. Overall, your online presence reflects a tech professional with interests in AI development, startups, and career growth opportunities.",
-    actionableInsights: [
-      { text: "Connect with more AI researchers on Twitter to expand your network", source: 'twitter' },
-      { text: "Follow up on the Headout interview opportunity in your Gmail", source: 'gmail' },
-      { text: "Engage more with the r/science community on Reddit to increase visibility", source: 'reddit' },
-      { text: "Consider speaking at React India 2025 as mentioned in your emails", source: 'gmail' },
-      { text: "Explore trending repositories on GitHub based on your Twitter following", source: 'twitter' }
+      { name: 'u/science_enthusiast', description: 'Active in r/science community', source: 'reddit' }
     ]
   };
 
@@ -113,12 +105,88 @@ const HomePage = ({ connectedServices, onConnect }: HomePageProps) => {
       <Tabs defaultValue="overview" className="space-y-4">
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="ai-insights">AI Insights</TabsTrigger>
           <TabsTrigger value="services">Services</TabsTrigger>
           <TabsTrigger value="activity">Recent Activity</TabsTrigger>
         </TabsList>
         
         <TabsContent value="overview" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>AI Summary</CardTitle>
+              <CardDescription>
+                Comprehensive analysis across all your connected platforms
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-medium flex items-center gap-2 mb-3">
+                    <FaLightbulb className="text-yellow-500" />
+                    Content Analysis
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    {aiInsights.contentSummary}
+                  </p>
+                </div>
+                
+                <Separator />
+                
+                <div>
+                  <h3 className="text-lg font-medium flex items-center gap-2 mb-3">
+                    <FaChartLine className="text-blue-500" />
+                    Top Trends
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {aiInsights.topTrends
+                      .filter(trend => connectedServices[trend.source])
+                      .map((trend, i) => (
+                        <div key={i} className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <FaHashtag className="text-gray-400" />
+                            <span>{trend.name}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-muted-foreground">{trend.count} mentions</span>
+                            {trend.source === 'twitter' && <FaTwitter className="h-3 w-3 text-blue-400" />}
+                            {trend.source === 'reddit' && <FaReddit className="h-3 w-3 text-orange-500" />}
+                            {trend.source === 'gmail' && <FaEnvelope className="h-3 w-3 text-red-500" />}
+                            {trend.source === 'facebook' && <FaFacebook className="h-3 w-3 text-blue-600" />}
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+                
+                <Separator />
+                
+                <div>
+                  <h3 className="text-lg font-medium flex items-center gap-2 mb-3">
+                    <FaUsers className="text-green-500" />
+                    Key People in Your Network
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {aiInsights.keyPeople
+                      .filter(person => connectedServices[person.source])
+                      .map((person, i) => (
+                        <div key={i} className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium">{person.name}</p>
+                            <p className="text-sm text-muted-foreground">{person.description}</p>
+                          </div>
+                          <div>
+                            {person.source === 'twitter' && <FaTwitter className="h-4 w-4 text-blue-400" />}
+                            {person.source === 'reddit' && <FaReddit className="h-4 w-4 text-orange-500" />}
+                            {person.source === 'gmail' && <FaEnvelope className="h-4 w-4 text-red-500" />}
+                            {person.source === 'facebook' && <FaFacebook className="h-4 w-4 text-blue-600" />}
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {services.map((service) => (
               <Card key={service.id}>
@@ -139,179 +207,32 @@ const HomePage = ({ connectedServices, onConnect }: HomePageProps) => {
           </div>
         </TabsContent>
 
-        <TabsContent value="ai-insights" className="space-y-4">
-          {!hasConnectedServices ? (
-            <Card>
-              <CardHeader>
-                <CardTitle>Connect Services to See AI Insights</CardTitle>
-                <CardDescription>
-                  Connect to Twitter, Reddit, Gmail, or Facebook to see AI-powered insights across your platforms
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <p className="text-muted-foreground">
-                    AI Insights provides a comprehensive analysis of your social media and email activity, 
-                    including trending topics, key people in your network, and actionable recommendations.
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {services.map((service) => (
-                      <Button 
-                        key={service.id}
-                        onClick={() => onConnect(service.id)}
-                        disabled={connectedServices[service.id]}
-                        className="flex items-center gap-2"
-                      >
-                        <service.icon className={service.color} />
-                        {connectedServices[service.id] ? `${service.name} Connected` : `Connect ${service.name}`}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ) : (
-            <Card>
-              <CardHeader>
-                <CardTitle>Collective AI Summary</CardTitle>
-                <CardDescription>
-                  Comprehensive analysis across all your connected platforms
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="text-lg font-medium flex items-center gap-2 mb-3">
-                      <FaLightbulb className="text-yellow-500" />
-                      Content Analysis
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      {aiInsights.contentSummary}
-                    </p>
-                  </div>
-                  
-                  <Separator />
-                  
-                  <div>
-                    <h3 className="text-lg font-medium flex items-center gap-2 mb-3">
-                      <FaChartLine className="text-blue-500" />
-                      Top Trends
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {aiInsights.topTrends
-                        .filter(trend => connectedServices[trend.source])
-                        .map((trend, i) => (
-                          <div key={i} className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <FaHashtag className="text-gray-400" />
-                              <span>{trend.name}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <span className="text-sm text-muted-foreground">{trend.count} mentions</span>
-                              {trend.source === 'twitter' && <FaTwitter className="h-3 w-3 text-blue-400" />}
-                              {trend.source === 'reddit' && <FaReddit className="h-3 w-3 text-orange-500" />}
-                              {trend.source === 'gmail' && <FaEnvelope className="h-3 w-3 text-red-500" />}
-                              {trend.source === 'facebook' && <FaFacebook className="h-3 w-3 text-blue-600" />}
-                            </div>
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-                  
-                  <Separator />
-                  
-                  <div>
-                    <h3 className="text-lg font-medium flex items-center gap-2 mb-3">
-                      <FaUsers className="text-green-500" />
-                      Key People in Your Network
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {aiInsights.keyPeople
-                        .filter(person => connectedServices[person.source])
-                        .map((person, i) => (
-                          <div key={i} className="flex items-center justify-between">
-                            <div>
-                              <p className="font-medium">{person.name}</p>
-                              <p className="text-sm text-muted-foreground">{person.description}</p>
-                            </div>
-                            <div>
-                              {person.source === 'twitter' && <FaTwitter className="h-4 w-4 text-blue-400" />}
-                              {person.source === 'reddit' && <FaReddit className="h-4 w-4 text-orange-500" />}
-                              {person.source === 'gmail' && <FaEnvelope className="h-4 w-4 text-red-500" />}
-                              {person.source === 'facebook' && <FaFacebook className="h-4 w-4 text-blue-600" />}
-                            </div>
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-                  
-                  <Separator />
-                  
-                  <div>
-                    <h3 className="text-lg font-medium flex items-center gap-2 mb-3">
-                      <FaLightbulb className="text-purple-500" />
-                      Actionable Insights
-                    </h3>
-                    <div className="space-y-2">
-                      {aiInsights.actionableInsights
-                        .filter(insight => connectedServices[insight.source])
-                        .map((insight, i) => (
-                          <div key={i} className="flex items-center gap-3">
-                            <div className="flex-shrink-0">
-                              {insight.source === 'twitter' && <FaTwitter className="h-4 w-4 text-blue-400" />}
-                              {insight.source === 'reddit' && <FaReddit className="h-4 w-4 text-orange-500" />}
-                              {insight.source === 'gmail' && <FaEnvelope className="h-4 w-4 text-red-500" />}
-                              {insight.source === 'facebook' && <FaFacebook className="h-4 w-4 text-blue-600" />}
-                            </div>
-                            <p className="text-sm">{insight.text}</p>
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-        </TabsContent>
-
         <TabsContent value="services" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
             {services.map((service) => (
               <Card key={service.id}>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                      <div className={`p-2 rounded-full bg-gray-100 dark:bg-gray-800`}>
-                        <service.icon className={`h-6 w-6 ${service.color}`} />
-                      </div>
-                      <div>
-                        <CardTitle>{service.name}</CardTitle>
-                        <CardDescription>{service.description}</CardDescription>
-                      </div>
-                    </div>
-                    <Button
-                      variant={connectedServices[service.id] ? "secondary" : "default"}
-                      onClick={() => onConnect(service.id)}
-                      disabled={connectedServices[service.id]}
-                    >
-                      {connectedServices[service.id] ? "Connected" : "Connect"}
-                    </Button>
-                  </div>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    {service.name}
+                  </CardTitle>
+                  <service.icon className={`h-4 w-4 ${service.color}`} />
                 </CardHeader>
                 <CardContent>
-                  <div className="flex justify-between text-sm">
+                  <p className="text-sm text-muted-foreground mb-4">
+                    {service.description}
+                  </p>
+                  <div className="flex justify-between items-center">
                     <div>
-                      <p className="text-muted-foreground">Content Analyzed</p>
-                      <p className="text-xl font-bold">{service.stats.analyzed}</p>
+                      <div className="text-sm font-medium">{service.stats.analyzed} items analyzed</div>
+                      <div className="text-xs text-muted-foreground">{service.stats.summaries} summaries</div>
                     </div>
-                    <div>
-                      <p className="text-muted-foreground">Summaries</p>
-                      <p className="text-xl font-bold">{service.stats.summaries}</p>
-                    </div>
-                    <div>
-                      <p className="text-muted-foreground">Trending</p>
-                      <p className="text-xl font-bold">{service.stats.trending}</p>
-                    </div>
+                    <Button 
+                      onClick={() => onConnect(service.id)}
+                      disabled={connectedServices[service.id]}
+                      className="flex items-center gap-2"
+                    >
+                      {connectedServices[service.id] ? 'Connected' : 'Connect'}
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -324,30 +245,29 @@ const HomePage = ({ connectedServices, onConnect }: HomePageProps) => {
             <CardHeader>
               <CardTitle>Recent Activity</CardTitle>
               <CardDescription>
-                Your latest content analysis and summaries
+                Your latest interactions across connected platforms
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <ScrollArea className="h-[400px]">
+              <ScrollArea className="h-[300px]">
                 <div className="space-y-4">
                   {recentActivity.map((activity, i) => (
-                    <div key={i}>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4">
-                          <div className={`p-2 rounded-full bg-gray-100 dark:bg-gray-800`}>
-                            {activity.service === 'twitter' && <FaTwitter className="text-blue-400" />}
-                            {activity.service === 'reddit' && <FaReddit className="text-orange-500" />}
-                            {activity.service === 'gmail' && <FaEnvelope className="text-red-500" />}
-                            {activity.service === 'facebook' && <FaFacebook className="text-blue-600" />}
-                          </div>
+                    <div key={i} className="flex items-start gap-4 pb-4 border-b last:border-0">
+                      <div className="mt-1">
+                        {activity.service === 'twitter' && <FaTwitter className="h-4 w-4 text-blue-400" />}
+                        {activity.service === 'reddit' && <FaReddit className="h-4 w-4 text-orange-500" />}
+                        {activity.service === 'gmail' && <FaEnvelope className="h-4 w-4 text-red-500" />}
+                        {activity.service === 'facebook' && <FaFacebook className="h-4 w-4 text-blue-600" />}
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex justify-between items-start">
                           <div>
-                            <p className="text-sm font-medium">{activity.action}</p>
+                            <p className="font-medium">{activity.action}</p>
                             <p className="text-sm text-muted-foreground">{activity.user}</p>
                           </div>
+                          <span className="text-xs text-muted-foreground">{activity.time}</span>
                         </div>
-                        <p className="text-sm text-muted-foreground">{activity.time}</p>
                       </div>
-                      {i < recentActivity.length - 1 && <Separator className="my-4" />}
                     </div>
                   ))}
                 </div>

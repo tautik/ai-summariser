@@ -9,8 +9,7 @@ import {
   FaFacebook, 
   FaCog, 
   FaSignOutAlt,
-  FaBrain,
-  FaChartLine
+  FaBrain
 } from 'react-icons/fa';
 import { useEffect, useState } from "react";
 
@@ -132,26 +131,11 @@ const Sidebar = ({ onNavigate, activePage, onLogout }: SidebarProps) => {
             Facebook
           </NavItem>
           
-          <div className="pt-4 pb-2">
-            <div className="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              Analytics
-            </div>
-          </div>
-          
-          <NavItem 
-            icon={FaChartLine} 
-            isActive={activePage === 'insights'}
-            onClick={() => onNavigate('insights')}
-            delay={250}
-          >
-            Insights
-          </NavItem>
-          
           <NavItem 
             icon={FaCog} 
             isActive={activePage === 'settings'}
             onClick={() => onNavigate('settings')}
-            delay={300}
+            delay={250}
           >
             Settings
           </NavItem>
