@@ -1,162 +1,90 @@
-import { useState, useEffect } from 'react'
-import { 
-  ChakraProvider, 
-  Box, 
-  Container, 
-  Heading, 
-  Text, 
-  Input, 
-  Button, 
-  VStack, 
-  HStack, 
-  Spinner,
-  useToast,
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
-  Badge,
-  Stat,
-  StatLabel,
-  StatNumber,
-  StatGroup,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
-  Code
-} from '@chakra-ui/react'
-import axios from 'axios'
+import { useState } from 'react'
 import './App.css'
-import theme from './theme'
-import Auth from './components/Auth'
-import Dashboard from './components/Dashboard'
-
-// Define types for our data
-interface Profile {
-  id: string;
-  name: string;
-  username: string;
-  description: string;
-  profile_image_url: string;
-  verified?: boolean;
-  public_metrics?: {
-    followers_count: number;
-    following_count: number;
-    tweet_count: number;
-    listed_count: number;
-  };
-}
-
-interface Tweet {
-  id: string;
-  text: string;
-  created_at: string;
-  public_metrics: {
-    retweet_count: number;
-    reply_count: number;
-    like_count: number;
-    quote_count: number;
-  };
-}
-
-interface Following {
-  id: string;
-  name: string;
-  username: string;
-}
-
-interface RawData {
-  profile: {
-    data: Profile;
-  };
-  tweets: {
-    data: Tweet[];
-  };
-  following: {
-    data: Following[];
-  };
-}
-
-interface Summary {
-  profile: Profile;
-  tweetSummary: string;
-  tweetContent: string;
-  followingSummary: string;
-  rawData?: RawData;
-}
+import TwitterPage from './components/pages/TwitterPage'
+import HomePage from './components/pages/HomePage'
+import SettingsPage from './components/pages/SettingsPage'
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [handle, setHandle] = useState<string>('')
-  const [loading, setLoading] = useState<boolean>(false)
-  const [summary, setSummary] = useState<Summary | null>(null)
-  const toast = useToast()
+  const [isTwitterConnected, setIsTwitterConnected] = useState(false)
+  const [currentPage, setCurrentPage] = useState('home')
 
-  // Check if user is already authenticated on mount
-  useEffect(() => {
-    const authStatus = localStorage.getItem('isAuthenticated')
-    if (authStatus === 'true') {
-      setIsAuthenticated(true)
-    }
-  }, [])
-
-  const handleSubmit = async () => {
-    if (!handle) {
-      toast({
-        title: 'Error',
-        description: 'Please enter a Twitter handle',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      })
-      return
-    }
-
-    setLoading(true)
-    setSummary(null)
-
-    try {
-      const response = await axios.post('http://localhost:5001/api/social/summarize', { handle })
-      setSummary(response.data)
-    } catch (error) {
-      console.error('Error fetching data:', error)
-      toast({
-        title: 'Error',
-        description: 'Failed to fetch data. Please try again.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      })
-    } finally {
-      setLoading(false)
-    }
+  const handleTwitterConnect = () => {
+    setIsTwitterConnected(true)
   }
 
-  const handleLogin = () => {
-    setIsAuthenticated(true)
-    localStorage.setItem('isAuthenticated', 'true')
+  const handleTwitterDisconnect = () => {
+    setIsTwitterConnected(false)
   }
 
-  const handleLogout = () => {
-    setIsAuthenticated(false)
-    localStorage.removeItem('isAuthenticated')
-    // Clear connected services on logout
-    localStorage.removeItem('connectedServices')
+  const connectedServices = {
+    twitter: isTwitterConnected,
+    reddit: false,
+    gmail: false,
+    facebook: false
   }
 
   return (
-    <ChakraProvider theme={theme}>
-      <Box minH="100vh">
-        {isAuthenticated ? (
-          <Dashboard onLogout={handleLogout} />
-        ) : (
-          <Auth onLogin={handleLogin} />
-        )}
-      </Box>
-    </ChakraProvider>
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto py-8">
+        <nav className="mb-8">
+          <ul className="flex gap-4">
+            <li>
+              <button
+                onClick={() => setCurrentPage('home')}
+                className={`px-4 py-2 rounded-md ${
+                  currentPage === 'home'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'hover:bg-muted'
+                }`}
+              >
+                Home
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => setCurrentPage('twitter')}
+                className={`px-4 py-2 rounded-md ${
+                  currentPage === 'twitter'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'hover:bg-muted'
+                }`}
+              >
+                Twitter
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => setCurrentPage('settings')}
+                className={`px-4 py-2 rounded-md ${
+                  currentPage === 'settings'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'hover:bg-muted'
+                }`}
+              >
+                Settings
+              </button>
+            </li>
+          </ul>
+        </nav>
+
+        <main>
+          {currentPage === 'home' && (
+            <HomePage 
+              connectedServices={connectedServices}
+              onConnect={handleTwitterConnect}
+            />
+          )}
+          {currentPage === 'twitter' && (
+            <TwitterPage
+              isConnected={isTwitterConnected}
+              onConnect={handleTwitterConnect}
+              onDisconnect={handleTwitterDisconnect}
+            />
+          )}
+          {currentPage === 'settings' && <SettingsPage />}
+        </main>
+      </div>
+    </div>
   )
 }
 
