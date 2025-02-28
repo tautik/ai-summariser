@@ -1,11 +1,16 @@
 import { useState } from 'react'
 import './App.css'
 import TwitterPage from './components/pages/TwitterPage'
+import GmailPage from './components/pages/GmailPage'
+import RedditPage from './components/pages/RedditPage'
 import HomePage from './components/pages/HomePage'
 import SettingsPage from './components/pages/SettingsPage'
 
 function App() {
   const [isTwitterConnected, setIsTwitterConnected] = useState(false)
+  const [isGmailConnected, setIsGmailConnected] = useState(false)
+  const [isRedditConnected, setIsRedditConnected] = useState(false)
+  const [isFacebookConnected, setIsFacebookConnected] = useState(false)
   const [currentPage, setCurrentPage] = useState('home')
 
   const handleTwitterConnect = () => {
@@ -16,18 +21,42 @@ function App() {
     setIsTwitterConnected(false)
   }
 
+  const handleGmailConnect = () => {
+    setIsGmailConnected(true)
+  }
+
+  const handleGmailDisconnect = () => {
+    setIsGmailConnected(false)
+  }
+
+  const handleRedditConnect = () => {
+    setIsRedditConnected(true)
+  }
+
+  const handleRedditDisconnect = () => {
+    setIsRedditConnected(false)
+  }
+
+  const handleFacebookConnect = () => {
+    setIsFacebookConnected(true)
+  }
+
+  const handleFacebookDisconnect = () => {
+    setIsFacebookConnected(false)
+  }
+
   const connectedServices = {
     twitter: isTwitterConnected,
-    reddit: false,
-    gmail: false,
-    facebook: false
+    reddit: isRedditConnected,
+    gmail: isGmailConnected,
+    facebook: isFacebookConnected
   }
 
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto py-8">
         <nav className="mb-8">
-          <ul className="flex gap-4">
+          <ul className="flex gap-4 flex-wrap">
             <li>
               <button
                 onClick={() => setCurrentPage('home')}
@@ -50,6 +79,30 @@ function App() {
                 }`}
               >
                 Twitter
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => setCurrentPage('gmail')}
+                className={`px-4 py-2 rounded-md ${
+                  currentPage === 'gmail'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'hover:bg-muted'
+                }`}
+              >
+                Gmail
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => setCurrentPage('reddit')}
+                className={`px-4 py-2 rounded-md ${
+                  currentPage === 'reddit'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'hover:bg-muted'
+                }`}
+              >
+                Reddit
               </button>
             </li>
             <li>
@@ -79,6 +132,20 @@ function App() {
               isConnected={isTwitterConnected}
               onConnect={handleTwitterConnect}
               onDisconnect={handleTwitterDisconnect}
+            />
+          )}
+          {currentPage === 'gmail' && (
+            <GmailPage
+              isConnected={isGmailConnected}
+              onConnect={handleGmailConnect}
+              onDisconnect={handleGmailDisconnect}
+            />
+          )}
+          {currentPage === 'reddit' && (
+            <RedditPage
+              isConnected={isRedditConnected}
+              onConnect={handleRedditConnect}
+              onDisconnect={handleRedditDisconnect}
             />
           )}
           {currentPage === 'settings' && <SettingsPage />}
