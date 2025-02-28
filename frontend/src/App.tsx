@@ -5,13 +5,23 @@ import GmailPage from './components/pages/GmailPage'
 import RedditPage from './components/pages/RedditPage'
 import HomePage from './components/pages/HomePage'
 import SettingsPage from './components/pages/SettingsPage'
+import Auth from './components/Auth'
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isTwitterConnected, setIsTwitterConnected] = useState(true)
   const [isGmailConnected, setIsGmailConnected] = useState(true)
   const [isRedditConnected, setIsRedditConnected] = useState(true)
   const [isFacebookConnected, setIsFacebookConnected] = useState(true)
   const [currentPage, setCurrentPage] = useState('home')
+
+  const handleLogin = () => {
+    setIsAuthenticated(true)
+  }
+
+  const handleLogout = () => {
+    setIsAuthenticated(false)
+  }
 
   const handleTwitterConnect = () => {
     setIsTwitterConnected(true)
@@ -52,72 +62,84 @@ function App() {
     facebook: isFacebookConnected
   }
 
+  if (!isAuthenticated) {
+    return <Auth onLogin={handleLogin} />
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto py-8">
         <nav className="mb-8">
-          <ul className="flex gap-4 flex-wrap">
-            <li>
-              <button
-                onClick={() => setCurrentPage('home')}
-                className={`px-4 py-2 rounded-md ${
-                  currentPage === 'home'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'hover:bg-muted'
-                }`}
-              >
-                Home
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => setCurrentPage('twitter')}
-                className={`px-4 py-2 rounded-md ${
-                  currentPage === 'twitter'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'hover:bg-muted'
-                }`}
-              >
-                Twitter
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => setCurrentPage('gmail')}
-                className={`px-4 py-2 rounded-md ${
-                  currentPage === 'gmail'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'hover:bg-muted'
-                }`}
-              >
-                Gmail
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => setCurrentPage('reddit')}
-                className={`px-4 py-2 rounded-md ${
-                  currentPage === 'reddit'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'hover:bg-muted'
-                }`}
-              >
-                Reddit
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => setCurrentPage('settings')}
-                className={`px-4 py-2 rounded-md ${
-                  currentPage === 'settings'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'hover:bg-muted'
-                }`}
-              >
-                Settings
-              </button>
-            </li>
-          </ul>
+          <div className="flex justify-between items-center">
+            <ul className="flex gap-4 flex-wrap">
+              <li>
+                <button
+                  onClick={() => setCurrentPage('home')}
+                  className={`px-4 py-2 rounded-md ${
+                    currentPage === 'home'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'hover:bg-muted'
+                  }`}
+                >
+                  Home
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => setCurrentPage('twitter')}
+                  className={`px-4 py-2 rounded-md ${
+                    currentPage === 'twitter'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'hover:bg-muted'
+                  }`}
+                >
+                  Twitter
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => setCurrentPage('gmail')}
+                  className={`px-4 py-2 rounded-md ${
+                    currentPage === 'gmail'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'hover:bg-muted'
+                  }`}
+                >
+                  Gmail
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => setCurrentPage('reddit')}
+                  className={`px-4 py-2 rounded-md ${
+                    currentPage === 'reddit'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'hover:bg-muted'
+                  }`}
+                >
+                  Reddit
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => setCurrentPage('settings')}
+                  className={`px-4 py-2 rounded-md ${
+                    currentPage === 'settings'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'hover:bg-muted'
+                  }`}
+                >
+                  Settings
+                </button>
+              </li>
+            </ul>
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 rounded-md bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Logout
+            </button>
+          </div>
         </nav>
 
         <main>
