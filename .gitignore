@@ -1,0 +1,29 @@
+# Environment variables
+.env
+backend/.env
+
+# Dependency directories
+/node_modules
+backend/node_modules
+
+# Build directories
+/dist
+backend/dist
+/build
+backend/build
+
+# Coverage directories
+/coverage
+backend/coverage
+
+# Log files
+/logs
+backend/logs
+
+# Temporary files and directories
+/tmp
+backend/tmp
+/cache
+backend/cache
+/temp
+backend/temp
