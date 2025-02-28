@@ -7,10 +7,10 @@ import HomePage from './components/pages/HomePage'
 import SettingsPage from './components/pages/SettingsPage'
 
 function App() {
-  const [isTwitterConnected, setIsTwitterConnected] = useState(false)
-  const [isGmailConnected, setIsGmailConnected] = useState(false)
-  const [isRedditConnected, setIsRedditConnected] = useState(false)
-  const [isFacebookConnected, setIsFacebookConnected] = useState(false)
+  const [isTwitterConnected, setIsTwitterConnected] = useState(true)
+  const [isGmailConnected, setIsGmailConnected] = useState(true)
+  const [isRedditConnected, setIsRedditConnected] = useState(true)
+  const [isFacebookConnected, setIsFacebookConnected] = useState(true)
   const [currentPage, setCurrentPage] = useState('home')
 
   const handleTwitterConnect = () => {

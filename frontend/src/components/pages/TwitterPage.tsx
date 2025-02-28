@@ -80,85 +80,91 @@ interface Summary {
 type SummaryType = 'latest' | 'replies' | 'trending';
 
 // Default Twitter handle to analyze
-const DEFAULT_HANDLE = 'elonmusk';
+const DEFAULT_HANDLE = 'TautikA';
 
 // Sample profile data
 const SAMPLE_PROFILE: Profile = {
-  id: "44196397",
-  name: "Elon Musk",
-  username: "elonmusk",
-  description: "Working on X, Tesla, SpaceX, Neuralink, xAI & Boring",
-  profile_image_url: "https://pbs.twimg.com/profile_images/1683325380441128960/yRsRRjGO_400x400.jpg",
-  verified: true,
+  id: "1234567890",
+  name: "Tautik Agrahari",
+  username: "TautikA",
+  description: "Tech enthusiast, developer, and founder. Exploring AI, startups, and developer tools.",
+  profile_image_url: "https://pbs.twimg.com/profile_images/1234567890/tautik_400x400.jpg",
+  verified: false,
   public_metrics: {
-    followers_count: 193800000,
-    following_count: 449,
-    tweet_count: 37100,
-    listed_count: 135000
+    followers_count: 1250,
+    following_count: 520,
+    tweet_count: 1876,
+    listed_count: 42
   },
-  location: "🌎",
-  url: "https://x.com/elonmusk",
-  created_at: "2009-03-21T20:04:40.000Z"
+  location: "India",
+  url: "https://x.com/TautikA",
+  created_at: "2020-05-15T14:32:10.000Z"
 };
 
 // Sample latest tweets
 const LATEST_TWEETS: Tweet[] = [
   {
     id: "1",
-    text: "The future of AI is incredibly bright. We're making progress faster than ever before.",
-    created_at: "2025-02-28T18:30:00.000Z",
+    text: "genuine",
+    created_at: "2024-08-12T09:15:00.000Z",
     public_metrics: {
-      retweet_count: 12500,
-      reply_count: 3200,
-      like_count: 98700,
-      quote_count: 1800
-    },
-    entities: {
-      hashtags: [{ tag: "AI" }, { tag: "MachineLearning" }]
+      retweet_count: 1,
+      reply_count: 0,
+      like_count: 8,
+      quote_count: 0
     }
   },
   {
     id: "2",
-    text: "Just had a great meeting with the SpaceX team. Starship progress is accelerating!",
-    created_at: "2025-02-28T15:45:00.000Z",
+    text: "never knew something like @baserunai existed",
+    created_at: "2024-08-11T15:30:00.000Z",
     public_metrics: {
-      retweet_count: 8900,
-      reply_count: 2100,
-      like_count: 76500,
-      quote_count: 1200
+      retweet_count: 3,
+      reply_count: 2,
+      like_count: 15,
+      quote_count: 0
+    },
+    entities: {
+      mentions: [{ username: "baserunai" }]
     }
   },
   {
     id: "3",
-    text: "Tesla's new battery technology will increase range by 30% and reduce cost by 20%. Game changer.",
-    created_at: "2025-02-27T22:10:00.000Z",
+    text: "any alternative for storing secrets? @infisical really sucks at this point",
+    created_at: "2024-08-10T18:45:00.000Z",
     public_metrics: {
-      retweet_count: 15600,
-      reply_count: 4300,
-      like_count: 112000,
-      quote_count: 2500
+      retweet_count: 5,
+      reply_count: 8,
+      like_count: 12,
+      quote_count: 1
+    },
+    entities: {
+      mentions: [{ username: "infisical" }]
     }
   },
   {
     id: "4",
-    text: "The Boring Company's new tunnel in Las Vegas is now operational. 2 miles in 2 minutes!",
-    created_at: "2025-02-27T14:20:00.000Z",
+    text: "finally 🍻",
+    created_at: "2024-08-10T14:20:00.000Z",
     public_metrics: {
-      retweet_count: 7800,
-      reply_count: 1900,
-      like_count: 65400,
-      quote_count: 980
+      retweet_count: 2,
+      reply_count: 1,
+      like_count: 25,
+      quote_count: 1
     }
   },
   {
     id: "5",
-    text: "Neuralink has received FDA approval for human trials. This will help people with severe brain injuries.",
-    created_at: "2025-02-26T19:05:00.000Z",
+    text: "our new logo has a fun story behind it @Suhail",
+    created_at: "2024-08-10T10:30:00.000Z",
     public_metrics: {
-      retweet_count: 18700,
-      reply_count: 5200,
-      like_count: 143000,
-      quote_count: 3100
+      retweet_count: 7,
+      reply_count: 3,
+      like_count: 32,
+      quote_count: 2
+    },
+    entities: {
+      mentions: [{ username: "Suhail" }]
     }
   }
 ];
@@ -167,72 +173,72 @@ const LATEST_TWEETS: Tweet[] = [
 const REPLIES_TWEETS: Tweet[] = [
   {
     id: "6",
-    text: "@TechJournalist Absolutely. The pace of AI development is unprecedented. We need to ensure it remains beneficial.",
-    created_at: "2025-02-28T19:15:00.000Z",
+    text: "@therealprady Congratulations on the funding! Looking forward to seeing what you build next.",
+    created_at: "2024-08-12T16:45:00.000Z",
     public_metrics: {
-      retweet_count: 5600,
-      reply_count: 1800,
-      like_count: 42300,
-      quote_count: 780
+      retweet_count: 0,
+      reply_count: 1,
+      like_count: 5,
+      quote_count: 0
     },
     entities: {
-      mentions: [{ username: "TechJournalist" }]
+      mentions: [{ username: "therealprady" }]
     }
   },
   {
     id: "7",
-    text: "@SpaceEnthusiast The Starship will be ready for orbital test flight next month. Stay tuned!",
-    created_at: "2025-02-28T16:30:00.000Z",
+    text: "@eshamanideep @gigaml is an agi company from now on",
+    created_at: "2024-08-12T14:30:00.000Z",
     public_metrics: {
-      retweet_count: 6700,
-      reply_count: 1500,
-      like_count: 58900,
-      quote_count: 920
+      retweet_count: 0,
+      reply_count: 2,
+      like_count: 3,
+      quote_count: 0
     },
     entities: {
-      mentions: [{ username: "SpaceEnthusiast" }]
+      mentions: [{ username: "eshamanideep" }, { username: "gigaml" }]
     }
   },
   {
     id: "8",
-    text: "@EVowner Yes, all existing Tesla models will receive the software update for enhanced autopilot next week.",
-    created_at: "2025-02-27T23:40:00.000Z",
+    text: "@varunvummadi I'm if you are a founder applying to @ycombinator looking to get your application reviewed fee free to DM me. Happy to help",
+    created_at: "2024-08-12T13:20:00.000Z",
     public_metrics: {
-      retweet_count: 4300,
-      reply_count: 1200,
-      like_count: 37800,
-      quote_count: 650
+      retweet_count: 1,
+      reply_count: 0,
+      like_count: 7,
+      quote_count: 0
     },
     entities: {
-      mentions: [{ username: "EVowner" }]
+      mentions: [{ username: "varunvummadi" }, { username: "ycombinator" }]
     }
   },
   {
     id: "9",
-    text: "@CityPlanner The Boring Company is in discussions with 5 major cities for new tunnel projects. Will announce soon.",
-    created_at: "2025-02-27T15:50:00.000Z",
+    text: "@baserunai How does your product compare to other testing frameworks? Looking for something that integrates well with our CI/CD pipeline.",
+    created_at: "2024-08-11T16:10:00.000Z",
     public_metrics: {
-      retweet_count: 3900,
-      reply_count: 980,
-      like_count: 32500,
-      quote_count: 540
+      retweet_count: 0,
+      reply_count: 1,
+      like_count: 2,
+      quote_count: 0
     },
     entities: {
-      mentions: [{ username: "CityPlanner" }]
+      mentions: [{ username: "baserunai" }]
     }
   },
   {
     id: "10",
-    text: "@Neuroscientist The Neuralink device has shown promising results in animal trials. Human trials will focus on paralysis patients first.",
-    created_at: "2025-02-26T20:25:00.000Z",
+    text: "@infisical Have you considered improving the UX for secret rotation? That's a major pain point for us.",
+    created_at: "2024-08-10T19:25:00.000Z",
     public_metrics: {
-      retweet_count: 7800,
-      reply_count: 2100,
-      like_count: 67400,
-      quote_count: 1100
+      retweet_count: 2,
+      reply_count: 1,
+      like_count: 8,
+      quote_count: 0
     },
     entities: {
-      mentions: [{ username: "Neuroscientist" }]
+      mentions: [{ username: "infisical" }]
     }
   }
 ];
@@ -241,120 +247,127 @@ const REPLIES_TWEETS: Tweet[] = [
 const TRENDING_TWEETS: Tweet[] = [
   {
     id: "11",
-    text: "Breaking: xAI's new language model achieves human-level performance on all benchmarks. This is a watershed moment for artificial intelligence. #xAI #AGI",
-    created_at: "2025-02-25T12:00:00.000Z",
+    text: "it's official — we raised a $5.5M seed led by @GVteam 🚀 AI lip sync is only the beginning everyone has a story to tell, but not everyone is a storyteller — yet imagine a world where we can remix and reimagine ourselves in video in exactly the way we want to be seen",
+    created_at: "2024-08-12T10:00:00.000Z",
     public_metrics: {
-      retweet_count: 45600,
-      reply_count: 12800,
-      like_count: 287000,
-      quote_count: 8900
+      retweet_count: 145,
+      reply_count: 53,
+      like_count: 587,
+      quote_count: 32
     },
     entities: {
-      hashtags: [{ tag: "xAI" }, { tag: "AGI" }]
+      mentions: [{ username: "GVteam" }],
+      hashtags: [{ tag: "AI" }, { tag: "LipSync" }]
     }
   },
   {
     id: "12",
-    text: "Tesla's market cap just exceeded $3 trillion, making it the most valuable company in the world. Sustainable energy is the future.",
-    created_at: "2025-02-24T09:30:00.000Z",
+    text: "I'm if you are a founder applying to @ycombinator looking to get your application reviewed fee free to DM me. Happy to help",
+    created_at: "2024-08-12T09:30:00.000Z",
     public_metrics: {
-      retweet_count: 38700,
-      reply_count: 9500,
-      like_count: 245000,
-      quote_count: 7200
+      retweet_count: 78,
+      reply_count: 34,
+      like_count: 256,
+      quote_count: 15
+    },
+    entities: {
+      mentions: [{ username: "ycombinator" }]
     }
   },
   {
     id: "13",
-    text: "SpaceX Starship successfully completed its first trip to Mars orbit and back. Next stop: human landing. #Mars #SpaceX",
-    created_at: "2025-02-23T14:15:00.000Z",
+    text: "@gigaml is an agi company from now on",
+    created_at: "2024-08-12T08:45:00.000Z",
     public_metrics: {
-      retweet_count: 52300,
-      reply_count: 14700,
-      like_count: 312000,
-      quote_count: 9800
+      retweet_count: 112,
+      reply_count: 45,
+      like_count: 342,
+      quote_count: 28
     },
     entities: {
-      hashtags: [{ tag: "Mars" }, { tag: "SpaceX" }]
+      mentions: [{ username: "gigaml" }]
     }
   },
   {
     id: "14",
-    text: "The Boring Company has reduced tunnel construction costs by 90%. Urban transportation is about to be revolutionized.",
-    created_at: "2025-02-22T11:45:00.000Z",
+    text: "our new logo has a fun story behind it @Suhail",
+    created_at: "2024-08-10T10:30:00.000Z",
     public_metrics: {
-      retweet_count: 29800,
-      reply_count: 7600,
-      like_count: 198000,
-      quote_count: 5400
+      retweet_count: 89,
+      reply_count: 37,
+      like_count: 275,
+      quote_count: 19
+    },
+    entities: {
+      mentions: [{ username: "Suhail" }]
     }
   },
   {
     id: "15",
-    text: "Neuralink's first patient with the implant has regained the ability to control a computer with their thoughts. Medical miracle. #Neuralink",
-    created_at: "2025-02-21T16:20:00.000Z",
+    text: "Just hit 1000 GitHub stars on our open source project! Thanks to all the contributors who made this possible. #OpenSource #Milestone",
+    created_at: "2024-06-15T11:10:00.000Z",
     public_metrics: {
-      retweet_count: 61500,
-      reply_count: 18200,
-      like_count: 378000,
-      quote_count: 12300
+      retweet_count: 67,
+      reply_count: 29,
+      like_count: 215,
+      quote_count: 8
     },
     entities: {
-      hashtags: [{ tag: "Neuralink" }]
+      hashtags: [{ tag: "OpenSource" }, { tag: "Milestone" }]
     }
   }
 ];
 
-// Sample following data
+// Sample following users
 const SAMPLE_FOLLOWING: Following[] = [
   {
-    id: "1",
-    name: "SpaceX",
-    username: "SpaceX",
-    profile_image_url: "https://pbs.twimg.com/profile_images/1082744382585856001/rH_k3PtQ_400x400.jpg",
+    id: "123456",
+    name: "Prady",
+    username: "therealprady",
+    profile_image_url: "https://pbs.twimg.com/profile_images/1234567890/prady_400x400.jpg",
     verified: true,
-    description: "SpaceX designs, manufactures and launches advanced rockets and spacecraft."
+    description: "Founder @ AI lip sync startup. Raised $5.5M seed led by GV."
   },
   {
-    id: "2",
-    name: "Tesla",
-    username: "Tesla",
-    profile_image_url: "https://pbs.twimg.com/profile_images/1337607516008501250/6Ggc4S5n_400x400.png",
-    verified: true,
-    description: "Electric cars, giant batteries and solar"
+    id: "123457",
+    name: "Esha",
+    username: "eshamanideep",
+    profile_image_url: "https://pbs.twimg.com/profile_images/1234567890/esha_400x400.jpg",
+    verified: false,
+    description: "Working on AGI @ gigaml"
   },
   {
-    id: "3",
-    name: "The Boring Company",
-    username: "boringcompany",
-    profile_image_url: "https://pbs.twimg.com/profile_images/888138751242850304/ZdRUGYJo_400x400.jpg",
-    verified: true,
-    description: "Boring tunnels to solve traffic"
+    id: "123458",
+    name: "Varun Vummadi",
+    username: "varunvummadi",
+    profile_image_url: "https://pbs.twimg.com/profile_images/1234567890/varun_400x400.jpg",
+    verified: false,
+    description: "Helping founders apply to YC. DM for application reviews."
   },
   {
-    id: "4",
-    name: "xAI",
-    username: "xai",
-    profile_image_url: "https://pbs.twimg.com/profile_images/1679572242426720256/pYDzjTUd_400x400.jpg",
+    id: "123459",
+    name: "Baserun",
+    username: "baserunai",
+    profile_image_url: "https://pbs.twimg.com/profile_images/1234567890/baserun_400x400.jpg",
     verified: true,
-    description: "Building AI systems that understand the universe"
+    description: "Testing framework for AI applications. Simplify your testing workflow."
   },
   {
-    id: "5",
-    name: "Neuralink",
-    username: "neuralink",
-    profile_image_url: "https://pbs.twimg.com/profile_images/1284191856827863041/7n6w-Urh_400x400.jpg",
+    id: "123460",
+    name: "Infisical",
+    username: "infisical",
+    profile_image_url: "https://pbs.twimg.com/profile_images/1234567890/infisical_400x400.jpg",
     verified: true,
-    description: "Developing ultra high bandwidth brain-machine interfaces to connect humans and computers"
+    description: "Secure secret management for developers and teams."
   }
 ];
 
 // Sample summaries for different types
 const LATEST_SUMMARY = {
   profile: SAMPLE_PROFILE,
-  tweetSummary: "Elon Musk's recent tweets focus on technological advancements across his companies. He's particularly excited about AI developments, SpaceX's Starship progress, Tesla's new battery technology, The Boring Company's tunnel in Las Vegas, and Neuralink's FDA approval for human trials.",
-  tweetContent: "The content of Elon's latest tweets reveals a strong emphasis on innovation and breakthrough technologies. His communication style is direct and enthusiastic, often highlighting specific metrics and achievements. His tweets generate significant engagement, with an average of 99,000 likes per tweet.",
-  followingSummary: "Elon follows 449 accounts, primarily focused on technology, space exploration, and sustainable energy. His following list includes his own companies (SpaceX, Tesla, The Boring Company, xAI, and Neuralink), as well as scientists, engineers, and thought leaders in technology and innovation.",
+  tweetSummary: "Tautik Agrahari's recent tweets focus on developer tools and technologies. He's been exploring services like Baserun AI, discussing alternatives to Infisical for secret management, and sharing brief reactions to tech news and announcements.",
+  tweetContent: "Tautik's tweets are concise and direct, often mentioning specific tools or services he's exploring. His content reflects an active interest in developer productivity tools, particularly those related to AI and security. His engagement metrics show moderate interaction with his audience.",
+  followingSummary: "Tautik follows 520 accounts, with a focus on tech founders, AI researchers, and developer tool companies. His following list includes startup founders who recently raised funding, AI companies, and developer tool providers that align with his professional interests.",
   rawData: {
     profile: { data: SAMPLE_PROFILE },
     tweets: { data: LATEST_TWEETS },
@@ -364,9 +377,9 @@ const LATEST_SUMMARY = {
 
 const REPLIES_SUMMARY = {
   profile: SAMPLE_PROFILE,
-  tweetSummary: "Elon Musk actively engages with his audience through replies, addressing questions about his various companies. His responses are informative and forward-looking, often revealing upcoming plans and timelines for projects across SpaceX, Tesla, The Boring Company, and Neuralink.",
-  tweetContent: "In his replies, Elon provides specific details and timelines that aren't mentioned in his regular tweets. He's responsive to technical questions and often confirms upcoming features or events. His reply style is concise but informative, with an average of 47,980 likes per reply.",
-  followingSummary: "Elon follows 449 accounts, primarily focused on technology, space exploration, and sustainable energy. His following list includes his own companies (SpaceX, Tesla, The Boring Company, xAI, and Neuralink), as well as scientists, engineers, and thought leaders in technology and innovation.",
+  tweetSummary: "Tautik Agrahari actively engages with his network through replies, congratulating peers on their achievements, asking follow-up questions about products, and providing feedback on tools he uses. His interactions show a collaborative approach to the tech community.",
+  tweetContent: "In his replies, Tautik is supportive and inquisitive, often asking specific questions about products or offering congratulations for achievements. He engages with founders, product teams, and fellow developers, showing interest in understanding the details behind announcements.",
+  followingSummary: "Tautik follows 520 accounts, with a focus on tech founders, AI researchers, and developer tool companies. His following list includes startup founders who recently raised funding, AI companies, and developer tool providers that align with his professional interests.",
   rawData: {
     profile: { data: SAMPLE_PROFILE },
     tweets: { data: REPLIES_TWEETS },
@@ -376,9 +389,9 @@ const REPLIES_SUMMARY = {
 
 const TRENDING_SUMMARY = {
   profile: SAMPLE_PROFILE,
-  tweetSummary: "Elon Musk's most viral tweets announce major breakthroughs across his companies. His trending content includes xAI's human-level language model, Tesla becoming the world's most valuable company, SpaceX's Mars mission, The Boring Company's cost reduction, and Neuralink's first successful human implant.",
-  tweetContent: "Elon's trending tweets generate massive engagement, with an average of 284,000 likes per tweet. These posts typically announce major milestones or breakthroughs that have significant implications for their respective industries. His communication style in these tweets is bold and visionary.",
-  followingSummary: "Elon follows 449 accounts, primarily focused on technology, space exploration, and sustainable energy. His following list includes his own companies (SpaceX, Tesla, The Boring Company, xAI, and Neuralink), as well as scientists, engineers, and thought leaders in technology and innovation.",
+  tweetSummary: "Tautik Agrahari's most popular tweets focus on product launches, insights from his entrepreneurial journey, and open source contributions. His trending content includes announcements about his projects, thought leadership on AI and developer tools, and milestone celebrations.",
+  tweetContent: "Tautik's trending tweets generate significantly higher engagement than his regular posts, with an average of 255 likes per tweet. These posts typically share major achievements, insights from his experience, or useful tools he's created. His communication style in these tweets is informative and authentic.",
+  followingSummary: "Tautik follows 520 accounts, with a focus on tech founders, AI researchers, and developer tool companies. His following list includes startup founders who recently raised funding, AI companies, and developer tool providers that align with his professional interests.",
   rawData: {
     profile: { data: SAMPLE_PROFILE },
     tweets: { data: TRENDING_TWEETS },
@@ -413,11 +426,7 @@ const TwitterPage = ({ isConnected, onConnect, onDisconnect }: TwitterPageProps)
     setError(null);
     
     try {
-      // Use sample data instead of API call to prevent errors
-      setSummary(LATEST_SUMMARY);
-      
-      // Uncomment below to use actual API
-      /*
+      // Fetch data from API
       const response = await fetch(`http://localhost:5001/api/social/twitter/${DEFAULT_HANDLE}`);
       const data = await response.json();
       
@@ -436,10 +445,19 @@ const TwitterPage = ({ isConnected, onConnect, onDisconnect }: TwitterPageProps)
       };
       
       setSummary(processedData);
-      */
+      
+      // Fallback to sample data if API response doesn't have required data
+      if (!processedData.profile || !processedData.tweetSummary) {
+        console.warn('API response missing required data, using sample data');
+        loadSummaryByType(summaryType);
+      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
       console.error('Failed to load data:', err);
+      setError(err instanceof Error ? err.message : 'An error occurred');
+      
+      // Fallback to sample data on error
+      console.log('Using sample data due to API error');
+      loadSummaryByType(summaryType);
     } finally {
       setLoading(false);
     }
