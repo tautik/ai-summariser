@@ -77,19 +77,19 @@ const Sidebar = ({ onNavigate, activePage, onLogout }: SidebarProps) => {
       <div className="absolute -top-8 -right-8 w-24 h-24 bg-indigo-100 rounded-full opacity-20"></div>
       
       <div className={`flex items-center p-6 transition-all duration-700 ${logoAnimated ? 'opacity-100' : 'opacity-0 -translate-y-4'}`}>
-        <div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-md">
-          <FaBrain className="text-white h-5 w-5" />
+        <div className="h-12 w-12 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-md">
+          <FaBrain className="text-white h-6 w-6" />
         </div>
         <div className="ml-3">
           <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-indigo-600">AI Summarizer</span>
-          <div className="text-xs text-gray-500 mt-0.5">Smart insights</div>
+          <div className="text-xs text-gray-500 mt-1">Smart insights</div>
         </div>
       </div>
       
-      <Separator className="opacity-30" />
+      <Separator className="opacity-30 my-2" />
       
-      <ScrollArea className="flex-1 px-3">
-        <div className="space-y-1.5 py-4">
+      <ScrollArea className="flex-1 px-4">
+        <div className="space-y-2 py-6">
           <NavItem 
             icon={FaHome} 
             isActive={activePage === 'home'}
@@ -131,6 +131,8 @@ const Sidebar = ({ onNavigate, activePage, onLogout }: SidebarProps) => {
             Facebook
           </NavItem>
           
+          <Separator className="opacity-30 my-3" />
+          
           <NavItem 
             icon={FaCog} 
             isActive={activePage === 'settings'}
@@ -142,10 +144,10 @@ const Sidebar = ({ onNavigate, activePage, onLogout }: SidebarProps) => {
         </div>
       </ScrollArea>
 
-      <div className="p-4">
+      <div className="p-6">
         <Button
           variant="destructive"
-          className="w-full justify-start transition-all duration-500 hover:bg-red-600 opacity-90 hover:opacity-100"
+          className="w-full justify-start transition-all duration-500 hover:bg-red-600 opacity-90 hover:opacity-100 py-3"
           onClick={onLogout}
           style={{
             background: 'linear-gradient(90deg, rgba(229, 62, 62, 0.9) 0%, rgba(245, 101, 101, 0.9) 100%)',

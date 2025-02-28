@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { sendSummaryEmail } from '../services/emailService';
-import { FaEnvelope, FaSpinner, FaTimes } from 'react-icons/fa';
+import { FaEnvelope, FaSpinner, FaTimes, FaCheckCircle } from 'react-icons/fa';
 
 interface EmailModalProps {
   isOpen: boolean;
@@ -18,6 +18,21 @@ const EmailModal = ({ isOpen, onClose, serviceName, summaryData }: EmailModalPro
   const [error, setError] = useState('');
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  // Clear form when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      // Try to get the last used email from localStorage
+      const savedEmail = localStorage.getItem('lastUsedEmail');
+      if (savedEmail) {
+        setEmail(savedEmail);
+      }
+      
+      setError('');
+      setIsSuccess(false);
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (showToast) {
@@ -58,6 +73,9 @@ const EmailModal = ({ isOpen, onClose, serviceName, summaryData }: EmailModalPro
     setIsLoading(true);
     
     try {
+      // Save the email to localStorage for future use
+      localStorage.setItem('lastUsedEmail', email);
+      
       const result = await sendSummaryEmail({
         email,
         serviceName,
@@ -65,13 +83,19 @@ const EmailModal = ({ isOpen, onClose, serviceName, summaryData }: EmailModalPro
       });
 
       if (result.success) {
+        setIsSuccess(true);
         showSuccessToast('Summary report has been sent to your email');
-        onClose();
+        
+        // Close the modal after a short delay
+        setTimeout(() => {
+          onClose();
+          setIsSuccess(false);
+        }, 2000);
       } else {
         setError(result.message || 'Failed to send email');
       }
     } catch (error) {
-      setError('An unexpected error occurred');
+      setError('An unexpected error occurred. Please try again later.');
       console.error('Error sending email:', error);
     } finally {
       setIsLoading(false);
@@ -95,9 +119,13 @@ const EmailModal = ({ isOpen, onClose, serviceName, summaryData }: EmailModalPro
             borderRadius: '8px',
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
             zIndex: 9999,
-            animation: 'fadeIn 0.3s ease-out'
+            animation: 'fadeIn 0.3s ease-out',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
           }}
         >
+          <FaCheckCircle />
           {toastMessage}
         </div>
       )}
@@ -164,59 +192,99 @@ const EmailModal = ({ isOpen, onClose, serviceName, summaryData }: EmailModalPro
           
           {/* Modal body */}
           <div style={{ padding: '24px' }}>
-            <div style={{ marginBottom: '16px' }}>
-              <label 
-                style={{ 
-                  display: 'block', 
-                  marginBottom: '8px', 
-                  fontWeight: 'medium' 
-                }}
-              >
-                Email Address
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={handleEmailChange}
-                placeholder="Enter your email address"
-                style={{
-                  width: '100%',
-                  padding: '10px 12px',
-                  fontSize: '16px',
-                  borderRadius: '6px',
-                  border: error ? '1px solid #E53E3E' : '1px solid #CBD5E0',
-                  outline: 'none',
-                  boxSizing: 'border-box'
-                }}
-              />
-              {error && (
-                <div style={{ color: '#E53E3E', marginTop: '8px', fontSize: '14px' }}>
-                  {error}
-                </div>
-              )}
-            </div>
-            
-            <div>
-              <label 
-                style={{ 
-                  display: 'block', 
-                  marginBottom: '8px', 
-                  fontWeight: 'medium' 
-                }}
-              >
-                Service
-              </label>
-              <div
-                style={{
-                  padding: '12px',
-                  backgroundColor: '#F7FAFC',
-                  borderRadius: '6px',
-                  fontWeight: 'medium'
-                }}
-              >
-                {serviceName}
+            {isSuccess ? (
+              <div style={{ 
+                textAlign: 'center', 
+                padding: '20px',
+                color: '#48BB78'
+              }}>
+                <FaCheckCircle style={{ fontSize: '48px', margin: '0 auto 16px' }} />
+                <p style={{ fontSize: '18px', fontWeight: 'bold' }}>Email Sent Successfully!</p>
+                <p style={{ color: '#718096', marginTop: '8px' }}>
+                  The summary report has been sent to {email}
+                </p>
               </div>
-            </div>
+            ) : (
+              <>
+                <div style={{ marginBottom: '16px' }}>
+                  <label 
+                    style={{ 
+                      display: 'block', 
+                      marginBottom: '8px', 
+                      fontWeight: 'medium' 
+                    }}
+                  >
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={handleEmailChange}
+                    placeholder="Enter your email address"
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      fontSize: '16px',
+                      borderRadius: '6px',
+                      border: error ? '1px solid #E53E3E' : '1px solid #CBD5E0',
+                      outline: 'none',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                  {error && (
+                    <div style={{ color: '#E53E3E', marginTop: '8px', fontSize: '14px' }}>
+                      {error}
+                    </div>
+                  )}
+                </div>
+                
+                <div>
+                  <label 
+                    style={{ 
+                      display: 'block', 
+                      marginBottom: '8px', 
+                      fontWeight: 'medium' 
+                    }}
+                  >
+                    Service
+                  </label>
+                  <div
+                    style={{
+                      padding: '12px',
+                      backgroundColor: '#F7FAFC',
+                      borderRadius: '6px',
+                      fontWeight: 'medium'
+                    }}
+                  >
+                    {serviceName}
+                  </div>
+                </div>
+                
+                <div style={{ marginTop: '16px' }}>
+                  <label 
+                    style={{ 
+                      display: 'block', 
+                      marginBottom: '8px', 
+                      fontWeight: 'medium' 
+                    }}
+                  >
+                    Summary Preview
+                  </label>
+                  <div
+                    style={{
+                      padding: '12px',
+                      backgroundColor: '#F7FAFC',
+                      borderRadius: '6px',
+                      fontSize: '14px',
+                      maxHeight: '100px',
+                      overflow: 'auto'
+                    }}
+                  >
+                    {summaryData.summary}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
 
           {/* Modal footer */}
@@ -244,28 +312,31 @@ const EmailModal = ({ isOpen, onClose, serviceName, summaryData }: EmailModalPro
             >
               Cancel
             </button>
-            <button
-              style={{
-                padding: '8px 16px',
-                background: 'linear-gradient(90deg, #4299e1, #63b3ed)',
-                color: 'white',
-                border: 'none',
-                borderRadius: '6px',
-                display: 'flex',
-                alignItems: 'center',
-                cursor: isLoading ? 'not-allowed' : 'pointer',
-                opacity: isLoading ? 0.7 : 1
-              }}
-              onClick={handleSubmit}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <FaSpinner style={{ marginRight: '8px', animation: 'spin 1s linear infinite' }} />
-              ) : (
-                <FaEnvelope style={{ marginRight: '8px' }} />
-              )}
-              {isLoading ? 'Sending...' : 'Send Report'}
-            </button>
+            {!isSuccess && (
+              <button
+                style={{
+                  padding: '8px 16px',
+                  background: 'linear-gradient(90deg, #4299e1, #63b3ed)',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: isLoading ? 'not-allowed' : 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
+                onClick={handleSubmit}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <FaSpinner className="animate-spin" /> Sending...
+                  </>
+                ) : (
+                  'Send Email'
+                )}
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -280,6 +351,10 @@ const EmailModal = ({ isOpen, onClose, serviceName, summaryData }: EmailModalPro
           @keyframes spin {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
+          }
+          
+          .animate-spin {
+            animation: spin 1s linear infinite;
           }
         `}
       </style>

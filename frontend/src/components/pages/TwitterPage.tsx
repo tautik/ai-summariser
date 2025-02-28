@@ -558,247 +558,242 @@ const TwitterPage = ({ isConnected, onConnect, onDisconnect }: TwitterPageProps)
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
-            <FaTwitter className="text-[#1DA1F2]" />
-            Twitter Analysis
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Analyze Twitter profiles and get insights
-          </p>
-        </div>
-        <Button
-          variant={isConnected ? "destructive" : "default"}
-          onClick={isConnected ? onDisconnect : onConnect}
-        >
-          {isConnected ? (
-            <>
-              <FaUnlink className="mr-2" />
-              Disconnect
-            </>
-          ) : (
-            <>
-              <FaLink className="mr-2" />
-              Connect to Twitter
-            </>
-          )}
-        </Button>
-      </div>
-
+    <div className="p-6 md:p-8">
       {!isConnected ? (
-        <Card>
-          <CardHeader>
-            <CardTitle>Not connected!</CardTitle>
-            <CardDescription>
-              Connect to Twitter to analyze profiles and tweets.
-            </CardDescription>
-          </CardHeader>
-        </Card>
+        <div className="flex flex-col items-center justify-center space-y-6 p-8 bg-white rounded-lg shadow-sm border border-gray-200">
+          <FaTwitter className="text-blue-400 text-6xl mb-2" />
+          <h2 className="text-2xl font-bold text-center">Connect to Twitter</h2>
+          <p className="text-gray-500 text-center max-w-md">
+            Connect your Twitter account to analyze profiles, tweets, and get AI-powered insights
+          </p>
+          <button
+            onClick={onConnect}
+            className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-full transition-colors"
+          >
+            <FaLink className="text-sm" /> Connect Twitter
+          </button>
+        </div>
       ) : (
-        <div className="space-y-4">
-          <div className="flex gap-2">
-            <Button 
-              variant={summaryType === 'latest' ? "default" : "outline"} 
-              onClick={() => setSummaryType('latest')}
+        <div className="space-y-6">
+          <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+            <div>
+              <h1 className="text-3xl font-bold mb-1">Twitter Analysis</h1>
+              <p className="text-gray-500">Analyze Twitter profiles and get insights</p>
+            </div>
+            <button
+              onClick={onDisconnect}
+              className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-colors"
             >
-              Latest Tweets
-            </Button>
-            <Button 
-              variant={summaryType === 'replies' ? "default" : "outline"} 
-              onClick={() => setSummaryType('replies')}
-            >
-              Replies & Mentions
-            </Button>
-            <Button 
-              variant={summaryType === 'trending' ? "default" : "outline"} 
-              onClick={() => setSummaryType('trending')}
-            >
-              Trending Topics
-            </Button>
+              <FaUnlink className="text-sm" /> Disconnect
+            </button>
           </div>
 
-          {error && (
-            <Card className="bg-destructive/15">
-              <CardHeader>
-                <CardTitle className="text-destructive">Error</CardTitle>
-                <CardDescription>{error}</CardDescription>
-              </CardHeader>
-            </Card>
-          )}
+          <div className="space-y-6">
+            <div className="flex flex-wrap gap-3">
+              <Button 
+                variant={summaryType === 'latest' ? "default" : "outline"} 
+                onClick={() => setSummaryType('latest')}
+                className="px-4 py-2"
+              >
+                Latest Tweets
+              </Button>
+              <Button 
+                variant={summaryType === 'replies' ? "default" : "outline"} 
+                onClick={() => setSummaryType('replies')}
+                className="px-4 py-2"
+              >
+                Replies & Mentions
+              </Button>
+              <Button 
+                variant={summaryType === 'trending' ? "default" : "outline"} 
+                onClick={() => setSummaryType('trending')}
+                className="px-4 py-2"
+              >
+                Trending Topics
+              </Button>
+            </div>
 
-          {loading && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Loading...</CardTitle>
-                <CardDescription>
-                  Fetching Twitter data and generating analysis
-                </CardDescription>
-              </CardHeader>
-            </Card>
-          )}
+            {error && (
+              <Card className="bg-destructive/15 mb-6">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-destructive">Error</CardTitle>
+                  <CardDescription>{error}</CardDescription>
+                </CardHeader>
+              </Card>
+            )}
 
-          {summary && !loading && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Analysis Results for @{summary.profile.username}</CardTitle>
-                <CardDescription>
-                  {summaryType === 'latest' && 'Summary of latest tweets and activity'}
-                  {summaryType === 'replies' && 'Analysis of replies and mentions'}
-                  {summaryType === 'trending' && 'Trending topics in user\'s timeline'}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Tabs defaultValue="profile" className="space-y-4">
-                  <TabsList>
-                    <TabsTrigger value="profile">Profile</TabsTrigger>
-                    <TabsTrigger value="tweets">Tweets</TabsTrigger>
-                    <TabsTrigger value="following">Following</TabsTrigger>
-                    <TabsTrigger value="summary">AI Summary</TabsTrigger>
-                  </TabsList>
+            {loading && (
+              <Card className="mb-6">
+                <CardHeader className="pb-2">
+                  <CardTitle>Loading...</CardTitle>
+                  <CardDescription>
+                    Fetching Twitter data and generating analysis
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            )}
 
-                  <TabsContent value="profile">
-                    <div className="space-y-4">
-                      <div className="flex items-start gap-4">
-                        <img 
-                          src={summary.profile.profile_image_url} 
-                          alt={summary.profile.name}
-                          className="w-16 h-16 rounded-full"
-                        />
+            {summary && !loading && (
+              <Card className="overflow-hidden">
+                <CardHeader className="pb-2">
+                  <CardTitle>Analysis Results for @{summary.profile.username}</CardTitle>
+                  <CardDescription>
+                    {summaryType === 'latest' && 'Summary of latest tweets and activity'}
+                    {summaryType === 'replies' && 'Analysis of replies and mentions'}
+                    {summaryType === 'trending' && 'Trending topics in user\'s timeline'}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Tabs defaultValue="profile" className="space-y-6">
+                    <TabsList className="mb-2">
+                      <TabsTrigger value="profile">Profile</TabsTrigger>
+                      <TabsTrigger value="tweets">Tweets</TabsTrigger>
+                      <TabsTrigger value="following">Following</TabsTrigger>
+                      <TabsTrigger value="summary">AI Summary</TabsTrigger>
+                    </TabsList>
+
+                    <TabsContent value="profile" className="mt-4">
+                      <div className="space-y-6">
+                        <div className="flex items-start gap-5">
+                          <img 
+                            src={summary.profile.profile_image_url} 
+                            alt={summary.profile.name}
+                            className="w-20 h-20 rounded-full"
+                          />
+                          <div>
+                            <h3 className="text-2xl font-bold">{summary.profile.name}</h3>
+                            <p className="text-muted-foreground">@{summary.profile.username}</p>
+                            <p className="mt-3">{summary.profile.description}</p>
+                          </div>
+                        </div>
+                        
+                        <Separator className="my-4" />
+                        
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                          <div className="bg-gray-50 p-4 rounded-lg">
+                            <p className="text-sm text-muted-foreground">Followers</p>
+                            <p className="text-2xl font-bold">
+                              {formatNumber(safeGet(summary.profile, 'public_metrics.followers_count', 0))}
+                            </p>
+                          </div>
+                          <div className="bg-gray-50 p-4 rounded-lg">
+                            <p className="text-sm text-muted-foreground">Following</p>
+                            <p className="text-2xl font-bold">
+                              {formatNumber(safeGet(summary.profile, 'public_metrics.following_count', 0))}
+                            </p>
+                          </div>
+                          <div className="bg-gray-50 p-4 rounded-lg">
+                            <p className="text-sm text-muted-foreground">Tweets</p>
+                            <p className="text-2xl font-bold">
+                              {formatNumber(safeGet(summary.profile, 'public_metrics.tweet_count', 0))}
+                            </p>
+                          </div>
+                          <div className="bg-gray-50 p-4 rounded-lg">
+                            <p className="text-sm text-muted-foreground">Listed</p>
+                            <p className="text-2xl font-bold">
+                              {formatNumber(safeGet(summary.profile, 'public_metrics.listed_count', 0))}
+                            </p>
+                          </div>
+                        </div>
+                        
+                        <Separator className="my-4" />
+                        
                         <div>
-                          <h3 className="text-xl font-bold">{summary.profile.name}</h3>
-                          <p className="text-muted-foreground">@{summary.profile.username}</p>
-                          <p className="mt-2">{summary.profile.description}</p>
+                          <p className="text-sm text-muted-foreground">Location</p>
+                          <p>{summary.profile.location || 'Not specified'}</p>
+                        </div>
+                        
+                        <div>
+                          <p className="text-sm text-muted-foreground">Joined</p>
+                          <p>{summary.profile.created_at ? formatDate(summary.profile.created_at) : 'Unknown'}</p>
                         </div>
                       </div>
-                      
-                      <Separator />
-                      
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div>
-                          <p className="text-sm text-muted-foreground">Followers</p>
-                          <p className="text-xl font-bold">
-                            {formatNumber(safeGet(summary.profile, 'public_metrics.followers_count', 0))}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-muted-foreground">Following</p>
-                          <p className="text-xl font-bold">
-                            {formatNumber(safeGet(summary.profile, 'public_metrics.following_count', 0))}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-muted-foreground">Tweets</p>
-                          <p className="text-xl font-bold">
-                            {formatNumber(safeGet(summary.profile, 'public_metrics.tweet_count', 0))}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-muted-foreground">Listed</p>
-                          <p className="text-xl font-bold">
-                            {formatNumber(safeGet(summary.profile, 'public_metrics.listed_count', 0))}
-                          </p>
-                        </div>
-                      </div>
-                      
-                      <Separator />
-                      
-                      <div>
-                        <p className="text-sm text-muted-foreground">Location</p>
-                        <p>{summary.profile.location || 'Not specified'}</p>
-                      </div>
-                      
-                      <div>
-                        <p className="text-sm text-muted-foreground">Joined</p>
-                        <p>{summary.profile.created_at ? formatDate(summary.profile.created_at) : 'Unknown'}</p>
-                      </div>
-                    </div>
-                  </TabsContent>
+                    </TabsContent>
 
-                  <TabsContent value="tweets">
-                    <ScrollArea className="h-[400px]">
-                      {summary.rawData.tweets && summary.rawData.tweets.data && summary.rawData.tweets.data.length > 0 ? (
-                        <div className="space-y-4">
-                          {summary.rawData.tweets.data.map((tweet) => (
-                            <Card key={tweet.id}>
-                              <CardContent className="pt-6">
-                                <p>{tweet.text}</p>
-                                <div className="flex justify-between items-center mt-2 text-sm text-muted-foreground">
-                                  <span>{formatDate(tweet.created_at)}</span>
-                                  <div className="flex gap-4">
-                                    <span>{formatNumber(tweet.public_metrics.retweet_count)} retweets</span>
-                                    <span>{formatNumber(tweet.public_metrics.reply_count)} replies</span>
-                                    <span>{formatNumber(tweet.public_metrics.like_count)} likes</span>
+                    <TabsContent value="tweets">
+                      <ScrollArea className="h-[400px]">
+                        {summary.rawData.tweets && summary.rawData.tweets.data && summary.rawData.tweets.data.length > 0 ? (
+                          <div className="space-y-4">
+                            {summary.rawData.tweets.data.map((tweet) => (
+                              <Card key={tweet.id}>
+                                <CardContent className="pt-6">
+                                  <p>{tweet.text}</p>
+                                  <div className="flex justify-between items-center mt-2 text-sm text-muted-foreground">
+                                    <span>{formatDate(tweet.created_at)}</span>
+                                    <div className="flex gap-4">
+                                      <span>{formatNumber(tweet.public_metrics.retweet_count)} retweets</span>
+                                      <span>{formatNumber(tweet.public_metrics.reply_count)} replies</span>
+                                      <span>{formatNumber(tweet.public_metrics.like_count)} likes</span>
+                                    </div>
                                   </div>
-                                </div>
-                              </CardContent>
-                            </Card>
-                          ))}
-                        </div>
-                      ) : (
-                        <p>No tweets available</p>
-                      )}
-                    </ScrollArea>
-                  </TabsContent>
+                                </CardContent>
+                              </Card>
+                            ))}
+                          </div>
+                        ) : (
+                          <p>No tweets available</p>
+                        )}
+                      </ScrollArea>
+                    </TabsContent>
 
-                  <TabsContent value="following">
-                    <ScrollArea className="h-[400px]">
-                      {summary.rawData.following && summary.rawData.following.data && summary.rawData.following.data.length > 0 ? (
-                        <div className="space-y-4">
-                          {summary.rawData.following.data.map((user) => (
-                            <Card key={user.id}>
-                              <CardContent className="pt-6">
-                                <div className="flex items-start gap-4">
-                                  {user.profile_image_url && (
-                                    <img 
-                                      src={user.profile_image_url} 
-                                      alt={user.name}
-                                      className="w-12 h-12 rounded-full"
-                                    />
-                                  )}
-                                  <div>
-                                    <h3 className="font-bold">{user.name}</h3>
-                                    <p className="text-muted-foreground">@{user.username}</p>
-                                    {user.description && <p className="mt-1">{user.description}</p>}
+                    <TabsContent value="following">
+                      <ScrollArea className="h-[400px]">
+                        {summary.rawData.following && summary.rawData.following.data && summary.rawData.following.data.length > 0 ? (
+                          <div className="space-y-4">
+                            {summary.rawData.following.data.map((user) => (
+                              <Card key={user.id}>
+                                <CardContent className="pt-6">
+                                  <div className="flex items-start gap-4">
+                                    {user.profile_image_url && (
+                                      <img 
+                                        src={user.profile_image_url} 
+                                        alt={user.name}
+                                        className="w-12 h-12 rounded-full"
+                                      />
+                                    )}
+                                    <div>
+                                      <h3 className="font-bold">{user.name}</h3>
+                                      <p className="text-muted-foreground">@{user.username}</p>
+                                      {user.description && <p className="mt-1">{user.description}</p>}
+                                    </div>
                                   </div>
-                                </div>
-                              </CardContent>
-                            </Card>
-                          ))}
-                        </div>
-                      ) : (
-                        <p>No following data available</p>
-                      )}
-                    </ScrollArea>
-                  </TabsContent>
+                                </CardContent>
+                              </Card>
+                            ))}
+                          </div>
+                        ) : (
+                          <p>No following data available</p>
+                        )}
+                      </ScrollArea>
+                    </TabsContent>
 
-                  <TabsContent value="summary">
-                    <div className="space-y-4">
-                      <div>
-                        <h3 className="text-lg font-medium mb-2">Tweet Analysis</h3>
-                        <p>{summary.tweetSummary}</p>
+                    <TabsContent value="summary">
+                      <div className="space-y-4">
+                        <div>
+                          <h3 className="text-lg font-medium mb-2">Tweet Analysis</h3>
+                          <p>{summary.tweetSummary}</p>
+                        </div>
+                        
+                        <Separator />
+                        
+                        <div>
+                          <h3 className="text-lg font-medium mb-2">Tweet Content</h3>
+                          <p>{summary.tweetContent}</p>
+                        </div>
+                        
+                        <Separator />
+                        
+                        <div>
+                          <h3 className="text-lg font-medium mb-2">Following Analysis</h3>
+                          <p>{summary.followingSummary}</p>
+                        </div>
                       </div>
-                      
-                      <Separator />
-                      
-                      <div>
-                        <h3 className="text-lg font-medium mb-2">Tweet Content</h3>
-                        <p>{summary.tweetContent}</p>
-                      </div>
-                      
-                      <Separator />
-                      
-                      <div>
-                        <h3 className="text-lg font-medium mb-2">Following Analysis</h3>
-                        <p>{summary.followingSummary}</p>
-                      </div>
-                    </div>
-                  </TabsContent>
-                </Tabs>
-              </CardContent>
-            </Card>
-          )}
+                    </TabsContent>
+                  </Tabs>
+                </CardContent>
+              </Card>
+            )}
+          </div>
         </div>
       )}
     </div>

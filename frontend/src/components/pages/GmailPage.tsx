@@ -1,11 +1,5 @@
 import { useState, useEffect } from 'react';
 import { FaEnvelope, FaLink, FaUnlink } from 'react-icons/fa';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
 
 interface GmailPageProps {
   isConnected: boolean;
@@ -17,6 +11,7 @@ interface Email {
   id: string;
   subject: string;
   sender: string;
+  from: string;
   date: string;
   snippet: string;
   isRead: boolean;
@@ -28,10 +23,26 @@ interface EmailSummary {
   emailCount: number;
   unreadCount: number;
   importantCount: number;
-  topSenders: { name: string; count: number }[];
-  categorySummary: { category: string; count: number }[];
-  recentEmails: Email[];
   summary: string;
+  timePeriod: string;
+  topSenders: Array<{
+    name: string;
+    email: string;
+    count: number;
+  }>;
+  recentEmails: Array<{
+    id: string;
+    subject: string;
+    from: string;
+    date: string;
+    snippet: string;
+    labels: string[];
+    hasAttachment: boolean;
+  }>;
+  categorySummary: Array<{
+    category: string;
+    count: number;
+  }>;
   actionItems: string[];
   followUps: string[];
 }
@@ -44,6 +55,7 @@ const SAMPLE_EMAILS: Email[] = [
     id: '1',
     subject: 'Regarding your application to Headout | Software Engineer, Backend',
     sender: 'Ekta Chaturvedi <ekta@headout.com>',
+    from: 'Ekta Chaturvedi',
     date: '2025-02-28T20:17:00Z',
     snippet: 'Hi Tautik, Thank you for informing us about your unavailability for the assignment. Since you won\'t be able to complete it this weekend, we will include you in the next batch.',
     isRead: false,
@@ -54,6 +66,7 @@ const SAMPLE_EMAILS: Email[] = [
     id: '2',
     subject: 'Alert : Update on your HDFC Bank Credit Card',
     sender: 'HDFC Bank InstaAlerts <alerts@hdfcbank.net>',
+    from: 'HDFC Bank',
     date: '2025-02-28T20:49:00Z',
     snippet: 'Dear Customer, Thank you for using HDFC Bank Card XX9764 for Rs. 119.0 at SPOTIFYINDIA on 28-02-2025 20:49:14',
     isRead: true,
@@ -64,6 +77,7 @@ const SAMPLE_EMAILS: Email[] = [
     id: '3',
     subject: 'Delve - Tautik - Teemgenie',
     sender: 'Isaiah de la Fuente <isaiah@delve.com>',
+    from: 'Isaiah de la Fuente',
     date: '2025-02-27T00:15:00Z',
     snippet: 'Hey all! We recently have given Tautik an opportunity to join Delve. Please find time to sync so we work out payment and HR details.',
     isRead: false,
@@ -74,16 +88,18 @@ const SAMPLE_EMAILS: Email[] = [
     id: '4',
     subject: 'Your Amazon Order #402-7892345-2938456 has shipped',
     sender: 'Amazon.in <shipment-tracking@amazon.in>',
+    from: 'Amazon',
     date: '2025-02-26T14:30:00Z',
     snippet: 'Your package with Logitech MX Master 3S Mouse is on the way and will be delivered tomorrow by 9 PM.',
     isRead: true,
-    hasAttachment: true,
-    labels: ['shopping', 'orders']
+    hasAttachment: false,
+    labels: ['shopping', 'updates']
   },
   {
     id: '5',
     subject: 'Invitation to speak at React India 2025',
     sender: 'React India <organizers@reactindia.dev>',
+    from: 'React India',
     date: '2025-02-25T09:45:00Z',
     snippet: 'Dear Tautik, We would like to invite you to speak at React India 2025 conference in Goa. Please let us know if you are interested.',
     isRead: false,
@@ -94,26 +110,29 @@ const SAMPLE_EMAILS: Email[] = [
     id: '6',
     subject: 'Your Netflix subscription will renew soon',
     sender: 'Netflix <info@netflix.com>',
+    from: 'Netflix',
     date: '2025-02-24T11:20:00Z',
     snippet: 'Your monthly subscription will be renewed on March 3rd. Your Premium plan costs Rs. 649 per month.',
     isRead: true,
     hasAttachment: false,
-    labels: ['subscriptions', 'entertainment']
+    labels: ['entertainment', 'finance']
   },
   {
     id: '7',
     subject: 'Feedback on your recent pull request',
     sender: 'GitHub <notifications@github.com>',
+    from: 'GitHub',
     date: '2025-02-23T16:05:00Z',
     snippet: 'Your pull request #342 on repository ai-summariser has received comments from the code owner.',
     isRead: false,
     hasAttachment: false,
-    labels: ['development', 'github']
+    labels: ['development', 'updates']
   },
   {
     id: '8',
     subject: 'Your flight to Bangalore is confirmed',
     sender: 'MakeMyTrip <bookings@makemytrip.com>',
+    from: 'MakeMyTrip',
     date: '2025-02-22T13:15:00Z',
     snippet: 'Your flight AI-505 from Delhi to Bangalore on March 15th is confirmed. Check-in opens 24 hours before departure.',
     isRead: true,
@@ -123,146 +142,138 @@ const SAMPLE_EMAILS: Email[] = [
 ];
 
 // Sample email categories
-const RECRUITMENT_EMAILS = SAMPLE_EMAILS.filter(email => email.labels.includes('recruitment'));
-const FINANCE_EMAILS = SAMPLE_EMAILS.filter(email => email.labels.includes('finance'));
-const SOCIAL_EMAILS = SAMPLE_EMAILS.filter(email => email.labels.includes('events') || email.labels.includes('entertainment'));
+const RECRUITMENT_EMAILS: Email[] = SAMPLE_EMAILS.filter(email => email.labels.includes('recruitment'));
+const FINANCE_EMAILS: Email[] = SAMPLE_EMAILS.filter(email => email.labels.includes('finance'));
+const SOCIAL_EMAILS: Email[] = SAMPLE_EMAILS.filter(email => email.labels.includes('events') || email.labels.includes('entertainment'));
 
 // Create more detailed category-specific email summaries
 const RECRUITMENT_SUMMARY: EmailSummary = {
-  emailCount: 30,
+  emailCount: 25,
   unreadCount: 8,
   importantCount: 15,
+  timePeriod: 'Last 7 days',
   topSenders: [
-    { name: 'ekta@headout.com', count: 5 },
-    { name: 'isaiah@delve.com', count: 3 },
-    { name: 'careers@google.com', count: 2 },
-    { name: 'talent@microsoft.com', count: 2 },
-    { name: 'jobs@amazon.com', count: 1 }
+    { name: 'Ekta Chaturvedi', email: 'ekta@headout.com', count: 5 },
+    { name: 'Isaiah de la Fuente', email: 'isaiah@delve.com', count: 3 },
+    { name: 'Google Careers', email: 'careers@google.com', count: 2 },
+    { name: 'Microsoft Talent', email: 'talent@microsoft.com', count: 2 },
+    { name: 'Amazon Jobs', email: 'jobs@amazon.com', count: 1 }
   ],
   categorySummary: [
-    { category: 'Recruitment', count: 30 },
-    { category: 'Job Applications', count: 12 },
+    { category: 'Applications', count: 12 },
     { category: 'Interviews', count: 8 },
-    { category: 'Offers', count: 5 },
     { category: 'Rejections', count: 5 }
   ],
   recentEmails: RECRUITMENT_EMAILS,
   summary: 'You have received 2 new job opportunities this week from Headout and Delve. The Headout application requires follow-up for the next interview batch. The Delve opportunity involves scheduling a meeting to discuss payment and HR details. You have 3 pending interview invitations that require responses within the next 48 hours.',
   actionItems: [
     'Schedule meeting with Delve team about job opportunity',
-    'Prepare for Headout interview in the next batch',
-    'Update your resume with recent projects',
-    'Complete coding assessment for Google by March 3rd',
-    'Respond to Microsoft interview invitation by tomorrow'
+    'Follow up with Headout about next interview batch',
+    'Prepare resume for Google application'
   ],
   followUps: [
-    'Check with Ekta about the exact dates for the next interview batch',
-    'Research more about Delve company before the meeting',
+    'Check status of Microsoft application',
     'Ask for feedback on rejected applications',
     'Update LinkedIn profile with new skills'
   ]
 };
 
 const FINANCE_SUMMARY: EmailSummary = {
-  emailCount: 25,
-  unreadCount: 3,
+  emailCount: 32,
+  unreadCount: 5,
   importantCount: 10,
+  timePeriod: 'Last 7 days',
   topSenders: [
-    { name: 'alerts@hdfcbank.net', count: 8 },
-    { name: 'statements@icicibank.com', count: 5 },
-    { name: 'billing@amazon.in', count: 4 },
-    { name: 'payments@phonepe.com', count: 3 },
-    { name: 'tax@incometax.gov.in', count: 2 }
+    { name: 'HDFC Bank', email: 'alerts@hdfcbank.net', count: 8 },
+    { name: 'ICICI Bank', email: 'statements@icicibank.com', count: 5 },
+    { name: 'Amazon Billing', email: 'billing@amazon.in', count: 4 },
+    { name: 'PhonePe', email: 'payments@phonepe.com', count: 3 },
+    { name: 'Income Tax Dept', email: 'tax@incometax.gov.in', count: 2 }
   ],
   categorySummary: [
-    { category: 'Finance', count: 25 },
-    { category: 'Bank Alerts', count: 12 },
-    { category: 'Bills', count: 8 },
-    { category: 'Investments', count: 3 },
+    { category: 'Transactions', count: 15 },
+    { category: 'Statements', count: 8 },
+    { category: 'Subscriptions', count: 7 },
     { category: 'Tax', count: 2 }
   ],
   recentEmails: FINANCE_EMAILS,
   summary: 'Your financial emails show recent transactions from Spotify (Rs. 119) on your HDFC credit card. You have upcoming subscription renewals for Netflix (Rs. 649) on March 3rd. Your credit card statement is due on March 10th with a total outstanding amount of Rs. 15,432. There are no unusual transactions detected in your accounts. Your mutual fund SIP of Rs. 10,000 was successfully processed on February 25th.',
   actionItems: [
     'Review credit card statement for February',
-    'Pay HDFC credit card bill by March 10th',
-    'Check if Netflix subscription price has increased',
-    'File quarterly tax statement by March 15th',
-    'Review investment portfolio performance'
+    'Pay credit card bill by March 10th',
+    'Evaluate Netflix subscription renewal'
   ],
   followUps: [
-    'Update payment method for Netflix if needed',
-    'Consider switching to annual subscription plans to save money',
+    'Check for tax-saving investment options',
+    'Review mutual fund performance',
     'Check for any unauthorized transactions',
     'Update KYC details for mutual fund investments'
   ]
 };
 
 const SOCIAL_SUMMARY: EmailSummary = {
-  emailCount: 9,
-  unreadCount: 2,
+  emailCount: 18,
+  unreadCount: 3,
   importantCount: 5,
+  timePeriod: 'Last 7 days',
   topSenders: [
-    { name: 'organizers@reactindia.dev', count: 2 },
-    { name: 'info@netflix.com', count: 2 },
-    { name: 'events@meetup.com', count: 2 },
-    { name: 'friends@facebook.com', count: 2 },
-    { name: 'community@github.com', count: 1 }
+    { name: 'React India', email: 'organizers@reactindia.dev', count: 2 },
+    { name: 'Netflix', email: 'info@netflix.com', count: 2 },
+    { name: 'Meetup', email: 'events@meetup.com', count: 2 },
+    { name: 'Facebook', email: 'friends@facebook.com', count: 2 },
+    { name: 'GitHub', email: 'community@github.com', count: 1 }
   ],
   categorySummary: [
-    { category: 'Social', count: 9 },
-    { category: 'Events', count: 5 },
-    { category: 'Entertainment', count: 3 },
+    { category: 'Events', count: 8 },
+    { category: 'Entertainment', count: 6 },
+    { category: 'Social Media', count: 3 },
     { category: 'Community', count: 1 }
   ],
   recentEmails: SOCIAL_EMAILS,
   summary: 'Your social and events emails include an invitation to speak at React India 2025 in Goa. You also have entertainment-related emails about your Netflix subscription. There\'s a local tech meetup happening next week that matches your interests. You\'ve been invited to a friend\'s birthday celebration on March 5th. The React India speaking opportunity is particularly prestigious and could boost your professional profile.',
   actionItems: [
     'Respond to React India speaking invitation by March 5th',
-    'Prepare a talk proposal for the conference',
-    'RSVP to the local tech meetup',
-    'Confirm attendance for birthday celebration',
-    'Update Netflix watchlist with new releases'
+    'RSVP to local tech meetup',
+    'Confirm attendance for friend\'s birthday'
   ],
   followUps: [
-    'Check conference dates to ensure no scheduling conflicts',
-    'Look into accommodation options in Goa for the event',
+    'Prepare talk proposal for React India',
+    'Check Netflix content updates',
     'Connect with other speakers at React India',
     'Share tech meetup details with colleagues'
   ]
 };
 
-// Sample email summary for all emails
-const SAMPLE_SUMMARY: EmailSummary = {
-  emailCount: 124,
+const DEFAULT_SUMMARY: EmailSummary = {
+  emailCount: 125,
   unreadCount: 18,
   importantCount: 32,
+  timePeriod: 'Last 7 days',
   topSenders: [
-    { name: 'notifications@github.com', count: 23 },
-    { name: 'alerts@hdfcbank.net', count: 15 },
-    { name: 'newsletter@medium.com', count: 12 },
-    { name: 'info@linkedin.com', count: 10 },
-    { name: 'no-reply@amazon.in', count: 8 }
+    { name: 'GitHub', email: 'notifications@github.com', count: 23 },
+    { name: 'HDFC Bank', email: 'alerts@hdfcbank.net', count: 15 },
+    { name: 'Medium', email: 'newsletter@medium.com', count: 12 },
+    { name: 'LinkedIn', email: 'info@linkedin.com', count: 10 },
+    { name: 'Amazon', email: 'no-reply@amazon.in', count: 8 }
   ],
   categorySummary: [
-    { category: 'Development', count: 45 },
-    { category: 'Recruitment', count: 30 },
-    { category: 'Finance', count: 25 },
-    { category: 'Shopping', count: 15 },
+    { category: 'Updates', count: 42 },
+    { category: 'Finance', count: 28 },
+    { category: 'Recruitment', count: 15 },
+    { category: 'Shopping', count: 12 },
     { category: 'Social', count: 9 }
   ],
   recentEmails: SAMPLE_EMAILS,
   summary: 'Your inbox has been active with recruitment opportunities this week, with 2 new job offers. You have several financial alerts from HDFC Bank. There are 4 emails requiring immediate attention, including a speaking invitation and job opportunities. Your Amazon order is scheduled for delivery tomorrow. You have 18 unread emails, with 8 of them marked as important.',
   actionItems: [
     'Respond to React India speaking invitation by March 5th',
-    'Schedule meeting with Delve team about job opportunity',
-    'Review GitHub pull request feedback',
-    'Prepare for Headout interview in the next batch',
-    'Pay HDFC credit card bill by March 10th'
+    'Schedule meeting with Delve team',
+    'Review credit card statement',
+    'Confirm flight details for Bangalore trip'
   ],
   followUps: [
-    'Track Amazon package delivery status',
-    'Check Netflix subscription renewal on March 3rd',
+    'Check status of Amazon delivery',
+    'Follow up with Headout about next interview batch',
     'Confirm flight details for Bangalore trip on March 15th',
     'Update resume with recent projects'
   ]
@@ -270,11 +281,12 @@ const SAMPLE_SUMMARY: EmailSummary = {
 
 const GmailPage = ({ isConnected, onConnect, onDisconnect }: GmailPageProps) => {
   const [emailAddress, setEmailAddress] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [summary, setSummary] = useState<EmailSummary | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [summaryType, setSummaryType] = useState<SummaryType>('inbox');
+  const [summaryType, setSummaryType] = useState<string>('inbox');
   const [category, setCategory] = useState<string>('all');
+  const [activeTab, setActiveTab] = useState<string>('overview');
 
   // Auto-load sample data when connected
   useEffect(() => {
@@ -303,7 +315,7 @@ const GmailPage = ({ isConnected, onConnect, onDisconnect }: GmailPageProps) => 
           setSummary(SOCIAL_SUMMARY);
           break;
         default:
-          setSummary(SAMPLE_SUMMARY);
+          setSummary(DEFAULT_SUMMARY);
           break;
       }
       setLoading(false);
@@ -322,7 +334,7 @@ const GmailPage = ({ isConnected, onConnect, onDisconnect }: GmailPageProps) => 
     try {
       // Simulate API call
       setTimeout(() => {
-        setSummary(SAMPLE_SUMMARY);
+        setSummary(DEFAULT_SUMMARY);
         setLoading(false);
       }, 1500);
     } catch (err) {
@@ -339,305 +351,291 @@ const GmailPage = ({ isConnected, onConnect, onDisconnect }: GmailPageProps) => 
     });
   };
 
+  const loadDefaultSummary = async () => {
+    try {
+      setLoading(true);
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Mock data
+      const mockSummary: EmailSummary = {
+        emailCount: 1243,
+        unreadCount: 57,
+        importantCount: 89,
+        timePeriod: "Last 30 days",
+        summary: "Your inbox has been moderately active in the past month with communications primarily from work contacts and subscription services. There's been a 15% increase in email volume compared to the previous month.",
+        topSenders: [
+          { name: "GitHub", email: "noreply@github.com", count: 35 },
+          { name: "LinkedIn", email: "news@linkedin.com", count: 28 },
+          { name: "Slack", email: "notifications@slack.com", count: 22 },
+          { name: "Twitter", email: "info@twitter.com", count: 18 },
+          { name: "Amazon", email: "orders@amazon.com", count: 12 }
+        ],
+        recentEmails: [
+          {
+            id: "1",
+            subject: "Your weekly GitHub digest",
+            from: "GitHub",
+            date: "2025-02-27T10:23:45Z",
+            snippet: "Here's what happened in your repositories this week...",
+            labels: ["Updates", "Social"],
+            hasAttachment: false
+          },
+          {
+            id: "2",
+            subject: "Invoice #12345",
+            from: "Billing Department",
+            date: "2025-02-26T14:15:00Z",
+            snippet: "Please find attached your invoice for February 2025...",
+            labels: ["Finance"],
+            hasAttachment: true
+          },
+          {
+            id: "3",
+            subject: "Meeting reminder: Project Review",
+            from: "Calendar",
+            date: "2025-02-25T09:00:00Z",
+            snippet: "This is a reminder about your upcoming meeting at 2:00 PM...",
+            labels: ["Important", "Work"],
+            hasAttachment: false
+          },
+          {
+            id: "4",
+            subject: "Your order has shipped",
+            from: "Amazon",
+            date: "2025-02-24T16:30:00Z",
+            snippet: "Your recent order #AB123456 has shipped and is on its way...",
+            labels: ["Shopping"],
+            hasAttachment: false
+          },
+          {
+            id: "5",
+            subject: "New connection request",
+            from: "LinkedIn",
+            date: "2025-02-23T11:45:00Z",
+            snippet: "You have a new connection request from Jane Smith...",
+            labels: ["Social", "Network"],
+            hasAttachment: false
+          }
+        ],
+        categorySummary: [
+          { category: "Updates", count: 156 },
+          { category: "Social", count: 98 },
+          { category: "Promotions", count: 423 },
+          { category: "Finance", count: 57 },
+          { category: "Work", count: 289 }
+        ],
+        actionItems: [
+          "Respond to meeting invitation from Marketing team",
+          "Review and pay invoice #12345",
+          "Confirm attendance for conference on March 15"
+        ],
+        followUps: [
+          "Check status of support ticket #45678",
+          "Follow up with Jane about project proposal",
+          "Verify shipment delivery for order #AB123456"
+        ]
+      };
+      
+      setSummary(mockSummary);
+      setError(null);
+    } catch (err) {
+      console.error('Error loading summary:', err);
+      setError('Failed to load email summary. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
-            <FaEnvelope className="text-[#D44638]" />
-            Gmail Analysis
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Analyze your email communications
-          </p>
-        </div>
-        <Button
-          variant={isConnected ? "destructive" : "default"}
-          onClick={isConnected ? onDisconnect : onConnect}
-        >
-          {isConnected ? (
-            <>
-              <FaUnlink className="mr-2" />
-              Disconnect
-            </>
-          ) : (
-            <>
-              <FaLink className="mr-2" />
-              Connect to Gmail
-            </>
-          )}
-        </Button>
-      </div>
-
+    <div className="p-6 md:p-8">
       {!isConnected ? (
-        <Card>
-          <CardHeader>
-            <CardTitle>Not connected!</CardTitle>
-            <CardDescription>
-              Connect to Gmail to analyze your email communications.
-            </CardDescription>
-          </CardHeader>
-        </Card>
+        <div className="flex flex-col items-center justify-center space-y-6 p-8 bg-white rounded-lg shadow-sm border border-gray-200">
+          <FaEnvelope className="text-red-500 text-6xl mb-2" />
+          <h2 className="text-2xl font-bold text-center">Connect to Gmail</h2>
+          <p className="text-gray-500 text-center max-w-md">
+            Connect your Gmail account to analyze emails and get AI-powered insights
+          </p>
+          <button
+            onClick={onConnect}
+            className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-full transition-colors"
+          >
+            <FaLink className="text-sm" /> Connect Gmail
+          </button>
+        </div>
       ) : (
-        <div className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Analyze Gmail Account</CardTitle>
-              <CardDescription>
-                Select a category to analyze or enter a specific email address
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div>
-                  <p className="text-sm text-muted-foreground mb-2">Select email category:</p>
-                  <div className="flex flex-wrap gap-2">
-                    <Button 
-                      variant={category === 'all' ? "default" : "outline"} 
-                      size="sm"
-                      onClick={() => loadSummaryData('all')}
-                    >
-                      All Emails
-                    </Button>
-                    <Button 
-                      variant={category === 'recruitment' ? "default" : "outline"} 
-                      size="sm"
-                      onClick={() => loadSummaryData('recruitment')}
-                    >
-                      Recruitment
-                    </Button>
-                    <Button 
-                      variant={category === 'finance' ? "default" : "outline"} 
-                      size="sm"
-                      onClick={() => loadSummaryData('finance')}
-                    >
-                      Finance
-                    </Button>
-                    <Button 
-                      variant={category === 'social' ? "default" : "outline"} 
-                      size="sm"
-                      onClick={() => loadSummaryData('social')}
-                    >
-                      Social & Events
-                    </Button>
+        <div className="space-y-6">
+          <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+            <div>
+              <h1 className="text-3xl font-bold mb-1">Gmail Analysis</h1>
+              <p className="text-gray-500">Analyze your emails and get insights</p>
+            </div>
+            <button
+              onClick={onDisconnect}
+              className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-colors"
+            >
+              <FaUnlink className="text-sm" /> Disconnect
+            </button>
+          </div>
+
+          {loading ? (
+            <div className="flex flex-col items-center justify-center p-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500 mb-4"></div>
+              <p className="text-gray-500">Loading your email data...</p>
+            </div>
+          ) : error ? (
+            <div className="bg-red-50 border border-red-200 text-red-700 p-6 rounded-lg">
+              <h3 className="text-lg font-semibold mb-2">Error</h3>
+              <p>{error}</p>
+              <button 
+                onClick={loadDefaultSummary}
+                className="mt-4 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-colors"
+              >
+                Try Again
+              </button>
+            </div>
+          ) : summary ? (
+            <div className="space-y-6">
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <h2 className="text-xl font-semibold mb-4">Email Summary</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <div className="text-gray-500 mb-1">Total Emails</div>
+                    <div className="text-2xl font-bold">{summary.emailCount.toLocaleString()}</div>
+                  </div>
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <div className="text-gray-500 mb-1">Unread Emails</div>
+                    <div className="text-2xl font-bold">{summary.unreadCount.toLocaleString()}</div>
+                  </div>
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <div className="text-gray-500 mb-1">Time Period</div>
+                    <div className="text-2xl font-bold">{summary.timePeriod}</div>
                   </div>
                 </div>
-                
-                <div className="flex gap-4">
-                  <Input
-                    placeholder="e.g. your.email@gmail.com"
-                    value={emailAddress}
-                    onChange={(e) => setEmailAddress(e.target.value)}
-                    disabled={loading}
-                  />
-                  <Button onClick={handleSubmit} disabled={loading}>
-                    {loading ? 'Analyzing...' : 'Analyze'}
-                  </Button>
-                </div>
-                
-                {emailAddress && (
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-2">Select what you want to analyze:</p>
-                    <div className="flex gap-2">
-                      <Button 
-                        variant={summaryType === 'inbox' ? "default" : "outline"} 
-                        size="sm"
-                        onClick={() => setSummaryType('inbox')}
-                      >
-                        All Inbox
-                      </Button>
-                      <Button 
-                        variant={summaryType === 'important' ? "default" : "outline"} 
-                        size="sm"
-                        onClick={() => setSummaryType('important')}
-                      >
-                        Important
-                      </Button>
-                      <Button 
-                        variant={summaryType === 'unread' ? "default" : "outline"} 
-                        size="sm"
-                        onClick={() => setSummaryType('unread')}
-                      >
-                        Unread
-                      </Button>
-                    </div>
-                  </div>
-                )}
               </div>
-            </CardContent>
-          </Card>
 
-          {error && (
-            <Card className="bg-destructive/15">
-              <CardHeader>
-                <CardTitle className="text-destructive">Error</CardTitle>
-                <CardDescription>{error}</CardDescription>
-              </CardHeader>
-            </Card>
-          )}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <div className="mb-6">
+                  <h2 className="text-xl font-semibold mb-2">Email Analysis</h2>
+                  <p className="text-gray-500">{summary.summary}</p>
+                </div>
 
-          {summary && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Email Analysis Results</CardTitle>
-                <CardDescription>
-                  {summaryType === 'inbox' && 'Summary of all emails in your inbox'}
-                  {summaryType === 'important' && 'Analysis of important emails'}
-                  {summaryType === 'unread' && 'Summary of unread emails'}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Tabs defaultValue="overview" className="space-y-4">
-                  <TabsList>
-                    <TabsTrigger value="overview">Overview</TabsTrigger>
-                    <TabsTrigger value="emails">Emails</TabsTrigger>
-                    <TabsTrigger value="categories">Categories</TabsTrigger>
-                    <TabsTrigger value="summary">AI Summary</TabsTrigger>
-                  </TabsList>
+                <div className="border-t border-gray-200 pt-6">
+                  <div className="flex mb-4 border-b border-gray-200">
+                    <button
+                      className={`pb-2 px-4 font-medium ${
+                        activeTab === 'overview' 
+                          ? 'text-red-500 border-b-2 border-red-500' 
+                          : 'text-gray-500 hover:text-gray-700'
+                      }`}
+                      onClick={() => setActiveTab('overview')}
+                    >
+                      Overview
+                    </button>
+                    <button
+                      className={`pb-2 px-4 font-medium ${
+                        activeTab === 'recent' 
+                          ? 'text-red-500 border-b-2 border-red-500' 
+                          : 'text-gray-500 hover:text-gray-700'
+                      }`}
+                      onClick={() => setActiveTab('recent')}
+                    >
+                      Recent Emails
+                    </button>
+                    <button
+                      className={`pb-2 px-4 font-medium ${
+                        activeTab === 'categories' 
+                          ? 'text-red-500 border-b-2 border-red-500' 
+                          : 'text-gray-500 hover:text-gray-700'
+                      }`}
+                      onClick={() => setActiveTab('categories')}
+                    >
+                      Categories
+                    </button>
+                  </div>
 
-                  <TabsContent value="overview">
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-3 gap-4">
-                        <Card>
-                          <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium">Total Emails</CardTitle>
-                          </CardHeader>
-                          <CardContent>
-                            <div className="text-2xl font-bold">{summary.emailCount}</div>
-                          </CardContent>
-                        </Card>
-                        <Card>
-                          <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium">Unread</CardTitle>
-                          </CardHeader>
-                          <CardContent>
-                            <div className="text-2xl font-bold">{summary.unreadCount}</div>
-                          </CardContent>
-                        </Card>
-                        <Card>
-                          <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium">Important</CardTitle>
-                          </CardHeader>
-                          <CardContent>
-                            <div className="text-2xl font-bold">{summary.importantCount}</div>
-                          </CardContent>
-                        </Card>
-                      </div>
-                      
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="text-base">Top Senders</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <ul className="space-y-2">
-                            {summary.topSenders.map((sender, index) => (
-                              <li key={index} className="flex justify-between items-center">
-                                <span>{sender.name}</span>
-                                <span className="text-muted-foreground">{sender.count} emails</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </TabsContent>
-
-                  <TabsContent value="emails">
-                    <div className="space-y-4">
-                      <ScrollArea className="h-[400px]">
-                        {summary.recentEmails.map((email) => (
-                          <Card key={email.id} className="mb-4">
-                            <CardContent className="pt-6">
-                              <div className="flex justify-between items-start">
+                  {activeTab === 'overview' && (
+                    <div className="space-y-6">
+                      <div>
+                        <h3 className="text-lg font-medium mb-3">Top Senders</h3>
+                        <div className="space-y-3">
+                          {summary.topSenders.map((sender, index) => (
+                            <div key={index} className="flex justify-between items-center">
+                              <div className="flex items-center">
+                                <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-500 mr-3">
+                                  {sender.name.charAt(0).toUpperCase()}
+                                </div>
                                 <div>
-                                  <h3 className={`font-medium ${!email.isRead ? 'font-bold' : ''}`}>{email.subject}</h3>
-                                  <p className="text-sm text-muted-foreground">{email.sender}</p>
-                                </div>
-                                <div className="text-sm text-muted-foreground">
-                                  {formatDate(email.date)}
+                                  <div className="font-medium">{sender.name}</div>
+                                  <div className="text-sm text-gray-500">{sender.email}</div>
                                 </div>
                               </div>
-                              <p className="mt-2">{email.snippet}</p>
-                              <div className="mt-2 flex flex-wrap gap-1">
-                                {email.labels.map((label, index) => (
-                                  <span key={index} className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
-                                    {label}
-                                  </span>
-                                ))}
-                                {email.hasAttachment && (
-                                  <span className="text-xs bg-gray-100 text-gray-800 px-2 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">
-                                    attachment
-                                  </span>
-                                )}
-                              </div>
-                            </CardContent>
-                          </Card>
-                        ))}
-                      </ScrollArea>
+                              <div className="text-gray-500">{sender.count} emails</div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                  </TabsContent>
+                  )}
 
-                  <TabsContent value="categories">
-                    <div className="space-y-4">
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="text-base">Email Categories</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="space-y-4">
-                            {summary.categorySummary.map((category, index) => (
-                              <div key={index}>
-                                <div className="flex justify-between items-center mb-1">
-                                  <span>{category.category}</span>
-                                  <span className="text-muted-foreground">{category.count} emails</span>
-                                </div>
-                                <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                                  <div 
-                                    className="bg-blue-600 h-2.5 rounded-full" 
-                                    style={{ width: `${(category.count / summary.emailCount) * 100}%` }}
-                                  ></div>
-                                </div>
-                              </div>
+                  {activeTab === 'recent' && (
+                    <div className="space-y-4 max-h-96 overflow-y-auto pr-2">
+                      {summary.recentEmails.map((email, index) => (
+                        <div key={index} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50">
+                          <div className="flex justify-between mb-2">
+                            <div className="font-medium">{email.from}</div>
+                            <div className="text-sm text-gray-500">{email.date}</div>
+                          </div>
+                          <div className="font-medium text-gray-800 mb-2">{email.subject}</div>
+                          <p className="text-gray-600 text-sm">{email.snippet}</p>
+                          <div className="mt-2 flex flex-wrap gap-1">
+                            {email.labels.map((label, index) => (
+                              <span key={index} className="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded-full">
+                                {label}
+                              </span>
                             ))}
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </TabsContent>
-
-                  <TabsContent value="summary">
-                    <Card>
-                      <CardContent className="pt-6">
-                        <div className="space-y-4">
-                          <div>
-                            <h3 className="text-lg font-medium mb-2">Email Summary</h3>
-                            <p>{summary.summary}</p>
-                          </div>
-                          <Separator />
-                          <div>
-                            <h3 className="text-lg font-medium mb-2">Action Items</h3>
-                            <ul className="list-disc pl-5 space-y-1">
-                              {summary.actionItems.map((item, index) => (
-                                <li key={index}>{item}</li>
-                              ))}
-                            </ul>
-                          </div>
-                          <Separator />
-                          <div>
-                            <h3 className="text-lg font-medium mb-2">Follow-ups</h3>
-                            <ul className="list-disc pl-5 space-y-1">
-                              {summary.followUps.map((item, index) => (
-                                <li key={index}>{item}</li>
-                              ))}
-                            </ul>
+                            {email.hasAttachment && (
+                              <span className="text-xs bg-gray-100 text-gray-800 px-2 py-0.5 rounded-full">
+                                attachment
+                              </span>
+                            )}
                           </div>
                         </div>
-                      </CardContent>
-                    </Card>
-                  </TabsContent>
-                </Tabs>
-              </CardContent>
-            </Card>
+                      ))}
+                    </div>
+                  )}
+
+                  {activeTab === 'categories' && (
+                    <div className="space-y-4">
+                      {summary.categorySummary.map((category, index) => (
+                        <div key={index}>
+                          <div className="flex justify-between items-center mb-1">
+                            <span className="font-medium">{category.category}</span>
+                            <span className="text-gray-500">{category.count} emails</span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-2.5">
+                            <div 
+                              className="bg-red-500 h-2.5 rounded-full" 
+                              style={{ width: `${(category.count / summary.emailCount) * 100}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">
+              <p className="text-gray-500 mb-4">No email data available. Click the button below to load your data.</p>
+              <button
+                onClick={loadDefaultSummary}
+                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-colors"
+              >
+                Load Email Data
+              </button>
+            </div>
           )}
         </div>
       )}

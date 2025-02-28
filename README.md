@@ -1,6 +1,6 @@
 # AI Content Summarizer
 
-A web application that aggregates and summarizes Twitter content for a given user handle. The application uses mock data for development and provides a clean, user-friendly interface to view the summarized content.
+A web application that aggregates and summarizes Twitter content for a given user handle. The application integrates with the SocialData API to fetch real Twitter data and provides a clean, user-friendly interface to view the summarized content.
 
 ## Features
 
@@ -28,7 +28,7 @@ The project is divided into two main parts:
 
 ```bash
 # Install all dependencies (frontend, backend, and root)
-npm run install-deps
+./run.sh setup
 ```
 
 ## Configuration
@@ -40,7 +40,7 @@ PORT=5001
 SOCIAL_DATA_API_KEY=2315|FcPglN4lMDKYHFVglhpS5nr6m8ynOtE02oDP5K18407e911d
 ```
 
-Note: The current implementation uses mock data for Twitter API responses by default. To use the real SocialData API, set `useMockData = false` in the `fetchTwitterData` function in `backend/src/services/socialDataService.ts`.
+Note: The application uses the real SocialData API by default. If you want to use mock data for testing, you can set `useMockData = true` in the `fetchTwitterData` function in `backend/src/services/socialDataService.ts` or use the `dev:mock` command (see below).
 
 ## Running the Application
 
@@ -50,12 +50,30 @@ To run both the frontend and backend in development mode:
 
 ```bash
 # From the project root
-npm run dev
+./run.sh dev
 ```
 
 This will start:
 - Backend server on http://localhost:5001
 - Frontend development server on http://localhost:5173
+
+### Running with Mock Data
+
+To run the application with mock data:
+
+```bash
+# From the project root
+./run.sh dev:mock
+```
+
+### Running with Real API Data (Default)
+
+To run the application with real API data:
+
+```bash
+# From the project root
+./run.sh dev:real
+```
 
 ### Production Build
 
@@ -63,7 +81,7 @@ To build both the frontend and backend for production:
 
 ```bash
 # From the project root
-npm run build
+./run.sh build
 ```
 
 ### Starting Production Server
@@ -72,7 +90,7 @@ To start the application in production mode after building:
 
 ```bash
 # From the project root
-npm start
+./run.sh start
 ```
 
 ## Usage
@@ -94,7 +112,7 @@ npm start
 
 ## SocialData API Integration
 
-This project can integrate with the [SocialData API](https://docs.socialdata.tools/) to fetch real Twitter data. The integration is currently set to use mock data by default, but can be configured to use the real API.
+This project integrates with the [SocialData API](https://docs.socialdata.tools/) to fetch real Twitter data. The integration uses the following endpoints:
 
 ### Testing the API
 
@@ -111,8 +129,9 @@ This will run a series of tests against the SocialData API and save the results 
 
 The following SocialData API endpoints are used in this project:
 
+- `/twitter/users/by/username/{username}` - Get user profile
 - `/twitter/search?query=from%3A{handle}&type=Latest` - Search for tweets from a specific user
-- `/twitter/tweets/{tweet_id}` - Get details for a specific tweet
+- `/twitter/users/{user_id}/following` - Get accounts the user follows
 
 For more information about the SocialData API, see the [documentation](https://docs.socialdata.tools/).
 
@@ -122,19 +141,19 @@ If you encounter port conflicts:
 
 1. Kill all Node.js processes related to the project:
    ```bash
-   pkill -f "node.*ai-summariser"
+   ./run.sh clean
    ```
 2. Restart the application:
    ```bash
-   npm run dev
+   ./run.sh restart
    ```
 
 ## Future Improvements
 
-- Implement real Twitter API integration
 - Add user authentication
 - Implement caching for improved performance
 - Add more social media platforms
+- Add error handling for rate limiting
 
 ## License
 

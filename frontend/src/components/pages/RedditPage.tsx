@@ -528,112 +528,79 @@ const RedditPage = ({ isConnected, onConnect, onDisconnect }: RedditPageProps) =
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
-            <FaReddit className="text-[#FF4500]" />
-            Reddit Analysis
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Analyze Reddit profiles and posts
-          </p>
-        </div>
-        <Button
-          variant={isConnected ? "destructive" : "default"}
-          onClick={isConnected ? onDisconnect : onConnect}
-        >
-          {isConnected ? (
-            <>
-              <FaUnlink className="mr-2" />
-              Disconnect
-            </>
-          ) : (
-            <>
-              <FaLink className="mr-2" />
-              Connect to Reddit
-            </>
-          )}
-        </Button>
-      </div>
-
+    <div className="p-6 md:p-8">
       {!isConnected ? (
-        <Card>
-          <CardHeader>
-            <CardTitle>Not connected!</CardTitle>
-            <CardDescription>
-              Connect to Reddit to analyze profiles and posts.
-            </CardDescription>
-          </CardHeader>
-        </Card>
+        <div className="flex flex-col items-center justify-center space-y-6 p-8 bg-white rounded-lg shadow-sm border border-gray-200">
+          <FaReddit className="text-orange-500 text-6xl mb-2" />
+          <h2 className="text-2xl font-bold text-center">Connect to Reddit</h2>
+          <p className="text-gray-500 text-center max-w-md">
+            Connect your Reddit account to analyze subreddits, posts, and get AI-powered insights
+          </p>
+          <button
+            onClick={onConnect}
+            className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-full transition-colors"
+          >
+            <FaLink className="text-sm" /> Connect Reddit
+          </button>
+        </div>
       ) : (
-        <div className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Analyze Subreddit</CardTitle>
-              <CardDescription>
-                Select a popular subreddit or enter a subreddit name to analyze
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="mb-4">
-                <p className="text-sm text-muted-foreground mb-2">Popular subreddits:</p>
-                <div className="flex gap-2 flex-wrap">
-                  {DEFAULT_SUBREDDITS.map(subreddit => (
-                    <Button 
-                      key={subreddit}
-                      variant={selectedDefaultSubreddit === subreddit ? "default" : "outline"} 
-                      size="sm"
-                      onClick={() => selectDefaultSubreddit(subreddit)}
-                    >
-                      r/{subreddit}
-                    </Button>
-                  ))}
-                </div>
+        <div className="space-y-6">
+          <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+            <div>
+              <h1 className="text-3xl font-bold mb-1">Reddit Analysis</h1>
+              <p className="text-gray-500">Analyze subreddits and get insights</p>
+            </div>
+            <button
+              onClick={onDisconnect}
+              className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-colors"
+            >
+              <FaUnlink className="text-sm" /> Disconnect
+            </button>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+            <h2 className="text-xl font-semibold mb-4">Analyze Subreddit</h2>
+            <p className="text-gray-500 mb-4">
+              Select a popular subreddit or enter a subreddit name to analyze
+            </p>
+            <div className="mb-5">
+              <p className="text-sm text-gray-500 mb-3">Popular subreddits:</p>
+              <div className="flex gap-2 flex-wrap">
+                {DEFAULT_SUBREDDITS.map(subreddit => (
+                  <button 
+                    key={subreddit}
+                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                      selectedDefaultSubreddit === subreddit 
+                        ? "bg-orange-500 text-white" 
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
+                    onClick={() => selectDefaultSubreddit(subreddit)}
+                  >
+                    r/{subreddit}
+                  </button>
+                ))}
               </div>
-              
-              <div className="flex gap-4">
-                <Input
+            </div>
+            
+            <div className="flex flex-wrap gap-4">
+              <div className="flex-grow">
+                <input
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                   placeholder="e.g. r/science"
                   value={subredditName}
                   onChange={(e) => setSubredditName(e.target.value)}
                   disabled={loading}
                 />
-                <Button onClick={handleSubmit} disabled={loading}>
-                  {loading ? 'Analyzing...' : 'Analyze'}
-                </Button>
               </div>
-              
-              {subredditName && (
-                <div className="mt-4">
-                  <p className="text-sm text-muted-foreground mb-2">Select what you want to analyze:</p>
-                  <div className="flex gap-2">
-                    <Button 
-                      variant={summaryType === 'hot' ? "default" : "outline"} 
-                      size="sm"
-                      onClick={() => setSummaryType('hot')}
-                    >
-                      Hot Posts
-                    </Button>
-                    <Button 
-                      variant={summaryType === 'new' ? "default" : "outline"} 
-                      size="sm"
-                      onClick={() => setSummaryType('new')}
-                    >
-                      New Posts
-                    </Button>
-                    <Button 
-                      variant={summaryType === 'top' ? "default" : "outline"} 
-                      size="sm"
-                      onClick={() => setSummaryType('top')}
-                    >
-                      Top Posts
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
+              <button
+                className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={handleSubmit}
+                disabled={loading || (!subredditName && !selectedDefaultSubreddit)}
+              >
+                {loading ? 'Analyzing...' : 'Analyze Subreddit'}
+              </button>
+            </div>
+          </div>
 
           {error && (
             <Card className="bg-destructive/15">

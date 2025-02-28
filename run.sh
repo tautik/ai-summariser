@@ -15,6 +15,8 @@ show_help() {
   echo "Commands:"
   echo "  setup       - Install all dependencies"
   echo "  dev         - Run the application in development mode"
+  echo "  dev:mock    - Run the application with mock data (default)"
+  echo "  dev:real    - Run the application with real API data"
   echo "  build       - Build the application for production"
   echo "  start       - Start the application in production mode"
   echo "  clean       - Kill all Node.js processes related to the project"
@@ -38,6 +40,18 @@ setup() {
 run_dev() {
   echo -e "${YELLOW}Starting application in development mode...${NC}"
   npm run dev
+}
+
+# Function to run with mock data
+run_dev_mock() {
+  echo -e "${YELLOW}Starting application with mock data...${NC}"
+  cd backend && npm run dev:mock
+}
+
+# Function to run with real API data
+run_dev_real() {
+  echo -e "${YELLOW}Starting application with real API data...${NC}"
+  cd backend && npm run dev:real
 }
 
 # Function to build for production
@@ -82,6 +96,12 @@ case "$1" in
     ;;
   dev)
     run_dev
+    ;;
+  dev:mock)
+    run_dev_mock
+    ;;
+  dev:real)
+    run_dev_real
     ;;
   build)
     build

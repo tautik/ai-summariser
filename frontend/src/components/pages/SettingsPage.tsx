@@ -1,10 +1,5 @@
 import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
+import { FaCog, FaMoon, FaSun, FaDatabase } from 'react-icons/fa';
 
 const SettingsPage = () => {
   const [useMockData, setUseMockData] = useState(true);
@@ -20,66 +15,80 @@ const SettingsPage = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Settings</h1>
-        <p className="text-muted-foreground mt-1">
+    <div className="p-6 md:p-8">
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold mb-1 flex items-center gap-2">
+          <FaCog className="text-gray-700" /> Settings
+        </h1>
+        <p className="text-gray-500">
           Configure your application preferences
         </p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Appearance</CardTitle>
-          <CardDescription>
+      <div className="space-y-6">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+            <FaSun className="text-yellow-500" /> Appearance
+          </h2>
+          <p className="text-gray-500 mb-5">
             Customize how the application looks and feels
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
+          </p>
+          
           <div>
-            <h3 className="text-lg font-medium mb-2">Theme</h3>
-            <div className="flex gap-2">
-              <Button
-                variant={theme === 'light' ? 'default' : 'outline'}
+            <h3 className="text-lg font-medium mb-3">Theme</h3>
+            <div className="flex gap-3">
+              <button
+                className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
+                  theme === 'light' 
+                    ? 'bg-blue-500 text-white' 
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
                 onClick={() => handleThemeChange('light')}
               >
-                Light
-              </Button>
-              <Button
-                variant={theme === 'dark' ? 'default' : 'outline'}
+                <FaSun className="text-sm" /> Light
+              </button>
+              <button
+                className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
+                  theme === 'dark' 
+                    ? 'bg-blue-500 text-white' 
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
                 onClick={() => handleThemeChange('dark')}
               >
-                Dark
-              </Button>
+                <FaMoon className="text-sm" /> Dark
+              </button>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Data Sources</CardTitle>
-          <CardDescription>
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+            <FaDatabase className="text-blue-500" /> Data Sources
+          </h2>
+          <p className="text-gray-500 mb-5">
             Configure how data is fetched and processed
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center justify-between">
+          </p>
+          
+          {/* <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
-              <h3 className="text-lg font-medium">Use Mock Data</h3>
-              <p className="text-muted-foreground">
+              <h3 className="text-lg font-medium mb-1">Use Mock Data</h3>
+              <p className="text-gray-500">
                 Toggle between mock and real API data
               </p>
             </div>
-            <Button
-              variant={useMockData ? 'default' : 'outline'}
+            <button
+              className={`px-4 py-2 rounded-md transition-colors ${
+                useMockData 
+                  ? 'bg-green-500 text-white' 
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
               onClick={handleMockDataToggle}
             >
               {useMockData ? 'Using Mock Data' : 'Using Real Data'}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+            </button>
+          </div> */}
+        </div>
+      </div>
     </div>
   );
 };
