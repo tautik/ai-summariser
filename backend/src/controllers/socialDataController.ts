@@ -4,37 +4,39 @@ import { fetchTwitterData, generateSummary } from '../services/socialDataService
 /**
  * Get social data for a specific Twitter handle
  */
-export const getSocialData = async (req: Request, res: Response) => {
+export const getSocialData = async (req: Request, res: Response): Promise<void> => {
   try {
     const { handle } = req.params;
     
     if (!handle) {
-      return res.status(400).json({ error: 'Twitter handle is required' });
+      res.status(400).json({ error: 'Twitter handle is required' });
+      return;
     }
     
     const data = await fetchTwitterData(handle);
-    return res.status(200).json(data);
+    res.status(200).json(data);
   } catch (error) {
     console.error('Error fetching social data:', error);
-    return res.status(500).json({ error: 'Failed to fetch social data' });
+    res.status(500).json({ error: 'Failed to fetch social data' });
   }
 };
 
 /**
  * Generate a summary of user content
  */
-export const summarizeUserContent = async (req: Request, res: Response) => {
+export const summarizeUserContent = async (req: Request, res: Response): Promise<void> => {
   try {
     const { handle } = req.body;
     
     if (!handle) {
-      return res.status(400).json({ error: 'Twitter handle is required' });
+      res.status(400).json({ error: 'Twitter handle is required' });
+      return;
     }
     
     const summary = await generateSummary(handle);
-    return res.status(200).json(summary);
+    res.status(200).json(summary);
   } catch (error) {
     console.error('Error generating summary:', error);
-    return res.status(500).json({ error: 'Failed to generate summary' });
+    res.status(500).json({ error: 'Failed to generate summary' });
   }
 }; 

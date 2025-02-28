@@ -54,7 +54,7 @@ function App() {
     setSummary(null)
 
     try {
-      const response = await axios.post('http://localhost:5000/api/social/summarize', { handle })
+      const response = await axios.post('http://localhost:5001/api/social/summarize', { handle })
       setSummary(response.data)
     } catch (error) {
       console.error('Error fetching data:', error)
