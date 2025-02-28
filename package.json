@@ -1,0 +1,23 @@
+{
+  "name": "ai-summariser",
+  "version": "1.0.0",
+  "description": "AI-powered content summarization platform",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"cd backend && npm start\" \"cd frontend && npm run preview\"",
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",
+    "build": "concurrently \"cd backend && npm run build\" \"cd frontend && npm run build\"",
+    "install-deps": "npm install && concurrently \"cd backend && npm install\" \"cd frontend && npm install\""
+  },
+  "keywords": [
+    "ai",
+    "summarization",
+    "twitter",
+    "content"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+} 
