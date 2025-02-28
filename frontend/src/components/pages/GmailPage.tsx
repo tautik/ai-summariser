@@ -1,15 +1,6 @@
-import {
-  Box,
-  Heading,
-  Text,
-  Button,
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
-  Flex
-} from '@chakra-ui/react';
 import { FaEnvelope, FaLink, FaUnlink } from 'react-icons/fa';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 interface GmailPageProps {
   isConnected: boolean;
@@ -19,43 +10,55 @@ interface GmailPageProps {
 
 const GmailPage = ({ isConnected, onConnect, onDisconnect }: GmailPageProps) => {
   return (
-    <Box>
-      <Flex justify="space-between" align="center" mb={6}>
-        <Box>
-          <Heading display="flex" alignItems="center">
-            <FaEnvelope color="#D44638" style={{ marginRight: '10px' }} />
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold flex items-center gap-2">
+            <FaEnvelope className="text-[#D44638]" />
             Gmail Analysis
-          </Heading>
-          <Text color="gray.500" mt={1}>
+          </h1>
+          <p className="text-muted-foreground mt-1">
             Analyze your email communications
-          </Text>
-        </Box>
+          </p>
+        </div>
         <Button
-          leftIcon={isConnected ? <FaUnlink /> : <FaLink />}
-          colorScheme={isConnected ? "red" : "red"}
+          variant={isConnected ? "destructive" : "default"}
           onClick={isConnected ? onDisconnect : onConnect}
         >
-          {isConnected ? "Disconnect" : "Connect to Gmail"}
+          {isConnected ? (
+            <>
+              <FaUnlink className="mr-2" />
+              Disconnect
+            </>
+          ) : (
+            <>
+              <FaLink className="mr-2" />
+              Connect to Gmail
+            </>
+          )}
         </Button>
-      </Flex>
+      </div>
 
       {!isConnected ? (
-        <Alert status="info" borderRadius="md">
-          <AlertIcon />
-          <AlertTitle>Not connected!</AlertTitle>
-          <AlertDescription>
-            Connect to Gmail to analyze your email communications.
-          </AlertDescription>
-        </Alert>
+        <Card>
+          <CardHeader>
+            <CardTitle>Not connected!</CardTitle>
+            <CardDescription>
+              Connect to Gmail to analyze your email communications.
+            </CardDescription>
+          </CardHeader>
+        </Card>
       ) : (
-        <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
-          <Heading size="md" mb={4}>Gmail Analysis</Heading>
-          <Text>
-            This feature is coming soon! Gmail integration is currently under development.
-          </Text>
-        </Box>
+        <Card>
+          <CardHeader>
+            <CardTitle>Gmail Analysis</CardTitle>
+            <CardDescription>
+              This feature is coming soon! Gmail integration is currently under development.
+            </CardDescription>
+          </CardHeader>
+        </Card>
       )}
-    </Box>
+    </div>
   );
 };
 

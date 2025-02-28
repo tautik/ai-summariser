@@ -1,130 +1,86 @@
-import {
-  Box,
-  Heading,
-  Text,
-  FormControl,
-  FormLabel,
-  Switch,
-  VStack,
-  Divider,
-  Button,
-  useToast,
-  Select,
-  HStack,
-  useColorMode
-} from '@chakra-ui/react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
 
 const SettingsPage = () => {
-  const [useMockData, setUseMockData] = useState(false);
+  const [useMockData, setUseMockData] = useState(true);
   const [theme, setTheme] = useState('light');
-  const [language, setLanguage] = useState('en');
-  const { colorMode, toggleColorMode } = useColorMode();
-  const toast = useToast();
-
-  useEffect(() => {
-    // Load settings from localStorage
-    const storedSettings = localStorage.getItem('appSettings');
-    if (storedSettings) {
-      const settings = JSON.parse(storedSettings);
-      setUseMockData(settings.useMockData || false);
-      setLanguage(settings.language || 'en');
-    }
-    
-    // Set theme based on colorMode
-    setTheme(colorMode);
-  }, [colorMode]);
-
-  const handleSaveSettings = () => {
-    // Save settings to localStorage
-    const settings = {
-      useMockData,
-      language,
-      theme
-    };
-    localStorage.setItem('appSettings', JSON.stringify(settings));
-    
-    // Show success toast
-    toast({
-      title: 'Settings saved',
-      description: 'Your preferences have been updated',
-      status: 'success',
-      duration: 3000,
-      isClosable: true,
-    });
-  };
 
   const handleThemeChange = (newTheme: string) => {
     setTheme(newTheme);
-    if (newTheme !== colorMode) {
-      toggleColorMode();
-    }
+    document.documentElement.classList.toggle('dark', newTheme === 'dark');
+  };
+
+  const handleMockDataToggle = () => {
+    setUseMockData(!useMockData);
   };
 
   return (
-    <Box>
-      <Heading mb={6}>Settings</Heading>
-      
-      <VStack spacing={6} align="stretch">
-        <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
-          <Heading size="md" mb={4}>Application Settings</Heading>
-          
-          <FormControl display="flex" alignItems="center" mb={4}>
-            <FormLabel htmlFor="use-mock-data" mb="0">
-              Use Mock Data
-            </FormLabel>
-            <Switch 
-              id="use-mock-data" 
-              isChecked={useMockData}
-              onChange={(e) => setUseMockData(e.target.checked)}
-            />
-          </FormControl>
-          
-          <Text fontSize="sm" color="gray.500" mb={4}>
-            When enabled, the application will use mock data instead of making real API calls.
-            This is useful for testing and development purposes.
-          </Text>
-        </Box>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold">Settings</h1>
+        <p className="text-muted-foreground mt-1">
+          Configure your application preferences
+        </p>
+      </div>
 
-        <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
-          <Heading size="md" mb={4}>Display Settings</Heading>
-          
-          <FormControl mb={4}>
-            <FormLabel htmlFor="theme">Theme</FormLabel>
-            <Select 
-              id="theme" 
-              value={theme}
-              onChange={(e) => handleThemeChange(e.target.value)}
+      <Card>
+        <CardHeader>
+          <CardTitle>Appearance</CardTitle>
+          <CardDescription>
+            Customize how the application looks and feels
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <h3 className="text-lg font-medium mb-2">Theme</h3>
+            <div className="flex gap-2">
+              <Button
+                variant={theme === 'light' ? 'default' : 'outline'}
+                onClick={() => handleThemeChange('light')}
+              >
+                Light
+              </Button>
+              <Button
+                variant={theme === 'dark' ? 'default' : 'outline'}
+                onClick={() => handleThemeChange('dark')}
+              >
+                Dark
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Data Sources</CardTitle>
+          <CardDescription>
+            Configure how data is fetched and processed
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-medium">Use Mock Data</h3>
+              <p className="text-muted-foreground">
+                Toggle between mock and real API data
+              </p>
+            </div>
+            <Button
+              variant={useMockData ? 'default' : 'outline'}
+              onClick={handleMockDataToggle}
             >
-              <option value="light">Light</option>
-              <option value="dark">Dark</option>
-            </Select>
-          </FormControl>
-          
-          <FormControl mb={4}>
-            <FormLabel htmlFor="language">Language</FormLabel>
-            <Select 
-              id="language" 
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
-            >
-              <option value="en">English</option>
-              <option value="es">Spanish</option>
-              <option value="fr">French</option>
-              <option value="de">German</option>
-            </Select>
-          </FormControl>
-        </Box>
-        
-        <Divider />
-        
-        <HStack justifyContent="flex-end">
-          <Button colorScheme="blue" onClick={handleSaveSettings}>
-            Save Settings
-          </Button>
-        </HStack>
-      </VStack>
-    </Box>
+              {useMockData ? 'Using Mock Data' : 'Using Real Data'}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 
