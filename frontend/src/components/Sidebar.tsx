@@ -9,25 +9,28 @@ import {
   FaFacebook, 
   FaCog, 
   FaSignOutAlt,
-  FaBrain
+  FaBrain,
+  FaHeadphones
 } from 'react-icons/fa';
 import { useEffect, useState } from "react";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-interface SidebarProps {
+export interface SidebarProps {
+  onLogout: () => void;
   onNavigate: (page: string) => void;
   activePage: string;
-  onLogout: () => void;
 }
 
 interface NavItemProps {
   icon: React.ElementType;
   children: React.ReactNode;
   isActive?: boolean;
-  onClick: () => void;
+  path: string;
   delay?: number;
 }
 
-const NavItem = ({ icon: Icon, children, isActive, onClick, delay = 0 }: NavItemProps) => {
+const NavItem = ({ icon: Icon, children, isActive, path, delay = 0 }: NavItemProps) => {
   const [isVisible, setIsVisible] = useState(false);
   
   useEffect(() => {
@@ -39,26 +42,27 @@ const NavItem = ({ icon: Icon, children, isActive, onClick, delay = 0 }: NavItem
   }, [delay]);
   
   return (
-    <Button
-      variant={isActive ? "default" : "ghost"}
-      className={`w-full justify-start transition-all duration-300 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}`}
-      onClick={onClick}
-      style={{
-        background: isActive ? 'linear-gradient(90deg, rgba(66, 153, 225, 0.9) 0%, rgba(99, 179, 237, 0.9) 100%)' : '',
-        boxShadow: isActive ? '0 4px 14px rgba(66, 153, 225, 0.25)' : 'none',
-        transitionDelay: `${delay}ms`
-      }}
-    >
-      <Icon className={`mr-2 h-4 w-4 ${isActive ? 'text-white' : ''}`} />
-      <span className={`${isActive ? 'font-medium' : ''}`}>{children}</span>
-      {isActive && (
-        <div className="absolute right-2 w-1 h-1 rounded-full bg-white animate-pulse"></div>
-      )}
-    </Button>
+    <Link to={path} className="w-full block">
+      <Button
+        variant={isActive ? "default" : "ghost"}
+        className={`w-full justify-start transition-all duration-300 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}`}
+        style={{
+          background: isActive ? 'linear-gradient(90deg, rgba(66, 153, 225, 0.9) 0%, rgba(99, 179, 237, 0.9) 100%)' : '',
+          boxShadow: isActive ? '0 4px 14px rgba(66, 153, 225, 0.25)' : 'none',
+          transitionDelay: `${delay}ms`
+        }}
+      >
+        <Icon className={`mr-2 h-4 w-4 ${isActive ? 'text-white' : ''}`} />
+        <span className={`${isActive ? 'font-medium' : ''}`}>{children}</span>
+        {isActive && (
+          <div className="absolute right-2 w-1 h-1 rounded-full bg-white animate-pulse"></div>
+        )}
+      </Button>
+    </Link>
   );
 };
 
-const Sidebar = ({ onNavigate, activePage, onLogout }: SidebarProps) => {
+const Sidebar: React.FC<SidebarProps> = ({ onLogout, onNavigate, activePage }) => {
   const [logoAnimated, setLogoAnimated] = useState(false);
   
   useEffect(() => {
@@ -69,6 +73,15 @@ const Sidebar = ({ onNavigate, activePage, onLogout }: SidebarProps) => {
     return () => clearTimeout(timer);
   }, []);
   
+  const navItems = [
+    { id: 'home', name: 'Dashboard', icon: FaHome, path: '/' },
+    { id: 'twitter', name: 'Twitter', icon: FaTwitter, path: '/twitter' },
+    { id: 'gmail', name: 'Gmail', icon: FaEnvelope, path: '/gmail' },
+    { id: 'reddit', name: 'Reddit', icon: FaReddit, path: '/reddit' },
+    { id: 'facebook', name: 'Facebook', icon: FaFacebook, path: '/facebook' },
+    { id: 'audio-summary', name: 'Audio Summary', icon: FaHeadphones, path: '/audio-summary' },
+  ];
+
   return (
     <div className="flex h-screen w-64 flex-col border-r bg-background/80 backdrop-blur-md shadow-lg relative overflow-hidden">
       {/* Decorative elements */}
@@ -90,53 +103,24 @@ const Sidebar = ({ onNavigate, activePage, onLogout }: SidebarProps) => {
       
       <ScrollArea className="flex-1 px-4">
         <div className="space-y-2 py-6">
-          <NavItem 
-            icon={FaHome} 
-            isActive={activePage === 'home'}
-            onClick={() => onNavigate('home')}
-            delay={0}
-          >
-            Dashboard
-          </NavItem>
-          <NavItem 
-            icon={FaTwitter} 
-            isActive={activePage === 'twitter'}
-            onClick={() => onNavigate('twitter')}
-            delay={50}
-          >
-            Twitter
-          </NavItem>
-          <NavItem 
-            icon={FaReddit} 
-            isActive={activePage === 'reddit'}
-            onClick={() => onNavigate('reddit')}
-            delay={100}
-          >
-            Reddit
-          </NavItem>
-          <NavItem 
-            icon={FaEnvelope} 
-            isActive={activePage === 'gmail'}
-            onClick={() => onNavigate('gmail')}
-            delay={150}
-          >
-            Gmail
-          </NavItem>
-          <NavItem 
-            icon={FaFacebook} 
-            isActive={activePage === 'facebook'}
-            onClick={() => onNavigate('facebook')}
-            delay={200}
-          >
-            Facebook
-          </NavItem>
+          {navItems.map(item => (
+            <NavItem
+              key={item.id}
+              icon={item.icon}
+              isActive={activePage === item.id}
+              path={item.path}
+              delay={navItems.indexOf(item) * 50}
+            >
+              {item.name}
+            </NavItem>
+          ))}
           
           <Separator className="opacity-30 my-3" />
           
           <NavItem 
             icon={FaCog} 
             isActive={activePage === 'settings'}
-            onClick={() => onNavigate('settings')}
+            path="/settings"
             delay={250}
           >
             Settings

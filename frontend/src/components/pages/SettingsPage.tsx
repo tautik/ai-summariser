@@ -1,92 +1,80 @@
-import { useState } from 'react';
-import { FaCog, FaMoon, FaSun, FaDatabase } from 'react-icons/fa';
+import React from 'react';
 
-const SettingsPage = () => {
-  const [useMockData, setUseMockData] = useState(true);
-  const [theme, setTheme] = useState('light');
-
-  const handleThemeChange = (newTheme: string) => {
-    setTheme(newTheme);
-    document.documentElement.classList.toggle('dark', newTheme === 'dark');
-  };
-
-  const handleMockDataToggle = () => {
-    setUseMockData(!useMockData);
-  };
-
+const SettingsPage: React.FC = () => {
   return (
-    <div className="p-6 md:p-8">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold mb-1 flex items-center gap-2">
-          <FaCog className="text-gray-700" /> Settings
-        </h1>
-        <p className="text-gray-500">
-          Configure your application preferences
-        </p>
-      </div>
-
-      <div className="space-y-6">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <FaSun className="text-yellow-500" /> Appearance
-          </h2>
-          <p className="text-gray-500 mb-5">
-            Customize how the application looks and feels
-          </p>
+    <div className="p-8 bg-gray-50 min-h-screen">
+      <div className="max-w-5xl mx-auto">
+        <h1 className="text-3xl font-bold text-gray-900 mb-6">Settings</h1>
+        
+        <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Account Settings</h2>
           
-          <div>
-            <h3 className="text-lg font-medium mb-3">Theme</h3>
-            <div className="flex gap-3">
-              <button
-                className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
-                  theme === 'light' 
-                    ? 'bg-blue-500 text-white' 
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-                onClick={() => handleThemeChange('light')}
-              >
-                <FaSun className="text-sm" /> Light
-              </button>
-              <button
-                className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
-                  theme === 'dark' 
-                    ? 'bg-blue-500 text-white' 
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-                onClick={() => handleThemeChange('dark')}
-              >
-                <FaMoon className="text-sm" /> Dark
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                <input 
+                  type="email" 
+                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="your@email.com"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                <input 
+                  type="text" 
+                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Your Name"
+                />
+              </div>
+            </div>
+            
+            <div>
+              <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-colors">
+                Save Changes
               </button>
             </div>
           </div>
         </div>
-
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <FaDatabase className="text-blue-500" /> Data Sources
-          </h2>
-          <p className="text-gray-500 mb-5">
-            Configure how data is fetched and processed
-          </p>
+        
+        <div className="bg-white rounded-lg shadow-sm p-6">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Notification Preferences</h2>
           
-          {/* <div className="flex flex-wrap items-center justify-between gap-4">
-            <div>
-              <h3 className="text-lg font-medium mb-1">Use Mock Data</h3>
-              <p className="text-gray-500">
-                Toggle between mock and real API data
-              </p>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-medium text-gray-800">Email Notifications</h3>
+                <p className="text-sm text-gray-500">Receive daily summary reports via email</p>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" className="sr-only peer" checked />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+              </label>
             </div>
-            <button
-              className={`px-4 py-2 rounded-md transition-colors ${
-                useMockData 
-                  ? 'bg-green-500 text-white' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-              onClick={handleMockDataToggle}
-            >
-              {useMockData ? 'Using Mock Data' : 'Using Real Data'}
-            </button>
-          </div> */}
+            
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-medium text-gray-800">Audio Summaries</h3>
+                <p className="text-sm text-gray-500">Generate audio versions of summaries</p>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" className="sr-only peer" checked />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+              </label>
+            </div>
+            
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-medium text-gray-800">Weekly Analytics</h3>
+                <p className="text-sm text-gray-500">Get weekly insights and trend analysis</p>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" className="sr-only peer" />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+              </label>
+            </div>
+          </div>
         </div>
       </div>
     </div>

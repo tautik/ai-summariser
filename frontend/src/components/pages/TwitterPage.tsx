@@ -405,6 +405,10 @@ const TwitterPage = ({ isConnected, onConnect, onDisconnect }: TwitterPageProps)
   const [summary, setSummary] = useState<Summary | null>(null);
   const [summaryType, setSummaryType] = useState<SummaryType>('latest');
   const [error, setError] = useState<string | null>(null);
+  const [emailAddress, setEmailAddress] = useState<string>('');
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+  const [sendingEmail, setSendingEmail] = useState(false);
+  const [emailSuccess, setEmailSuccess] = useState<boolean | null>(null);
   
   // Add this function to generate summary data for email
   const getEmailSummaryData = () => {
@@ -441,17 +445,65 @@ const TwitterPage = ({ isConnected, onConnect, onDisconnect }: TwitterPageProps)
     return emailSummary;
   };
   
+  // Function to send summary via email
+  const sendSummaryEmail = async () => {
+    if (!emailAddress || !summary) return;
+    
+    setSendingEmail(true);
+    setEmailSuccess(null);
+    
+    try {
+      const summaryData = getEmailSummaryData();
+      
+      const response = await fetch('http://localhost:5001/api/email/send-summary', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: emailAddress,
+          serviceName: 'twitter',
+          summaryData
+        }),
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        setEmailSuccess(true);
+        // Close modal after success
+        setTimeout(() => {
+          setIsEmailModalOpen(false);
+          setEmailSuccess(null);
+          setEmailAddress('');
+        }, 2000);
+      } else {
+        setEmailSuccess(false);
+        setError(data.message || 'Failed to send email');
+      }
+    } catch (err) {
+      setEmailSuccess(false);
+      setError(err instanceof Error ? err.message : 'An error occurred while sending email');
+    } finally {
+      setSendingEmail(false);
+    }
+  };
+  
   // Make this function available to the parent component via a ref or context
   // For now, we'll attach it to the window object for demonstration purposes
   useEffect(() => {
     // @ts-ignore
     window.getTwitterSummaryData = getEmailSummaryData;
+    // @ts-ignore
+    window.sendTwitterSummaryEmail = sendSummaryEmail;
     
     return () => {
       // @ts-ignore
       delete window.getTwitterSummaryData;
+      // @ts-ignore
+      delete window.sendTwitterSummaryEmail;
     };
-  }, [summary, summaryType]);
+  }, [summary, summaryType, emailAddress]);
 
   // Load default summary on component mount or when connection status changes
   useEffect(() => {
@@ -580,12 +632,26 @@ const TwitterPage = ({ isConnected, onConnect, onDisconnect }: TwitterPageProps)
               <h1 className="text-3xl font-bold mb-1">Twitter Analysis</h1>
               <p className="text-gray-500">Analyze Twitter profiles and get insights</p>
             </div>
-            <button
-              onClick={onDisconnect}
-              className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-colors"
-            >
-              <FaUnlink className="text-sm" /> Disconnect
-            </button>
+            <div className="flex items-center gap-3">
+              {summary && (
+                <button
+                  onClick={() => setIsEmailModalOpen(true)}
+                  className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-colors"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                  </svg>
+                  Email Summary
+                </button>
+              )}
+              <button
+                onClick={onDisconnect}
+                className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-colors"
+              >
+                <FaUnlink className="text-sm" /> Disconnect
+              </button>
+            </div>
           </div>
 
           <div className="space-y-6">
@@ -793,6 +859,68 @@ const TwitterPage = ({ isConnected, onConnect, onDisconnect }: TwitterPageProps)
                 </CardContent>
               </Card>
             )}
+          </div>
+        </div>
+      )}
+      
+      {/* Email Modal */}
+      {isEmailModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-xl font-bold mb-4">Send Twitter Summary</h3>
+            <p className="text-gray-600 mb-4">
+              Enter your email address to receive a detailed summary of @{summary?.profile.username}'s Twitter activity.
+            </p>
+            
+            <div className="mb-4">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                Email Address
+              </label>
+              <input
+                type="email"
+                id="email"
+                value={emailAddress}
+                onChange={(e) => setEmailAddress(e.target.value)}
+                placeholder="your@email.com"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            
+            {emailSuccess === true && (
+              <div className="mb-4 bg-green-100 text-green-800 p-3 rounded-md">
+                Email sent successfully! Check your inbox.
+              </div>
+            )}
+            
+            {emailSuccess === false && (
+              <div className="mb-4 bg-red-100 text-red-800 p-3 rounded-md">
+                Failed to send email. Please try again.
+              </div>
+            )}
+            
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => {
+                  setIsEmailModalOpen(false);
+                  setEmailSuccess(null);
+                  setEmailAddress('');
+                }}
+                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={sendSummaryEmail}
+                disabled={!emailAddress || sendingEmail}
+                className={`px-4 py-2 rounded-md text-white ${
+                  !emailAddress || sendingEmail
+                    ? 'bg-blue-400 cursor-not-allowed'
+                    : 'bg-blue-600 hover:bg-blue-700'
+                }`}
+              >
+                {sendingEmail ? 'Sending...' : 'Send Email'}
+              </button>
+            </div>
           </div>
         </div>
       )}
