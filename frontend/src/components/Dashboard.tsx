@@ -223,11 +223,11 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
   
   return (
     <div className="flex h-screen bg-gray-100">
-      <Sidebar 
+      {/* <Sidebar 
         activePage={activePage} 
         onNavigate={handlePageChange}
         onLogout={onLogout}
-      />
+      /> */}
       
       <div className="flex-1 overflow-auto">
         {/* Show SyncToEmailButton only on the home/overview page */}

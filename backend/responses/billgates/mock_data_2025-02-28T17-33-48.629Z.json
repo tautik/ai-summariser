@@ -1,0 +1,188 @@
+{
+  "profile": {
+    "data": {
+      "id": "50393960",
+      "name": "Bill Gates",
+      "username": "BillGates",
+      "description": "Sharing things I'm learning through my foundation work and other interests.",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1564398871996174336/M-hffw5a_400x400.jpg",
+      "verified": true,
+      "public_metrics": {
+        "followers_count": 62800000,
+        "following_count": 283,
+        "tweet_count": 4200,
+        "listed_count": 90000
+      },
+      "location": "Seattle, WA",
+      "url": "https://www.gatesnotes.com/",
+      "created_at": "2009-06-24T18:44:10.000Z",
+      "pinned_tweet_id": "9876543210"
+    }
+  },
+  "tweets": {
+    "data": [
+      {
+        "id": "9876543210",
+        "text": "Climate change and the global pandemic are reminders that we need to invest in science and innovation to solve our biggest challenges.",
+        "created_at": "2023-03-15T14:30:00Z",
+        "public_metrics": {
+          "retweet_count": 4500,
+          "reply_count": 2000,
+          "like_count": 20000,
+          "quote_count": 800
+        },
+        "entities": {
+          "hashtags": [
+            {
+              "tag": "ClimateChange"
+            },
+            {
+              "tag": "Innovation"
+            }
+          ],
+          "mentions": []
+        },
+        "source": "Twitter Web App"
+      },
+      {
+        "id": "9876543211",
+        "text": "I'm optimistic about the progress we're making on malaria. New tools and approaches are helping us get closer to eradication.",
+        "created_at": "2023-03-14T16:45:00Z",
+        "public_metrics": {
+          "retweet_count": 3000,
+          "reply_count": 1500,
+          "like_count": 15000,
+          "quote_count": 600
+        },
+        "entities": {
+          "hashtags": [
+            {
+              "tag": "Malaria"
+            },
+            {
+              "tag": "GlobalHealth"
+            }
+          ],
+          "mentions": []
+        },
+        "source": "Twitter Web App"
+      },
+      {
+        "id": "9876543212",
+        "text": "Just finished reading \"The Code Breaker\" by Walter Isaacson. A fascinating look at CRISPR and the scientists who are revolutionizing medicine.",
+        "created_at": "2023-03-13T20:10:00Z",
+        "public_metrics": {
+          "retweet_count": 2500,
+          "reply_count": 1200,
+          "like_count": 18000,
+          "quote_count": 500
+        },
+        "entities": {
+          "hashtags": [
+            {
+              "tag": "Books"
+            },
+            {
+              "tag": "CRISPR"
+            },
+            {
+              "tag": "Science"
+            }
+          ],
+          "mentions": []
+        },
+        "source": "Twitter Web App"
+      },
+      {
+        "id": "9876543213",
+        "text": "Clean energy innovation is critical to addressing climate change. We need to make green products affordable for everyone.",
+        "created_at": "2023-03-12T12:20:00Z",
+        "public_metrics": {
+          "retweet_count": 3800,
+          "reply_count": 1800,
+          "like_count": 22000,
+          "quote_count": 700
+        },
+        "entities": {
+          "hashtags": [
+            {
+              "tag": "CleanEnergy"
+            },
+            {
+              "tag": "ClimateChange"
+            }
+          ],
+          "mentions": []
+        },
+        "source": "Twitter Web App"
+      },
+      {
+        "id": "9876543214",
+        "text": "Education is the key to opportunity. I'm inspired by teachers who are finding innovative ways to help students learn, especially during challenging times.",
+        "created_at": "2023-03-11T15:35:00Z",
+        "public_metrics": {
+          "retweet_count": 4200,
+          "reply_count": 2200,
+          "like_count": 25000,
+          "quote_count": 900
+        },
+        "entities": {
+          "hashtags": [
+            {
+              "tag": "Education"
+            },
+            {
+              "tag": "Teachers"
+            }
+          ],
+          "mentions": []
+        },
+        "source": "Twitter Web App"
+      }
+    ]
+  },
+  "following": {
+    "data": [
+      {
+        "id": "234567",
+        "name": "Gates Foundation",
+        "username": "gatesfoundation",
+        "profile_image_url": "https://pbs.twimg.com/profile_images/1234567890/gates_foundation_400x400.jpg",
+        "verified": true,
+        "description": "Guided by the belief that every life has equal value, the Bill & Melinda Gates Foundation works to help all people lead healthy, productive lives."
+      },
+      {
+        "id": "234568",
+        "name": "Melinda French Gates",
+        "username": "melindagates",
+        "profile_image_url": "https://pbs.twimg.com/profile_images/1234567890/melinda_gates_400x400.jpg",
+        "verified": true,
+        "description": "Philanthropist, businesswoman, and global advocate for women and girls."
+      },
+      {
+        "id": "234569",
+        "name": "World Health Organization",
+        "username": "WHO",
+        "profile_image_url": "https://pbs.twimg.com/profile_images/1234567890/who_400x400.jpg",
+        "verified": true,
+        "description": "We are the #UnitedNations' health agency - #HealthForAll. Always check our latest tweets on #COVID19 for updated advice/information."
+      },
+      {
+        "id": "234570",
+        "name": "Microsoft",
+        "username": "Microsoft",
+        "profile_image_url": "https://pbs.twimg.com/profile_images/1234567890/microsoft_400x400.jpg",
+        "verified": true,
+        "description": "Enabling every person and organization on the planet to achieve more."
+      },
+      {
+        "id": "234571",
+        "name": "Breakthrough Energy",
+        "username": "Breakthrough",
+        "profile_image_url": "https://pbs.twimg.com/profile_images/1234567890/breakthrough_400x400.jpg",
+        "verified": true,
+        "description": "A network of entities and initiatives working together to accelerate the clean energy transition."
+      }
+    ]
+  }
+}

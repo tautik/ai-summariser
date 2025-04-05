@@ -210,7 +210,7 @@ class EmailService {
           </div>
           <h2 style="margin: 0; color: #1e3a8a; font-size: 22px; font-weight: 700;">
             Twitter Insights: ${summaryTypeFormatted}
-          </h2>
+        </h2>
         </div>
         
         <!-- Profile Overview Card -->
@@ -560,13 +560,41 @@ class EmailService {
     const sentimentColor = this.getSentimentColor(sentimentScore);
     const sentimentTextColor = sentimentScore >= 0.5 ? '#047857' : (sentimentScore >= 0 ? '#854D0E' : '#B91C1C');
     
+    // Audio file path - Use local MP3 file
+    const audioFilePath = "/services/elevenlabs.mp3";
+    
     return `
       <div style="margin-bottom: 25px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+        <!-- Audio Preview Section -->
+        <div style="background-color: white; border-radius: 10px; padding: 25px; margin-bottom: 25px; border: 1px solid ${borderColor};">
+          <h2 style="margin: 0 0 20px; color: ${secondaryColor}; font-size: 22px; font-weight: 700; letter-spacing: -0.3px; border-bottom: 2px solid ${borderColor}; padding-bottom: 10px;">
+            Audio Summary
+          </h2>
+          
+          <div style="text-align: center; margin-bottom: 15px;">
+            <p style="margin: 0 0 15px; color: #4b5563; font-size: 16px;">
+              Listen to your summary report narrated by AI voice
+            </p>
+            
+            <!-- Audio Player -->
+            <div style="max-width: 500px; margin: 0 auto;">
+              <audio controls style="width: 100%; margin-bottom: 15px;">
+                <source src="${audioFilePath}" type="audio/mpeg">
+                Your browser does not support the audio element.
+              </audio>
+              
+              <p style="font-size: 13px; color: #6b7280; margin-top: 5px;">
+                If audio doesn't play above, <a href="${audioFilePath}" download style="color: ${primaryColor}; text-decoration: underline;">download the MP3 file</a>
+              </p>
+            </div>
+          </div>
+        </div>
+        
         <!-- Main Summary Section -->
         <div style="background-color: white; border-radius: 10px; padding: 25px; margin-bottom: 25px; border: 1px solid ${borderColor};">
           <h2 style="margin: 0 0 20px; color: ${secondaryColor}; font-size: 22px; font-weight: 700; letter-spacing: -0.3px; border-bottom: 2px solid ${borderColor}; padding-bottom: 10px;">
-            Overall Dashboard Summary
-          </h2>
+          Overall Dashboard Summary
+        </h2>
           
           <!-- Key Metrics Cards - 2 column layout -->
           <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 25px;">
@@ -597,11 +625,11 @@ class EmailService {
           <div style="margin-bottom: 25px;">
             <h3 style="margin: 0 0 15px; font-size: 18px; color: ${secondaryColor}; font-weight: 600;">Top Topics</h3>
             <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 5px;">
-              ${topTopics.map((topic: string) => `
+            ${topTopics.map((topic: string) => `
                 <div style="background-color: ${primaryLight}; padding: 8px 14px; border-radius: 20px; font-weight: 500; color: ${primaryColor}; border: 1px solid ${primaryColor}30; font-size: 15px;">
                   ${topic}
                 </div>
-              `).join('')}
+            `).join('')}
             </div>
             <p style="margin: 15px 0 0; font-size: 14px; color: #64748B;">
               These topics are trending across your connected platforms.
@@ -612,8 +640,8 @@ class EmailService {
         <!-- Connected Services Section -->
         <div style="background-color: white; border-radius: 10px; padding: 25px; border: 1px solid ${borderColor};">
           <h2 style="margin: 0 0 20px; color: ${secondaryColor}; font-size: 22px; font-weight: 700; letter-spacing: -0.3px; border-bottom: 2px solid ${borderColor}; padding-bottom: 10px;">
-            Connected Services
-          </h2>
+          Connected Services
+        </h2>
           
           <p style="margin: 0 0 20px; line-height: 1.6; color: #475569;">
             This is a summary of all your connected social media and communication services. 
@@ -841,7 +869,7 @@ class EmailService {
             <td align="center" style="padding: 30px 0;">
               <!-- Container Table -->
               <table border="0" cellpadding="0" cellspacing="0" width="600" class="container" style="max-width: 600px; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);">
-                <!-- Header -->
+          <!-- Header -->
                 <tr>
                   <td style="background: linear-gradient(135deg, ${primaryColor}, #818CF8); padding: 30px;" class="mobile-padding">
                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -854,16 +882,16 @@ class EmailService {
                     </table>
                   </td>
                 </tr>
-                
-                <!-- Content -->
+          
+          <!-- Content -->
                 <tr>
                   <td style="padding: 30px;" class="mobile-padding">
-                    <!-- Service-specific content -->
-                    ${this.formatServiceContent(serviceName, details)}
+            <!-- Service-specific content -->
+            ${this.formatServiceContent(serviceName, details)}
                   </td>
                 </tr>
-                
-                <!-- Footer -->
+          
+          <!-- Footer -->
                 <tr>
                   <td style="background-color: ${backgroundColor}; border-top: 1px solid ${borderColor}; padding: 20px;" class="mobile-padding">
                     <table border="0" cellpadding="0" cellspacing="0" width="100%">

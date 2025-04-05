@@ -1,0 +1,74 @@
+{
+  "profile": {
+    "data": {
+      "id": "80118978",
+      "name": "TautikA",
+      "username": "tautika",
+      "description": "This is a mock profile for TautikA",
+      "profile_image_url": "https://ui-avatars.com/api/?name=TautikA&background=random",
+      "verified": false,
+      "public_metrics": {
+        "followers_count": 907044,
+        "following_count": 541,
+        "tweet_count": 6080,
+        "listed_count": 5282
+      }
+    }
+  },
+  "tweets": {
+    "data": [
+      {
+        "id": "159223580",
+        "text": "Just posted my first tweet as TautikA! #HelloWorld",
+        "created_at": "2025-02-27T14:49:20.593Z",
+        "public_metrics": {
+          "retweet_count": 622,
+          "reply_count": 461,
+          "like_count": 550,
+          "quote_count": 183
+        }
+      },
+      {
+        "id": "499695483",
+        "text": "Excited to share my latest project with everyone! #Innovation #Tech",
+        "created_at": "2025-02-26T14:49:20.593Z",
+        "public_metrics": {
+          "retweet_count": 243,
+          "reply_count": 193,
+          "like_count": 3066,
+          "quote_count": 50
+        }
+      },
+      {
+        "id": "440101465",
+        "text": "Thanks for all the support from my amazing followers! You're the best!",
+        "created_at": "2025-02-25T14:49:20.593Z",
+        "public_metrics": {
+          "retweet_count": 179,
+          "reply_count": 348,
+          "like_count": 4913,
+          "quote_count": 161
+        }
+      }
+    ]
+  },
+  "following": {
+    "data": [
+      {
+        "id": "123456",
+        "name": "Tech News",
+        "username": "technews"
+      },
+      {
+        "id": "123457",
+        "name": "Coding Tips",
+        "username": "codingtips"
+      },
+      {
+        "id": "123458",
+        "name": "AI Updates",
+        "username": "aiupdates"
+      }
+    ]
+  }
+}

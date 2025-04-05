@@ -1,0 +1,116 @@
+{
+  "timestamp": "2025-04-05T02:13:36.539Z",
+  "connectedServices": {
+    "twitter": true,
+    "reddit": true,
+    "gmail": true,
+    "facebook": true
+  },
+  "insights": {
+    "contentSummary": "Your digital presence shows strong engagement with technology and AI topics on Twitter. You're following key AI innovators and engaging with content about developer tools and startup funding. active participation in technology and science communities on Reddit, with particular interest in AI research and open source projects. professional communications via Gmail indicating active job recruitment in the tech sector, particularly for AI and software engineering roles. social networking on Facebook focused on tech events and industry connections. ",
+    "topTrends": [
+      {
+        "name": "AI and Machine Learning",
+        "count": 245,
+        "source": "twitter"
+      },
+      {
+        "name": "Startup Funding",
+        "count": 187,
+        "source": "reddit"
+      },
+      {
+        "name": "Developer Tools",
+        "count": 156,
+        "source": "twitter"
+      },
+      {
+        "name": "Remote Work",
+        "count": 132,
+        "source": "gmail"
+      },
+      {
+        "name": "Open Source Projects",
+        "count": 98,
+        "source": "reddit"
+      },
+      {
+        "name": "Data Science",
+        "count": 89,
+        "source": "twitter"
+      },
+      {
+        "name": "Blockchain",
+        "count": 76,
+        "source": "reddit"
+      },
+      {
+        "name": "Cloud Computing",
+        "count": 65,
+        "source": "gmail"
+      },
+      {
+        "name": "Tech Conferences",
+        "count": 54,
+        "source": "facebook"
+      },
+      {
+        "name": "Cybersecurity",
+        "count": 43,
+        "source": "twitter"
+      }
+    ],
+    "keyPeople": [
+      {
+        "name": "@therealprady",
+        "description": "Founder @ AI lip sync startup",
+        "source": "twitter"
+      },
+      {
+        "name": "@eshamanideep",
+        "description": "Working on AGI @ gigaml",
+        "source": "twitter"
+      },
+      {
+        "name": "ekta@headout.com",
+        "description": "Recruiter at Headout",
+        "source": "gmail"
+      },
+      {
+        "name": "u/science_enthusiast",
+        "description": "Active in r/science community",
+        "source": "reddit"
+      },
+      {
+        "name": "@techfounder",
+        "description": "Tech entrepreneur and investor",
+        "source": "twitter"
+      },
+      {
+        "name": "jobs@techinc.com",
+        "description": "Hiring manager at TechInc",
+        "source": "gmail"
+      },
+      {
+        "name": "u/codemaster",
+        "description": "Open source contributor",
+        "source": "reddit"
+      },
+      {
+        "name": "Alex Johnson",
+        "description": "CTO at StartupX",
+        "source": "facebook"
+      },
+      {
+        "name": "@airesearcher",
+        "description": "AI Research Scientist",
+        "source": "twitter"
+      },
+      {
+        "name": "Sarah Miller",
+        "description": "Tech Conference Organizer",
+        "source": "facebook"
+      }
+    ]
+  }
+}

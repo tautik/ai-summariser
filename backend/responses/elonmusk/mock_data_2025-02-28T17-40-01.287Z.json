@@ -1,0 +1,203 @@
+{
+  "profile": {
+    "data": {
+      "id": "44196397",
+      "name": "Elon Musk",
+      "username": "elonmusk",
+      "description": "Technoking of Tesla, Imperator of Mars",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1234567890/elon_musk_400x400.jpg",
+      "verified": true,
+      "public_metrics": {
+        "followers_count": 128500000,
+        "following_count": 177,
+        "tweet_count": 21500,
+        "listed_count": 120000
+      },
+      "location": "Mars & Earth",
+      "url": "https://x.com/elonmusk",
+      "created_at": "2009-03-06T20:12:29.000Z",
+      "pinned_tweet_id": "1234567890"
+    }
+  },
+  "tweets": {
+    "data": [
+      {
+        "id": "1234567890",
+        "text": "AI is the future. We need to ensure it remains safe and beneficial for humanity.",
+        "created_at": "2023-02-27T12:00:00Z",
+        "public_metrics": {
+          "retweet_count": 5000,
+          "reply_count": 3000,
+          "like_count": 25000,
+          "quote_count": 1000
+        },
+        "entities": {
+          "hashtags": [
+            {
+              "tag": "AI"
+            },
+            {
+              "tag": "Safety"
+            }
+          ],
+          "mentions": []
+        },
+        "source": "Twitter for iPhone"
+      },
+      {
+        "id": "1234567891",
+        "text": "SpaceX Starship successfully completed its orbital test flight!",
+        "created_at": "2023-02-26T18:30:00Z",
+        "public_metrics": {
+          "retweet_count": 10000,
+          "reply_count": 5000,
+          "like_count": 50000,
+          "quote_count": 2000
+        },
+        "entities": {
+          "hashtags": [
+            {
+              "tag": "SpaceX"
+            },
+            {
+              "tag": "Starship"
+            }
+          ],
+          "mentions": [
+            {
+              "username": "SpaceX"
+            }
+          ]
+        },
+        "source": "Twitter for iPhone"
+      },
+      {
+        "id": "1234567892",
+        "text": "Tesla's new battery technology increases range by 30% and reduces cost by 20%.",
+        "created_at": "2023-02-25T14:15:00Z",
+        "public_metrics": {
+          "retweet_count": 8000,
+          "reply_count": 4000,
+          "like_count": 35000,
+          "quote_count": 1500
+        },
+        "entities": {
+          "hashtags": [
+            {
+              "tag": "Tesla"
+            },
+            {
+              "tag": "Battery"
+            },
+            {
+              "tag": "Innovation"
+            }
+          ],
+          "mentions": [
+            {
+              "username": "Tesla"
+            }
+          ]
+        },
+        "source": "Twitter for iPhone"
+      },
+      {
+        "id": "1234567893",
+        "text": "The Boring Company is revolutionizing urban transportation with underground tunnels.",
+        "created_at": "2023-02-24T10:45:00Z",
+        "public_metrics": {
+          "retweet_count": 6000,
+          "reply_count": 3500,
+          "like_count": 30000,
+          "quote_count": 1200
+        },
+        "entities": {
+          "hashtags": [
+            {
+              "tag": "BoringCompany"
+            },
+            {
+              "tag": "Transportation"
+            }
+          ],
+          "mentions": [
+            {
+              "username": "boringcompany"
+            }
+          ]
+        },
+        "source": "Twitter for iPhone"
+      },
+      {
+        "id": "1234567894",
+        "text": "Neuralink has made significant progress in brain-machine interfaces. Human trials starting soon.",
+        "created_at": "2023-02-23T16:20:00Z",
+        "public_metrics": {
+          "retweet_count": 7000,
+          "reply_count": 4500,
+          "like_count": 40000,
+          "quote_count": 1800
+        },
+        "entities": {
+          "hashtags": [
+            {
+              "tag": "Neuralink"
+            },
+            {
+              "tag": "BrainInterface"
+            },
+            {
+              "tag": "Future"
+            }
+          ],
+          "mentions": []
+        },
+        "source": "Twitter for iPhone"
+      }
+    ]
+  },
+  "following": {
+    "data": [
+      {
+        "id": "123456",
+        "name": "SpaceX",
+        "username": "SpaceX",
+        "profile_image_url": "https://pbs.twimg.com/profile_images/1234567890/spacex_400x400.jpg",
+        "verified": true,
+        "description": "SpaceX designs, manufactures and launches advanced rockets and spacecraft."
+      },
+      {
+        "id": "123457",
+        "name": "Tesla",
+        "username": "Tesla",
+        "profile_image_url": "https://pbs.twimg.com/profile_images/1234567890/tesla_400x400.jpg",
+        "verified": true,
+        "description": "Electric cars, giant batteries and solar"
+      },
+      {
+        "id": "123458",
+        "name": "The Boring Company",
+        "username": "boringcompany",
+        "profile_image_url": "https://pbs.twimg.com/profile_images/1234567890/boring_400x400.jpg",
+        "verified": true,
+        "description": "Boring tunnels to solve traffic"
+      },
+      {
+        "id": "123459",
+        "name": "Neuralink",
+        "username": "neuralink",
+        "profile_image_url": "https://pbs.twimg.com/profile_images/1234567890/neuralink_400x400.jpg",
+        "verified": true,
+        "description": "Developing ultra high bandwidth brain-machine interfaces to connect humans and computers"
+      },
+      {
+        "id": "123460",
+        "name": "X",
+        "username": "x",
+        "profile_image_url": "https://pbs.twimg.com/profile_images/1234567890/x_400x400.jpg",
+        "verified": true,
+        "description": "X is the everything app"
+      }
+    ]
+  }
+}
