@@ -98,7 +98,7 @@ const SAMPLE_PROFILE: Profile = {
   },
   location: "India",
   url: "https://x.com/TautikA",
-  created_at: "2020-05-15T14:32:10.000Z"
+  created_at: "2022-04-05T14:32:10.000Z"
 };
 
 // Sample latest tweets
@@ -106,7 +106,7 @@ const LATEST_TWEETS: Tweet[] = [
   {
     id: "1",
     text: "genuine",
-    created_at: "2024-08-12T09:15:00.000Z",
+    created_at: "2025-04-04T09:15:00.000Z",
     public_metrics: {
       retweet_count: 1,
       reply_count: 0,
@@ -117,7 +117,7 @@ const LATEST_TWEETS: Tweet[] = [
   {
     id: "2",
     text: "never knew something like @baserunai existed",
-    created_at: "2024-08-11T15:30:00.000Z",
+    created_at: "2025-04-03T15:30:00.000Z",
     public_metrics: {
       retweet_count: 3,
       reply_count: 2,
@@ -131,7 +131,7 @@ const LATEST_TWEETS: Tweet[] = [
   {
     id: "3",
     text: "any alternative for storing secrets? @infisical really sucks at this point",
-    created_at: "2024-08-10T18:45:00.000Z",
+    created_at: "2025-04-02T18:45:00.000Z",
     public_metrics: {
       retweet_count: 5,
       reply_count: 8,
@@ -145,7 +145,7 @@ const LATEST_TWEETS: Tweet[] = [
   {
     id: "4",
     text: "finally 🍻",
-    created_at: "2024-08-10T14:20:00.000Z",
+    created_at: "2025-04-02T14:20:00.000Z",
     public_metrics: {
       retweet_count: 2,
       reply_count: 1,
@@ -156,7 +156,7 @@ const LATEST_TWEETS: Tweet[] = [
   {
     id: "5",
     text: "our new logo has a fun story behind it @Suhail",
-    created_at: "2024-08-10T10:30:00.000Z",
+    created_at: "2025-04-01T10:30:00.000Z",
     public_metrics: {
       retweet_count: 7,
       reply_count: 3,
@@ -174,7 +174,7 @@ const REPLIES_TWEETS: Tweet[] = [
   {
     id: "6",
     text: "@therealprady Congratulations on the funding! Looking forward to seeing what you build next.",
-    created_at: "2024-08-12T16:45:00.000Z",
+    created_at: "2025-04-04T16:45:00.000Z",
     public_metrics: {
       retweet_count: 0,
       reply_count: 1,
@@ -188,7 +188,7 @@ const REPLIES_TWEETS: Tweet[] = [
   {
     id: "7",
     text: "@eshamanideep @gigaml is an agi company from now on",
-    created_at: "2024-08-12T14:30:00.000Z",
+    created_at: "2025-04-04T14:30:00.000Z",
     public_metrics: {
       retweet_count: 0,
       reply_count: 2,
@@ -202,7 +202,7 @@ const REPLIES_TWEETS: Tweet[] = [
   {
     id: "8",
     text: "@varunvummadi I'm if you are a founder applying to @ycombinator looking to get your application reviewed fee free to DM me. Happy to help",
-    created_at: "2024-08-12T13:20:00.000Z",
+    created_at: "2025-04-03T13:20:00.000Z",
     public_metrics: {
       retweet_count: 1,
       reply_count: 0,
@@ -216,7 +216,7 @@ const REPLIES_TWEETS: Tweet[] = [
   {
     id: "9",
     text: "@baserunai How does your product compare to other testing frameworks? Looking for something that integrates well with our CI/CD pipeline.",
-    created_at: "2024-08-11T16:10:00.000Z",
+    created_at: "2025-04-02T16:10:00.000Z",
     public_metrics: {
       retweet_count: 0,
       reply_count: 1,
@@ -230,7 +230,7 @@ const REPLIES_TWEETS: Tweet[] = [
   {
     id: "10",
     text: "@infisical Have you considered improving the UX for secret rotation? That's a major pain point for us.",
-    created_at: "2024-08-10T19:25:00.000Z",
+    created_at: "2025-04-01T19:25:00.000Z",
     public_metrics: {
       retweet_count: 2,
       reply_count: 1,
@@ -248,7 +248,7 @@ const TRENDING_TWEETS: Tweet[] = [
   {
     id: "11",
     text: "it's official — we raised a $5.5M seed led by @GVteam 🚀 AI lip sync is only the beginning everyone has a story to tell, but not everyone is a storyteller — yet imagine a world where we can remix and reimagine ourselves in video in exactly the way we want to be seen",
-    created_at: "2024-08-12T10:00:00.000Z",
+    created_at: "2025-04-04T10:00:00.000Z",
     public_metrics: {
       retweet_count: 145,
       reply_count: 53,
@@ -263,7 +263,7 @@ const TRENDING_TWEETS: Tweet[] = [
   {
     id: "12",
     text: "I'm if you are a founder applying to @ycombinator looking to get your application reviewed fee free to DM me. Happy to help",
-    created_at: "2024-08-12T09:30:00.000Z",
+    created_at: "2025-04-04T09:30:00.000Z",
     public_metrics: {
       retweet_count: 78,
       reply_count: 34,
@@ -277,7 +277,7 @@ const TRENDING_TWEETS: Tweet[] = [
   {
     id: "13",
     text: "@gigaml is an agi company from now on",
-    created_at: "2024-08-12T08:45:00.000Z",
+    created_at: "2025-04-03T08:45:00.000Z",
     public_metrics: {
       retweet_count: 112,
       reply_count: 45,
@@ -291,7 +291,7 @@ const TRENDING_TWEETS: Tweet[] = [
   {
     id: "14",
     text: "our new logo has a fun story behind it @Suhail",
-    created_at: "2024-08-10T10:30:00.000Z",
+    created_at: "2025-04-02T10:30:00.000Z",
     public_metrics: {
       retweet_count: 89,
       reply_count: 37,
@@ -305,7 +305,7 @@ const TRENDING_TWEETS: Tweet[] = [
   {
     id: "15",
     text: "Just hit 1000 GitHub stars on our open source project! Thanks to all the contributors who made this possible. #OpenSource #Milestone",
-    created_at: "2024-06-15T11:10:00.000Z",
+    created_at: "2025-04-01T11:10:00.000Z",
     public_metrics: {
       retweet_count: 67,
       reply_count: 29,

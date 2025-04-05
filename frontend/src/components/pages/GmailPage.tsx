@@ -56,7 +56,7 @@ const SAMPLE_EMAILS: Email[] = [
     subject: 'Regarding your application to Headout | Software Engineer, Backend',
     sender: 'Ekta Chaturvedi <ekta@headout.com>',
     from: 'Ekta Chaturvedi',
-    date: '2025-02-28T20:17:00Z',
+    date: '2025-04-04T20:17:00Z',
     snippet: 'Hi Tautik, Thank you for informing us about your unavailability for the assignment. Since you won\'t be able to complete it this weekend, we will include you in the next batch.',
     isRead: false,
     hasAttachment: false,
@@ -67,8 +67,8 @@ const SAMPLE_EMAILS: Email[] = [
     subject: 'Alert : Update on your HDFC Bank Credit Card',
     sender: 'HDFC Bank InstaAlerts <alerts@hdfcbank.net>',
     from: 'HDFC Bank',
-    date: '2025-02-28T20:49:00Z',
-    snippet: 'Dear Customer, Thank you for using HDFC Bank Card XX9764 for Rs. 119.0 at SPOTIFYINDIA on 28-02-2025 20:49:14',
+    date: '2025-04-04T20:49:00Z',
+    snippet: 'Dear Customer, Thank you for using HDFC Bank Card XX9764 for Rs. 119.0 at SPOTIFYINDIA on 04-04-2025 20:49:14',
     isRead: true,
     hasAttachment: false,
     labels: ['finance', 'alerts']
@@ -78,7 +78,7 @@ const SAMPLE_EMAILS: Email[] = [
     subject: 'Delve - Tautik - Teemgenie',
     sender: 'Isaiah de la Fuente <isaiah@delve.com>',
     from: 'Isaiah de la Fuente',
-    date: '2025-02-27T00:15:00Z',
+    date: '2025-04-03T00:15:00Z',
     snippet: 'Hey all! We recently have given Tautik an opportunity to join Delve. Please find time to sync so we work out payment and HR details.',
     isRead: false,
     hasAttachment: false,
@@ -89,7 +89,7 @@ const SAMPLE_EMAILS: Email[] = [
     subject: 'Your Amazon Order #402-7892345-2938456 has shipped',
     sender: 'Amazon.in <shipment-tracking@amazon.in>',
     from: 'Amazon',
-    date: '2025-02-26T14:30:00Z',
+    date: '2025-04-02T14:30:00Z',
     snippet: 'Your package with Logitech MX Master 3S Mouse is on the way and will be delivered tomorrow by 9 PM.',
     isRead: true,
     hasAttachment: false,
@@ -100,7 +100,7 @@ const SAMPLE_EMAILS: Email[] = [
     subject: 'Invitation to speak at React India 2025',
     sender: 'React India <organizers@reactindia.dev>',
     from: 'React India',
-    date: '2025-02-25T09:45:00Z',
+    date: '2025-04-01T09:45:00Z',
     snippet: 'Dear Tautik, We would like to invite you to speak at React India 2025 conference in Goa. Please let us know if you are interested.',
     isRead: false,
     hasAttachment: true,
@@ -111,8 +111,8 @@ const SAMPLE_EMAILS: Email[] = [
     subject: 'Your Netflix subscription will renew soon',
     sender: 'Netflix <info@netflix.com>',
     from: 'Netflix',
-    date: '2025-02-24T11:20:00Z',
-    snippet: 'Your monthly subscription will be renewed on March 3rd. Your Premium plan costs Rs. 649 per month.',
+    date: '2025-04-04T11:20:00Z',
+    snippet: 'Your monthly subscription will be renewed on April 10th. Your Premium plan costs Rs. 649 per month.',
     isRead: true,
     hasAttachment: false,
     labels: ['entertainment', 'finance']
@@ -122,7 +122,7 @@ const SAMPLE_EMAILS: Email[] = [
     subject: 'Feedback on your recent pull request',
     sender: 'GitHub <notifications@github.com>',
     from: 'GitHub',
-    date: '2025-02-23T16:05:00Z',
+    date: '2025-04-02T16:05:00Z',
     snippet: 'Your pull request #342 on repository ai-summariser has received comments from the code owner.',
     isRead: false,
     hasAttachment: false,
@@ -133,8 +133,8 @@ const SAMPLE_EMAILS: Email[] = [
     subject: 'Your flight to Bangalore is confirmed',
     sender: 'MakeMyTrip <bookings@makemytrip.com>',
     from: 'MakeMyTrip',
-    date: '2025-02-22T13:15:00Z',
-    snippet: 'Your flight AI-505 from Delhi to Bangalore on March 15th is confirmed. Check-in opens 24 hours before departure.',
+    date: '2025-04-01T13:15:00Z',
+    snippet: 'Your flight AI-505 from Delhi to Bangalore on April 15th is confirmed. Check-in opens 24 hours before departure.',
     isRead: true,
     hasAttachment: true,
     labels: ['travel', 'important']
@@ -197,10 +197,10 @@ const FINANCE_SUMMARY: EmailSummary = {
     { category: 'Tax', count: 2 }
   ],
   recentEmails: FINANCE_EMAILS,
-  summary: 'Your financial emails show recent transactions from Spotify (Rs. 119) on your HDFC credit card. You have upcoming subscription renewals for Netflix (Rs. 649) on March 3rd. Your credit card statement is due on March 10th with a total outstanding amount of Rs. 15,432. There are no unusual transactions detected in your accounts. Your mutual fund SIP of Rs. 10,000 was successfully processed on February 25th.',
+  summary: 'Your financial emails show recent transactions from Spotify (Rs. 119) on your HDFC credit card. You have upcoming subscription renewals for Netflix (Rs. 649) on April 10th. Your credit card statement is due on April 15th with a total outstanding amount of Rs. 15,432. There are no unusual transactions detected in your accounts. Your mutual fund SIP of Rs. 10,000 was successfully processed on April 1st.',
   actionItems: [
-    'Review credit card statement for February',
-    'Pay credit card bill by March 10th',
+    'Review credit card statement for April',
+    'Pay credit card bill by April 15th',
     'Evaluate Netflix subscription renewal'
   ],
   followUps: [
@@ -230,9 +230,9 @@ const SOCIAL_SUMMARY: EmailSummary = {
     { category: 'Community', count: 1 }
   ],
   recentEmails: SOCIAL_EMAILS,
-  summary: 'Your social and events emails include an invitation to speak at React India 2025 in Goa. You also have entertainment-related emails about your Netflix subscription. There\'s a local tech meetup happening next week that matches your interests. You\'ve been invited to a friend\'s birthday celebration on March 5th. The React India speaking opportunity is particularly prestigious and could boost your professional profile.',
+  summary: 'Your social and events emails include an invitation to speak at React India 2025 in Goa. You also have entertainment-related emails about your Netflix subscription. There\'s a local tech meetup happening next week that matches your interests. You\'ve been invited to a friend\'s birthday celebration on April 10th. The React India speaking opportunity is particularly prestigious and could boost your professional profile.',
   actionItems: [
-    'Respond to React India speaking invitation by March 5th',
+    'Respond to React India speaking invitation by April 10th',
     'RSVP to local tech meetup',
     'Confirm attendance for friend\'s birthday'
   ],
@@ -266,7 +266,7 @@ const DEFAULT_SUMMARY: EmailSummary = {
   recentEmails: SAMPLE_EMAILS,
   summary: 'Your inbox has been active with recruitment opportunities this week, with 2 new job offers. You have several financial alerts from HDFC Bank. There are 4 emails requiring immediate attention, including a speaking invitation and job opportunities. Your Amazon order is scheduled for delivery tomorrow. You have 18 unread emails, with 8 of them marked as important.',
   actionItems: [
-    'Respond to React India speaking invitation by March 5th',
+    'Respond to React India speaking invitation by April 10th',
     'Schedule meeting with Delve team',
     'Review credit card statement',
     'Confirm flight details for Bangalore trip'
@@ -274,7 +274,7 @@ const DEFAULT_SUMMARY: EmailSummary = {
   followUps: [
     'Check status of Amazon delivery',
     'Follow up with Headout about next interview batch',
-    'Confirm flight details for Bangalore trip on March 15th',
+    'Confirm flight details for Bangalore trip on April 15th',
     'Update resume with recent projects'
   ]
 };
@@ -376,7 +376,7 @@ const GmailPage = ({ isConnected, onConnect, onDisconnect }: GmailPageProps) => 
             id: "1",
             subject: "Your weekly GitHub digest",
             from: "GitHub",
-            date: "2025-02-27T10:23:45Z",
+            date: "2025-04-04T10:23:45Z",
             snippet: "Here's what happened in your repositories this week...",
             labels: ["Updates", "Social"],
             hasAttachment: false
@@ -385,8 +385,8 @@ const GmailPage = ({ isConnected, onConnect, onDisconnect }: GmailPageProps) => 
             id: "2",
             subject: "Invoice #12345",
             from: "Billing Department",
-            date: "2025-02-26T14:15:00Z",
-            snippet: "Please find attached your invoice for February 2025...",
+            date: "2025-04-03T14:15:00Z",
+            snippet: "Please find attached your invoice for April 2025...",
             labels: ["Finance"],
             hasAttachment: true
           },
@@ -394,7 +394,7 @@ const GmailPage = ({ isConnected, onConnect, onDisconnect }: GmailPageProps) => 
             id: "3",
             subject: "Meeting reminder: Project Review",
             from: "Calendar",
-            date: "2025-02-25T09:00:00Z",
+            date: "2025-04-04T09:00:00Z",
             snippet: "This is a reminder about your upcoming meeting at 2:00 PM...",
             labels: ["Important", "Work"],
             hasAttachment: false
@@ -403,7 +403,7 @@ const GmailPage = ({ isConnected, onConnect, onDisconnect }: GmailPageProps) => 
             id: "4",
             subject: "Your order has shipped",
             from: "Amazon",
-            date: "2025-02-24T16:30:00Z",
+            date: "2025-04-02T16:30:00Z",
             snippet: "Your recent order #AB123456 has shipped and is on its way...",
             labels: ["Shopping"],
             hasAttachment: false
@@ -412,7 +412,7 @@ const GmailPage = ({ isConnected, onConnect, onDisconnect }: GmailPageProps) => 
             id: "5",
             subject: "New connection request",
             from: "LinkedIn",
-            date: "2025-02-23T11:45:00Z",
+            date: "2025-04-01T11:45:00Z",
             snippet: "You have a new connection request from Jane Smith...",
             labels: ["Social", "Network"],
             hasAttachment: false
@@ -428,7 +428,7 @@ const GmailPage = ({ isConnected, onConnect, onDisconnect }: GmailPageProps) => 
         actionItems: [
           "Respond to meeting invitation from Marketing team",
           "Review and pay invoice #12345",
-          "Confirm attendance for conference on March 15"
+          "Confirm attendance for conference on April 15"
         ],
         followUps: [
           "Check status of support ticket #45678",
