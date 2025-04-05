@@ -512,10 +512,37 @@ class EmailService {
    * Format Dashboard content for email
    */
   private formatDashboardContent(details: any): string {
+    // Default sample data based on frontend data
+    const sampleMetrics = {
+      engagementRate: 0.08,
+      topTopics: ['AI', 'Technology', 'Innovation'],
+      sentimentScore: 0.7,
+      twitterData: {
+        recentTweet: "Just hit 1000 GitHub stars on our open source project! Thanks to all the contributors who made this possible. #OpenSource #Milestone",
+        followers: 1250,
+        engagement: 215
+      },
+      redditData: {
+        posts: 32,
+        comments: 76,
+        karma: 847
+      },
+      gmailData: {
+        unread: 12,
+        important: 5,
+        actionItems: ["Follow up with design team", "Schedule meeting with investors"]
+      }
+    };
+    
+    // Use provided metrics or fallback to sample data
     const metrics = details.metrics || {};
-    const engagementRate = metrics.engagementRate || 0;
-    const topTopics = metrics.topTopics || ['AI', 'Technology', 'Innovation'];
-    const sentimentScore = metrics.sentimentScore || 0;
+    
+    // Extract data from metrics with reasonable defaults
+    const engagementRate = Math.min(metrics.engagementRate || sampleMetrics.engagementRate, 1); // Cap at 100%
+    const topTopics = Array.isArray(metrics.topTopics) && metrics.topTopics.length > 0 
+      ? metrics.topTopics 
+      : sampleMetrics.topTopics;
+    const sentimentScore = metrics.sentimentScore || sampleMetrics.sentimentScore;
     
     // Custom theme colors
     const primaryColor = '#4C6EF5'; // Indigo
@@ -525,7 +552,7 @@ class EmailService {
     const lightGray = '#F8FAFC';
     const borderColor = '#E2E8F0';
     
-    // Format engagement rate for display
+    // Format engagement rate for display with proper formatting
     const formattedEngagementRate = `${(engagementRate * 100).toFixed(1)}%`;
     
     // Get sentiment label and appropriate colors
@@ -535,14 +562,8 @@ class EmailService {
     
     return `
       <div style="margin-bottom: 25px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-        <!-- Hero Section with Gradient Background -->
-        <div style="background: linear-gradient(135deg, ${primaryColor}, #818CF8); color: white; padding: 30px; border-radius: 10px; margin-bottom: 25px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-          <h1 style="margin: 0 0 10px; font-size: 28px; font-weight: 700; letter-spacing: -0.5px;">Dashboard Summary Report</h1>
-          <p style="margin: 0; opacity: 0.9; font-size: 16px;">Your social media and communications at a glance</p>
-        </div>
-        
         <!-- Main Summary Section -->
-        <div style="background-color: white; border-radius: 10px; padding: 25px; margin-bottom: 25px; border: 1px solid ${borderColor}; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
+        <div style="background-color: white; border-radius: 10px; padding: 25px; margin-bottom: 25px; border: 1px solid ${borderColor};">
           <h2 style="margin: 0 0 20px; color: ${secondaryColor}; font-size: 22px; font-weight: 700; letter-spacing: -0.3px; border-bottom: 2px solid ${borderColor}; padding-bottom: 10px;">
             Overall Dashboard Summary
           </h2>
@@ -550,7 +571,7 @@ class EmailService {
           <!-- Key Metrics Cards - 2 column layout -->
           <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 25px;">
             <!-- Engagement Rate Card -->
-            <div style="flex: 1; min-width: 220px; background-color: ${primaryLight}; padding: 20px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.04); border: 1px solid ${borderColor};">
+            <div style="flex: 1; min-width: 220px; background-color: ${primaryLight}; padding: 20px; border-radius: 10px; border: 1px solid ${borderColor};">
               <div style="font-size: 16px; color: ${secondaryColor}; margin-bottom: 5px; font-weight: 500;">Engagement Rate</div>
               <div style="font-size: 36px; font-weight: 800; color: ${primaryColor}; letter-spacing: -1px; margin-bottom: 5px;">
                 ${formattedEngagementRate}
@@ -561,7 +582,7 @@ class EmailService {
             </div>
             
             <!-- Sentiment Score Card -->
-            <div style="flex: 1; min-width: 220px; background-color: ${sentimentColor}; padding: 20px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.04); border: 1px solid ${borderColor};">
+            <div style="flex: 1; min-width: 220px; background-color: ${sentimentColor}; padding: 20px; border-radius: 10px; border: 1px solid ${borderColor};">
               <div style="font-size: 16px; color: ${secondaryColor}; margin-bottom: 5px; font-weight: 500;">Overall Sentiment</div>
               <div style="font-size: 36px; font-weight: 800; color: ${sentimentTextColor}; letter-spacing: -1px; margin-bottom: 5px;">
                 ${sentimentLabel}
@@ -589,7 +610,7 @@ class EmailService {
         </div>
         
         <!-- Connected Services Section -->
-        <div style="background-color: white; border-radius: 10px; padding: 25px; border: 1px solid ${borderColor}; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
+        <div style="background-color: white; border-radius: 10px; padding: 25px; border: 1px solid ${borderColor};">
           <h2 style="margin: 0 0 20px; color: ${secondaryColor}; font-size: 22px; font-weight: 700; letter-spacing: -0.3px; border-bottom: 2px solid ${borderColor}; padding-bottom: 10px;">
             Connected Services
           </h2>
@@ -600,64 +621,136 @@ class EmailService {
             while viewing that service's page.
           </p>
           
-          <!-- Services Grid - Modern Card Design -->
-          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px;">
-            <!-- Twitter Card -->
-            <div style="background-color: white; padding: 20px; border-radius: 10px; border: 1px solid ${borderColor}; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
-              <div style="display: flex; align-items: center; margin-bottom: 15px;">
-                <div style="background-color: #1DA1F2; border-radius: 10px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+          <!-- Twitter Card -->
+          <div style="border: 1px solid ${borderColor}; border-radius: 10px; margin-bottom: 15px; overflow: hidden;">
+            <div style="padding: 15px 20px;">
+              <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                <div style="background-color: #1DA1F2; border-radius: 8px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
                     <path d="M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.49 2.048-2.578-.9.534-1.897.922-2.958 1.13-.85-.904-2.06-1.47-3.4-1.47-2.572 0-4.658 2.086-4.658 4.66 0 .364.042.718.12 1.06-3.873-.195-7.304-2.05-9.602-4.868-.4.69-.63 1.49-.63 2.342 0 1.616.823 3.043 2.072 3.878-.764-.025-1.482-.234-2.11-.583v.06c0 2.257 1.605 4.14 3.737 4.568-.392.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.313 3.198 4.352 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065 2.062 1.323 4.51 2.093 7.14 2.093 8.57 0 13.255-7.098 13.255-13.254 0-.2-.005-.402-.014-.602.91-.658 1.7-1.477 2.323-2.41z"></path>
                   </svg>
                 </div>
                 <h3 style="margin: 0; font-size: 18px; font-weight: 600; color: ${secondaryColor};">Twitter</h3>
               </div>
-              <p style="margin: 0; color: #64748B; font-size: 14px; line-height: 1.5;">
+              
+              <!-- Twitter Content -->
+              <div style="border-left: 3px solid #1DA1F2; padding: 12px 15px; margin-bottom: 12px; background-color: #f8fafc; border-radius: 4px;">
+                <p style="margin: 0; font-size: 14px; color: #4b5563; line-height: 1.5;">
+                  <span style="color: #1e293b; font-weight: 500;">@TautikA:</span> 
+                  ${metrics.twitterData?.recentTweet || sampleMetrics.twitterData.recentTweet}
+                </p>
+              </div>
+              
+              <div style="font-size: 14px; color: #64748B; margin-bottom: 12px;">
+                <span style="font-weight: 500; color: #4b5563;">${metrics.twitterData?.followers || sampleMetrics.twitterData.followers}</span> followers
+                <span style="display: inline-block; margin: 0 5px;">•</span>
+                <span style="font-weight: 500; color: #4b5563;">${metrics.twitterData?.engagement || sampleMetrics.twitterData.engagement}</span> engagements
+              </div>
+              
+              <p style="margin: 0; color: #64748B; font-size: 14px;">
                 View tweets, engagement, and follower insights
               </p>
             </div>
-            
-            <!-- Reddit Card -->
-            <div style="background-color: white; padding: 20px; border-radius: 10px; border: 1px solid ${borderColor}; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
-              <div style="display: flex; align-items: center; margin-bottom: 15px;">
-                <div style="background-color: #FF4500; border-radius: 10px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+          </div>
+          
+          <!-- Reddit Card -->
+          <div style="border: 1px solid ${borderColor}; border-radius: 10px; margin-bottom: 15px; overflow: hidden;">
+            <div style="padding: 15px 20px;">
+              <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                <div style="background-color: #FF4500; border-radius: 8px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 22C6.48 22 2 17.52 2 12S6.48 2 12 2s10 4.48 10 10-4.48 10-10 10zm0-18c-4.42 0-8 3.58-8 8 0 1.95.7 3.73 1.86 5.12.05-.39.11-.79.11-1.21 0-1.86 1.27-3.43 3-3.87-.34-.07-.7-.11-1.07-.11-.43 0-.84.09-1.22.23-.19-.31-.37-.63-.53-.97.17-.01.34-.03.51-.03.26 0 .51.02.75.07 1.43-.95 3.09-1.51 4.89-1.51 1.69 0 3.26.49 4.64 1.36.33-.3.75-.48 1.21-.48.1 0 .2.01.3.03.65.12 1.15.65 1.27 1.3.03.17.01.35-.05.51-.13.36-.44.64-.81.76.26.52.41 1.1.41 1.71 0 .44-.07.87-.21 1.27 1.33-1.42 2.15-3.34 2.15-5.46 0-4.42-3.58-8-8-8z"></path>
                   </svg>
                 </div>
                 <h3 style="margin: 0; font-size: 18px; font-weight: 600; color: ${secondaryColor};">Reddit</h3>
               </div>
-              <p style="margin: 0; color: #64748B; font-size: 14px; line-height: 1.5;">
+              
+              <!-- Reddit Stats -->
+              <div style="display: flex; text-align: center; background-color: #FEF2F2; border-radius: 4px; margin-bottom: 12px; padding: 8px 0;">
+                <div style="flex: 1; border-right: 1px solid #fecaca;">
+                  <div style="font-weight: 600; color: #B91C1C; font-size: 16px;">
+                    ${metrics.redditData?.posts || sampleMetrics.redditData.posts}
+                  </div>
+                  <div style="font-size: 12px; color: #64748B;">Posts</div>
+                </div>
+                <div style="flex: 1; border-right: 1px solid #fecaca;">
+                  <div style="font-weight: 600; color: #B91C1C; font-size: 16px;">
+                    ${metrics.redditData?.comments || sampleMetrics.redditData.comments}
+                  </div>
+                  <div style="font-size: 12px; color: #64748B;">Comments</div>
+                </div>
+                <div style="flex: 1;">
+                  <div style="font-weight: 600; color: #B91C1C; font-size: 16px;">
+                    ${metrics.redditData?.karma || sampleMetrics.redditData.karma}
+                  </div>
+                  <div style="font-size: 12px; color: #64748B;">Karma</div>
+                </div>
+              </div>
+              
+              <p style="margin: 0; color: #64748B; font-size: 14px;">
                 Analyze subreddit activity and post engagement
               </p>
             </div>
-            
-            <!-- Gmail Card -->
-            <div style="background-color: white; padding: 20px; border-radius: 10px; border: 1px solid ${borderColor}; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
-              <div style="display: flex; align-items: center; margin-bottom: 15px;">
-                <div style="background-color: #D93025; border-radius: 10px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+          </div>
+          
+          <!-- Gmail Card -->
+          <div style="border: 1px solid ${borderColor}; border-radius: 10px; margin-bottom: 15px; overflow: hidden;">
+            <div style="padding: 15px 20px;">
+              <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                <div style="background-color: #D93025; border-radius: 8px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
                     <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25c-.25-.16-.4-.43-.4-.72 0-.67.73-1.07 1.3-.72L12 11l6.7-4.19c.57-.35 1.3.05 1.3.72 0 .29-.15.56-.4.72z"></path>
                   </svg>
                 </div>
                 <h3 style="margin: 0; font-size: 18px; font-weight: 600; color: ${secondaryColor};">Gmail</h3>
               </div>
-              <p style="margin: 0; color: #64748B; font-size: 14px; line-height: 1.5;">
+              
+              <!-- Gmail Stats -->
+              <div style="background-color: #FFF7ED; border-radius: 4px; margin-bottom: 12px; padding: 12px 15px;">
+                <div style="margin-bottom: 8px; font-size: 14px; color: #92400E;">
+                  <span style="font-weight: 500;">${metrics.gmailData?.unread || sampleMetrics.gmailData.unread}</span> unread
+                  <span style="display: inline-block; margin: 0 5px;">•</span>
+                  <span style="font-weight: 500;">${metrics.gmailData?.important || sampleMetrics.gmailData.important}</span> important
+                </div>
+                
+                <div style="font-size: 14px; color: #78350F;">
+                  <div style="font-weight: 500; margin-bottom: 4px;">Action items:</div>
+                  <ul style="margin: 0; padding-left: 20px;">
+                    ${(metrics.gmailData?.actionItems || sampleMetrics.gmailData.actionItems).map((item: string) => 
+                      `<li>${item}</li>`).join('')}
+                  </ul>
+                </div>
+              </div>
+              
+              <p style="margin: 0; color: #64748B; font-size: 14px;">
                 Summarize email communications and priorities
               </p>
             </div>
-            
-            <!-- Facebook Card -->
-            <div style="background-color: white; padding: 20px; border-radius: 10px; border: 1px solid ${borderColor}; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
-              <div style="display: flex; align-items: center; margin-bottom: 15px;">
-                <div style="background-color: #1877F2; border-radius: 10px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+          </div>
+          
+          <!-- Facebook Card -->
+          <div style="border: 1px solid ${borderColor}; border-radius: 10px; margin-bottom: 15px; overflow: hidden;">
+            <div style="padding: 15px 20px;">
+              <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                <div style="background-color: #1877F2; border-radius: 8px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
                     <path d="M20.9 2H3.1A1.1 1.1 0 0 0 2 3.1v17.8A1.1 1.1 0 0 0 3.1 22h9.58v-7.75h-2.6v-3h2.6V9a3.64 3.64 0 0 1 3.88-4 20.26 20.26 0 0 1 2.33.12v2.7H17.3c-1.26 0-1.5.6-1.5 1.47v1.93h3l-.39 3H15.8V22h5.1a1.1 1.1 0 0 0 1.1-1.1V3.1A1.1 1.1 0 0 0 20.9 2z"></path>
                   </svg>
                 </div>
                 <h3 style="margin: 0; font-size: 18px; font-weight: 600; color: ${secondaryColor};">Facebook</h3>
               </div>
-              <p style="margin: 0; color: #64748B; font-size: 14px; line-height: 1.5;">
+              
+              <!-- Facebook Status -->
+              <div style="background-color: #EFF6FF; border-radius: 4px; margin-bottom: 12px; padding: 12px 15px; text-align: center;">
+                <p style="margin: 0 0 6px; color: #1E40AF; font-style: italic; font-size: 14px;">
+                  Facebook integration coming soon!
+                </p>
+                <div style="font-size: 13px; color: #3B82F6;">
+                  Connect your Facebook account for page and audience insights
+                </div>
+              </div>
+              
+              <p style="margin: 0; color: #64748B; font-size: 14px;">
                 Track page engagement and audience insights
               </p>
             </div>
@@ -665,7 +758,7 @@ class EmailService {
           
           <!-- Action Button -->
           <div style="margin-top: 25px; text-align: center;">
-            <a href="#" style="display: inline-block; background-color: ${primaryColor}; color: white; text-decoration: none; padding: 12px 25px; border-radius: 8px; font-weight: 600; font-size: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <a href="#" style="display: inline-block; background-color: ${primaryColor}; color: white; text-decoration: none; padding: 12px 25px; border-radius: 8px; font-weight: 600; font-size: 16px;">
               View Full Dashboard
             </a>
           </div>
