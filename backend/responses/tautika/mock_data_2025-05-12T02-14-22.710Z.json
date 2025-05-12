@@ -1,0 +1,187 @@
+{
+  "profile": {
+    "data": {
+      "id": "64245376",
+      "name": "TautikA",
+      "username": "tautika",
+      "description": "This is a mock profile for TautikA. Tech enthusiast, entrepreneur, and AI advocate. Passionate about innovation and making the world a better place through technology.",
+      "profile_image_url": "https://ui-avatars.com/api/?name=TautikA&background=random",
+      "verified": false,
+      "public_metrics": {
+        "followers_count": 549473,
+        "following_count": 621,
+        "tweet_count": 5012,
+        "listed_count": 1212
+      },
+      "location": "San Francisco",
+      "url": "https://example.com/tautika",
+      "created_at": "2021-04-24T20:10:29.473Z",
+      "pinned_tweet_id": "538382399"
+    }
+  },
+  "tweets": {
+    "data": [
+      {
+        "id": "760632058",
+        "text": "Just posted my first tweet as TautikA! Excited to join this amazing community. #HelloWorld #NewBeginnings",
+        "created_at": "2025-05-11T02:14:22.709Z",
+        "public_metrics": {
+          "retweet_count": 91,
+          "reply_count": 183,
+          "like_count": 2943,
+          "quote_count": 50
+        },
+        "entities": {
+          "hashtags": [
+            {
+              "tag": "HelloWorld"
+            },
+            {
+              "tag": "NewBeginnings"
+            }
+          ],
+          "mentions": []
+        },
+        "source": "Twitter Web App"
+      },
+      {
+        "id": "806972093",
+        "text": "Excited to share my latest project with everyone! We've been working on this for months and can't wait to hear your feedback. #Innovation #Tech #AI",
+        "created_at": "2025-05-10T02:14:22.709Z",
+        "public_metrics": {
+          "retweet_count": 415,
+          "reply_count": 29,
+          "like_count": 3029,
+          "quote_count": 156
+        },
+        "entities": {
+          "hashtags": [
+            {
+              "tag": "Innovation"
+            },
+            {
+              "tag": "Tech"
+            },
+            {
+              "tag": "AI"
+            }
+          ],
+          "mentions": []
+        },
+        "source": "Twitter Web App"
+      },
+      {
+        "id": "302244384",
+        "text": "Thanks for all the support from my amazing followers! You're the best! Just hit 9310 followers and I'm grateful for each one of you.",
+        "created_at": "2025-05-09T02:14:22.709Z",
+        "public_metrics": {
+          "retweet_count": 691,
+          "reply_count": 470,
+          "like_count": 2961,
+          "quote_count": 90
+        },
+        "entities": {
+          "hashtags": [],
+          "mentions": []
+        },
+        "source": "Twitter Web App"
+      },
+      {
+        "id": "392181420",
+        "text": "Just read an amazing article about the future of AI. The possibilities are endless! What do you think will be the biggest impact of AI in the next decade? #AI #FutureTech #Innovation",
+        "created_at": "2025-05-08T02:14:22.710Z",
+        "public_metrics": {
+          "retweet_count": 101,
+          "reply_count": 348,
+          "like_count": 670,
+          "quote_count": 44
+        },
+        "entities": {
+          "hashtags": [
+            {
+              "tag": "AI"
+            },
+            {
+              "tag": "FutureTech"
+            },
+            {
+              "tag": "Innovation"
+            }
+          ],
+          "mentions": []
+        },
+        "source": "Twitter for iPhone"
+      },
+      {
+        "id": "144157958",
+        "text": "Beautiful day for a hike! Nature always helps me clear my mind and come up with new ideas. #Nature #Inspiration #Creativity",
+        "created_at": "2025-05-07T02:14:22.710Z",
+        "public_metrics": {
+          "retweet_count": 56,
+          "reply_count": 449,
+          "like_count": 570,
+          "quote_count": 21
+        },
+        "entities": {
+          "hashtags": [
+            {
+              "tag": "Nature"
+            },
+            {
+              "tag": "Inspiration"
+            },
+            {
+              "tag": "Creativity"
+            }
+          ],
+          "mentions": []
+        },
+        "source": "Twitter for Android"
+      }
+    ]
+  },
+  "following": {
+    "data": [
+      {
+        "id": "123456",
+        "name": "Tech News",
+        "username": "technews",
+        "profile_image_url": "https://ui-avatars.com/api/?name=Tech+News&background=random",
+        "verified": true,
+        "description": "Latest news and updates from the tech world"
+      },
+      {
+        "id": "123457",
+        "name": "Coding Tips",
+        "username": "codingtips",
+        "profile_image_url": "https://ui-avatars.com/api/?name=Coding+Tips&background=random",
+        "verified": false,
+        "description": "Daily tips and tricks for programmers of all levels"
+      },
+      {
+        "id": "123458",
+        "name": "AI Updates",
+        "username": "aiupdates",
+        "profile_image_url": "https://ui-avatars.com/api/?name=AI+Updates&background=random",
+        "verified": true,
+        "description": "Keeping you informed about the latest in artificial intelligence"
+      },
+      {
+        "id": "123459",
+        "name": "Startup Founders",
+        "username": "startupfounders",
+        "profile_image_url": "https://ui-avatars.com/api/?name=Startup+Founders&background=random",
+        "verified": false,
+        "description": "A community of entrepreneurs sharing their journey"
+      },
+      {
+        "id": "123460",
+        "name": "Design Inspiration",
+        "username": "designinspo",
+        "profile_image_url": "https://ui-avatars.com/api/?name=Design+Inspiration&background=random",
+        "verified": true,
+        "description": "Beautiful design inspiration for creatives"
+      }
+    ]
+  }
+}

@@ -112,7 +112,7 @@ const SAMPLE_EMAILS: Email[] = [
     sender: 'Netflix <info@netflix.com>',
     from: 'Netflix',
     date: '2025-04-04T11:20:00Z',
-    snippet: 'Your monthly subscription will be renewed on April 10th. Your Premium plan costs Rs. 649 per month.',
+    snippet: 'Your monthly subscription will be renewed on May 10th. Your Premium plan costs Rs. 649 per month.',
     isRead: true,
     hasAttachment: false,
     labels: ['entertainment', 'finance']
@@ -134,7 +134,7 @@ const SAMPLE_EMAILS: Email[] = [
     sender: 'MakeMyTrip <bookings@makemytrip.com>',
     from: 'MakeMyTrip',
     date: '2025-04-01T13:15:00Z',
-    snippet: 'Your flight AI-505 from Delhi to Bangalore on April 15th is confirmed. Check-in opens 24 hours before departure.',
+    snippet: 'Your flight AI-505 from Delhi to Bangalore on May 11th is confirmed. Check-in opens 24 hours before departure.',
     isRead: true,
     hasAttachment: true,
     labels: ['travel', 'important']
@@ -197,10 +197,10 @@ const FINANCE_SUMMARY: EmailSummary = {
     { category: 'Tax', count: 2 }
   ],
   recentEmails: FINANCE_EMAILS,
-  summary: 'Your financial emails show recent transactions from Spotify (Rs. 119) on your HDFC credit card. You have upcoming subscription renewals for Netflix (Rs. 649) on April 10th. Your credit card statement is due on April 15th with a total outstanding amount of Rs. 15,432. There are no unusual transactions detected in your accounts. Your mutual fund SIP of Rs. 10,000 was successfully processed on April 1st.',
+  summary: 'Your financial emails show recent transactions from Spotify (Rs. 119) on your HDFC credit card. You have upcoming subscription renewals for Netflix (Rs. 649) on May 10th. Your credit card statement is due on May 11th with a total outstanding amount of Rs. 15,432. There are no unusual transactions detected in your accounts. Your mutual fund SIP of Rs. 10,000 was successfully processed on May 1st.',
   actionItems: [
-    'Review credit card statement for April',
-    'Pay credit card bill by April 15th',
+    'Review credit card statement for May',
+    'Pay credit card bill by May 11th',
     'Evaluate Netflix subscription renewal'
   ],
   followUps: [
@@ -230,9 +230,9 @@ const SOCIAL_SUMMARY: EmailSummary = {
     { category: 'Community', count: 1 }
   ],
   recentEmails: SOCIAL_EMAILS,
-  summary: 'Your social and events emails include an invitation to speak at React India 2025 in Goa. You also have entertainment-related emails about your Netflix subscription. There\'s a local tech meetup happening next week that matches your interests. You\'ve been invited to a friend\'s birthday celebration on April 10th. The React India speaking opportunity is particularly prestigious and could boost your professional profile.',
+  summary: 'Your social and events emails include an invitation to speak at React India 2025 in Goa. You also have entertainment-related emails about your Netflix subscription. There\'s a local tech meetup happening next week that matches your interests. You\'ve been invited to a friend\'s birthday celebration on May 10th. The React India speaking opportunity is particularly prestigious and could boost your professional profile.',
   actionItems: [
-    'Respond to React India speaking invitation by April 10th',
+    'Respond to React India speaking invitation by May 10th',
     'RSVP to local tech meetup',
     'Confirm attendance for friend\'s birthday'
   ],
@@ -266,7 +266,7 @@ const DEFAULT_SUMMARY: EmailSummary = {
   recentEmails: SAMPLE_EMAILS,
   summary: 'Your inbox has been active with recruitment opportunities this week, with 2 new job offers. You have several financial alerts from HDFC Bank. There are 4 emails requiring immediate attention, including a speaking invitation and job opportunities. Your Amazon order is scheduled for delivery tomorrow. You have 18 unread emails, with 8 of them marked as important.',
   actionItems: [
-    'Respond to React India speaking invitation by April 10th',
+    'Respond to React India speaking invitation by May 10th',
     'Schedule meeting with Delve team',
     'Review credit card statement',
     'Confirm flight details for Bangalore trip'
@@ -274,7 +274,7 @@ const DEFAULT_SUMMARY: EmailSummary = {
   followUps: [
     'Check status of Amazon delivery',
     'Follow up with Headout about next interview batch',
-    'Confirm flight details for Bangalore trip on April 15th',
+    'Confirm flight details for Bangalore trip on May 11th',
     'Update resume with recent projects'
   ]
 };
@@ -386,7 +386,7 @@ const GmailPage = ({ isConnected, onConnect, onDisconnect }: GmailPageProps) => 
             subject: "Invoice #12345",
             from: "Billing Department",
             date: "2025-04-03T14:15:00Z",
-            snippet: "Please find attached your invoice for April 2025...",
+            snippet: "Please find attached your invoice for May 2025...",
             labels: ["Finance"],
             hasAttachment: true
           },
@@ -428,7 +428,7 @@ const GmailPage = ({ isConnected, onConnect, onDisconnect }: GmailPageProps) => 
         actionItems: [
           "Respond to meeting invitation from Marketing team",
           "Review and pay invoice #12345",
-          "Confirm attendance for conference on April 15"
+          "Confirm attendance for conference on May 10"
         ],
         followUps: [
           "Check status of support ticket #45678",

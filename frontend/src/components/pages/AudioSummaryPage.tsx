@@ -15,7 +15,7 @@ const AudioSummaryPage: React.FC = () => {
           </p>
           
           <AudioPlayer 
-            title="Daily Overview - April 4, 2025"
+            title="Daily Overview - May 4, 2025"
             subtitle="Summary of your social media and email activity"
           />
         </div>
@@ -25,9 +25,9 @@ const AudioSummaryPage: React.FC = () => {
           
           <div className="space-y-4">
             {[
-              { date: 'April 4, 2025', duration: '3:45' },
-              { date: 'April 3, 2025', duration: '4:12' },
-              { date: 'April 2, 2025', duration: '3:24' }
+              { date: 'May 4, 2025', duration: '3:45' },
+              { date: 'May 3, 2025', duration: '4:12' },
+              { date: 'May 2, 2025', duration: '3:24' }
             ].map((summary, index) => (
               <div key={index} className="flex items-center justify-between p-4 border border-gray-100 rounded-lg hover:bg-gray-50 transition-colors">
                 <div className="flex items-center">
